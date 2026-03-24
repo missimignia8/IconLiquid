@@ -1,0 +1,2102 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Icon Liquid</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    @keyframes ambientShift {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.92; transform: scale(1.02); }
+    }
+    @keyframes ctaGlow {
+      0%, 100% { box-shadow: 0 4px 24px rgba(80, 140, 255, 0.35), 0 0 0 1px rgba(255,255,255,0.08) inset; }
+      50% { box-shadow: 0 8px 36px rgba(120, 170, 255, 0.5), 0 0 48px rgba(100, 160, 255, 0.2), 0 0 0 1px rgba(255,255,255,0.1) inset; }
+    }
+    @keyframes waGlow {
+      0%, 100% { box-shadow: 0 6px 28px rgba(37, 211, 102, 0.5), 0 0 0 0 rgba(37, 211, 102, 0.35); }
+      50% { box-shadow: 0 8px 36px rgba(37, 211, 102, 0.65), 0 0 28px rgba(37, 211, 102, 0.35); }
+    }
+    @keyframes pinkSparkle {
+      0%, 100% {
+        color: #ffd7f7;
+        text-shadow: 0 0 14px rgba(255, 120, 220, 0.25), 0 0 24px rgba(255, 90, 210, 0.2);
+      }
+      50% {
+        color: #ffeafd;
+        text-shadow: 0 0 18px rgba(255, 145, 228, 0.55), 0 0 40px rgba(255, 95, 214, 0.45);
+      }
+    }
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      position: relative;
+      background: #07070c;
+      color: #ffffff;
+      min-height: 100vh;
+      font-weight: 500;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      background:
+        radial-gradient(ellipse 120% 70% at 50% -15%, rgba(110, 60, 200, 0.28), transparent 52%),
+        radial-gradient(ellipse 70% 50% at 100% 20%, rgba(255, 90, 120, 0.12), transparent 45%),
+        radial-gradient(ellipse 55% 45% at 0% 90%, rgba(40, 130, 255, 0.18), transparent 50%),
+        radial-gradient(ellipse 80% 60% at 80% 100%, rgba(180, 40, 140, 0.1), transparent 55%);
+      animation: ambientShift 18s ease-in-out infinite;
+    }
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      background: radial-gradient(ellipse 50% 30% at 50% 100%, rgba(60, 100, 220, 0.15), transparent 70%);
+    }
+    header, main, footer { position: relative; z-index: 1; }
+    .container {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      backdrop-filter: blur(14px) saturate(1.2);
+      background: linear-gradient(180deg, rgba(10, 10, 18, 0.92) 0%, rgba(8, 8, 14, 0.82) 100%);
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35), 0 1px 0 rgba(130, 160, 255, 0.12) inset;
+    }
+    .nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 18px 0;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+    .brand {
+      font-size: 1.35rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+    .brand span {
+      color: #d4c4ff;
+      font-weight: 500;
+      text-shadow: 0 0 24px rgba(180, 140, 255, 0.45);
+    }
+    .nav-links {
+      display: flex;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+    .nav-links a {
+      color: rgba(255,255,255,0.7);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: color 0.15s ease;
+    }
+    .nav-links a:hover { color: rgba(255,255,255,0.95); }
+
+    .cart-nav-btn {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      border: 1px solid rgba(140, 180, 255, 0.22);
+      background: linear-gradient(145deg, rgba(50, 70, 140, 0.35), rgba(25, 30, 55, 0.6));
+      color: #fff;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+      box-shadow: 0 4px 16px rgba(60, 100, 200, 0.25), 0 0 0 1px rgba(255,255,255,0.04) inset;
+    }
+    .cart-nav-btn:hover {
+      background: linear-gradient(145deg, rgba(70, 100, 180, 0.45), rgba(35, 40, 75, 0.7));
+      border-color: rgba(160, 200, 255, 0.35);
+      box-shadow: 0 6px 24px rgba(80, 130, 240, 0.35);
+      transform: translateY(-1px);
+    }
+    .cart-nav-btn svg { width: 22px; height: 22px; }
+    .cart-badge {
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      min-width: 18px;
+      height: 18px;
+      padding: 0 5px;
+      border-radius: 999px;
+      background: linear-gradient(180deg, #ff6b6b, #e53935);
+      color: #fff;
+      font-size: 0.7rem;
+      font-weight: 700;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+      box-shadow: 0 2px 10px rgba(229, 57, 53, 0.55);
+    }
+
+    .cart-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.55);
+      z-index: 87;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.25s ease, visibility 0.25s;
+    }
+    .cart-backdrop.show {
+      opacity: 1;
+      visibility: visible;
+    }
+    .cart-drawer {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 88;
+      padding: 0 12px;
+      padding-top: max(8px, env(safe-area-inset-top));
+      transform: translateY(-100%);
+      transition: transform 0.32s cubic-bezier(0.2, 0.85, 0.25, 1);
+      pointer-events: none;
+    }
+    .cart-drawer.open {
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+    .cart-drawer-panel {
+      background: linear-gradient(180deg, rgba(18, 18, 32, 0.98) 0%, rgba(10, 10, 18, 0.99) 100%);
+      backdrop-filter: blur(18px) saturate(1.15);
+      border: 1px solid rgba(130, 170, 255, 0.15);
+      border-top: none;
+      border-radius: 0 0 22px 22px;
+      max-height: min(88vh, 720px);
+      display: flex;
+      flex-direction: column;
+      box-shadow:
+        0 28px 70px rgba(0,0,0,0.55),
+        0 0 0 1px rgba(255,255,255,0.04) inset,
+        0 -20px 60px rgba(80, 120, 220, 0.12);
+      overflow: hidden;
+    }
+    .cart-drawer-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 16px 18px 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .cart-drawer-header h2 {
+      font-size: 1.2rem;
+      font-weight: 600;
+    }
+    .cart-drawer-header .close-btn { flex-shrink: 0; }
+    .cart-list {
+      flex: 1;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior: contain;
+      padding: 10px 12px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .cart-empty {
+      text-align: center;
+      color: rgba(255,255,255,0.55);
+      font-size: 0.95rem;
+      padding: 28px 16px;
+    }
+    .cart-row-wrap {
+      position: relative;
+      border-radius: 14px;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    .cart-row-delete {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding-right: 18px;
+      gap: 8px;
+      background: linear-gradient(90deg, #5c1010 0%, #b71c1c 45%, #c62828 100%);
+      color: #fff;
+      font-weight: 600;
+      font-size: 0.88rem;
+    }
+    .cart-row-delete svg {
+      width: 22px;
+      height: 22px;
+      opacity: 0.95;
+    }
+    .cart-row-front {
+      position: relative;
+      display: grid;
+      grid-template-columns: 96px 1fr;
+      gap: 0;
+      min-height: 76px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 14px;
+      overflow: hidden;
+      touch-action: pan-y;
+      transition: transform 0.18s ease-out;
+      cursor: grab;
+    }
+    .cart-row-front:active { cursor: grabbing; }
+    .cart-row-banner {
+      position: relative;
+      min-height: 76px;
+      background-size: cover;
+      background-position: center;
+    }
+    .cart-row-banner::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, rgba(0,0,0,0.35), rgba(0,0,0,0.65));
+    }
+    .cart-row-info {
+      padding: 10px 12px 10px 10px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 4px;
+      min-width: 0;
+    }
+    .cart-row-name {
+      font-weight: 600;
+      font-size: 0.95rem;
+      line-height: 1.25;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .cart-row-meta {
+      font-size: 0.78rem;
+      color: rgba(255,255,255,0.65);
+      line-height: 1.35;
+    }
+    .cart-row-meta strong { color: rgba(255,255,255,0.92); font-weight: 600; }
+    .cart-row-remove-desktop {
+      display: none;
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      width: 32px;
+      height: 32px;
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(0,0,0,0.35);
+      color: #fff;
+      cursor: pointer;
+      align-items: center;
+      justify-content: center;
+      z-index: 2;
+    }
+    .cart-row-remove-desktop:hover { background: rgba(200,40,40,0.85); }
+    .cart-row-remove-desktop svg { width: 16px; height: 16px; }
+    .cart-drawer-footer {
+      padding: 14px 16px calc(16px + env(safe-area-inset-bottom));
+      border-top: 1px solid rgba(255,255,255,0.06);
+      background: rgba(8,8,12,0.96);
+    }
+    .cart-drawer-footer .btn-complete {
+      width: 100%;
+      padding: 14px 18px;
+      font-size: 1rem;
+    }
+    @media (min-width: 900px) {
+      .cart-row-remove-desktop { display: flex; }
+    }
+
+    .hero { padding: 56px 0 28px; }
+    .hero-box {
+      position: relative;
+      background: linear-gradient(165deg, rgba(32, 36, 58, 0.45) 0%, rgba(14, 14, 22, 0.85) 100%);
+      border: 1px solid rgba(130, 160, 255, 0.14);
+      border-radius: 22px;
+      overflow: hidden;
+      box-shadow:
+        0 12px 48px rgba(0, 0, 0, 0.4),
+        0 0 0 1px rgba(255,255,255,0.05) inset,
+        0 0 80px rgba(90, 120, 220, 0.12);
+    }
+    .hero-box::before {
+      content: '';
+      position: absolute;
+      top: -40%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 120%;
+      height: 80%;
+      background: radial-gradient(ellipse at center, rgba(120, 100, 220, 0.2) 0%, transparent 65%);
+      pointer-events: none;
+    }
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      padding: 32px 24px 18px;
+      text-align: center;
+    }
+    .badge {
+      display: inline-block;
+      padding: 7px 14px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, rgba(80, 60, 140, 0.35), rgba(50, 56, 105, 0.5));
+      border: 1px solid rgba(160, 140, 255, 0.25);
+      color: rgba(230, 220, 255, 0.9);
+      font-size: 0.8rem;
+      font-weight: 600;
+      margin-bottom: 14px;
+      box-shadow: 0 4px 20px rgba(100, 80, 200, 0.2), 0 0 0 1px rgba(255,255,255,0.04) inset;
+    }
+    h1 {
+      font-size: clamp(1.85rem, 3.5vw, 3.2rem);
+      font-weight: 600;
+      line-height: 1.15;
+      margin-bottom: 12px;
+      text-shadow: 0 2px 28px rgba(100, 140, 255, 0.2);
+    }
+    .sub {
+      color: rgba(255,255,255,0.72);
+      font-size: 1.06rem;
+      max-width: 760px;
+      margin: 0 auto 20px;
+      line-height: 1.65;
+    }
+    .hero-actions {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+    }
+    .btn {
+      display: inline-block;
+      padding: 10px 18px;
+      border-radius: 12px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: all 0.2s ease;
+      cursor: pointer;
+      border: none;
+    }
+    .btn-primary {
+      background: linear-gradient(180deg, #ffffff 0%, #f0f2f8 100%);
+      color: #0a0a0f;
+      box-shadow: 0 6px 24px rgba(255, 255, 255, 0.2), 0 2px 8px rgba(0, 0, 0, 0.15);
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 32px rgba(255, 255, 255, 0.28), 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+    .btn-secondary {
+      color: #fff;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.04);
+    }
+    .btn-secondary:hover { background: rgba(255,255,255,0.07); }
+    .btn-light {
+      background: rgba(255,255,255,0.05);
+      color: #fff;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    .btn-complete {
+      background: linear-gradient(180deg, #4db0ff 0%, #2a6ae8 45%, #1a4db8 100%);
+      color: #fff;
+      flex: 1;
+      min-width: 190px;
+      border: 1px solid rgba(160, 210, 255, 0.35);
+      box-shadow: 0 6px 28px rgba(50, 130, 240, 0.45), 0 0 40px rgba(60, 140, 255, 0.2);
+      animation: ctaGlow 4s ease-in-out infinite;
+    }
+    .btn-complete:hover {
+      filter: brightness(1.06);
+      transform: translateY(-2px);
+    }
+    .btn-disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+    .btn-complete:disabled {
+      animation: none;
+      filter: grayscale(0.3);
+      box-shadow: none;
+    }
+
+    .copy-status,
+    .modal-status {
+      min-height: 24px;
+      margin-top: 10px;
+      color: rgba(255,255,255,0.72);
+      font-size: 0.93rem;
+    }
+    .copy-status.success,
+    .modal-status.success { color: #b6ffb6; }
+    .copy-status.warning,
+    .modal-status.warning { color: #ffe08a; }
+
+    .wa-float {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 90;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: linear-gradient(145deg, #2ee576, #25d366 40%, #128c7e);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(180, 255, 210, 0.35);
+      text-decoration: none;
+      transition: transform 0.25s ease;
+      animation: waGlow 3.5s ease-in-out infinite;
+    }
+    .wa-float:hover {
+      transform: scale(1.08);
+      animation: none;
+      box-shadow: 0 10px 40px rgba(37, 211, 102, 0.65), 0 0 36px rgba(46, 230, 120, 0.35);
+    }
+    .wa-float svg { width: 32px; height: 32px; fill: currentColor; }
+
+    section { padding: 26px 0; }
+    .section-title {
+      font-size: clamp(1.5rem, 2.8vw, 2.2rem);
+      font-weight: 600;
+      margin-bottom: 10px;
+      letter-spacing: -0.02em;
+      text-shadow: 0 2px 20px rgba(140, 160, 255, 0.15);
+    }
+    .section-text {
+      color: rgba(255,255,255,0.72);
+      line-height: 1.7;
+      margin-bottom: 22px;
+      max-width: 780px;
+    }
+
+    /* Recensioni (stile minimale e moderno) */
+    .review-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+    .review-card {
+      background: linear-gradient(180deg, rgba(255,255,255,0.04) 0%, rgba(12, 12, 20, 0.62) 100%);
+      border: 1px solid rgba(120, 150, 220, 0.12);
+      border-radius: 16px;
+      padding: 16px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.22);
+      transition: border-color 0.25s, box-shadow 0.25s, transform 0.25s;
+    }
+    .review-card:hover {
+      border-color: rgba(140, 180, 255, 0.32);
+      box-shadow:
+        0 12px 40px rgba(0, 0, 0, 0.35),
+        0 0 0 1px rgba(100, 160, 255, 0.12) inset,
+        0 0 44px rgba(70, 120, 220, 0.18);
+      transform: translateY(-2px);
+    }
+    .review-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+    .review-stars {
+      font-size: 1.02rem;
+      letter-spacing: 0.06em;
+      margin-bottom: 6px;
+      color: #fff;
+      text-shadow: 0 2px 18px rgba(120, 170, 255, 0.18);
+      user-select: none;
+    }
+    .review-name {
+      font-weight: 700;
+      font-size: 1rem;
+      color: rgba(255,255,255,0.95);
+    }
+    .review-date {
+      color: rgba(255,255,255,0.58);
+      font-size: 0.82rem;
+      font-weight: 700;
+      white-space: nowrap;
+      padding-top: 2px;
+    }
+    .review-text {
+      color: rgba(255,255,255,0.72);
+      line-height: 1.65;
+      font-size: 0.95rem;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+    }
+    .card {
+      background: linear-gradient(180deg, rgba(255,255,255,0.05) 0%, rgba(12, 12, 20, 0.65) 100%);
+      border: 1px solid rgba(120, 150, 220, 0.12);
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+      transition: border-color 0.25s, box-shadow 0.25s, transform 0.25s;
+    }
+    .card:hover {
+      border-color: rgba(140, 180, 255, 0.35);
+      box-shadow:
+        0 12px 40px rgba(0, 0, 0, 0.35),
+        0 0 0 1px rgba(100, 160, 255, 0.15) inset,
+        0 0 48px rgba(70, 120, 220, 0.18);
+      transform: translateY(-3px);
+    }
+    .card-top {
+      height: 170px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: end;
+      justify-content: flex-start;
+    }
+    .card-image {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .card-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(0,0,0,0.04), rgba(0,0,0,0.58));
+    }
+    .card-label-wrap {
+      position: relative;
+      z-index: 1;
+      padding: 14px 16px;
+      width: 100%;
+    }
+    .flavour-label {
+      font-size: 1.1rem;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+      text-shadow: 0 2px 12px rgba(0,0,0,0.3);
+    }
+    .astro { background: linear-gradient(135deg, #100824, #5b1f8f 55%, #be2de0); }
+    .limon { background: linear-gradient(135deg, #4b3400, #a87400 55%, #ffd84d); }
+    .mango { background: linear-gradient(135deg, #03253f, #0d5ca1 55%, #4ac6ff); }
+    .tobacco { background: linear-gradient(135deg, #23140d, #693514 55%, #a35a2f); }
+    .vanilla { background: linear-gradient(135deg, #3b180b, #a34814 55%, #ffd19c); }
+    .iceberry { background: linear-gradient(135deg, #08132f, #1f4fa8 55%, #89d5ff); }
+    .greenapple { background: linear-gradient(135deg, #0e2a0c, #2f8c1f 55%, #b3ff8a); }
+    .colalemon { background: linear-gradient(135deg, #311009, #8f2d13 55%, #ff9e56); }
+    .bluerazzice { background: linear-gradient(135deg, #0a1a2e, #1e5a8a 55%, #4ecdc4); }
+    .strawberrykiwi { background: linear-gradient(135deg, #4a0a1a, #c41e3a 55%, #2d5a27); }
+    .grapeice { background: linear-gradient(135deg, #1a0a2e, #4a1a7a 55%, #9b59b6); }
+    .peachice { background: linear-gradient(135deg, #3d1a0a, #d4782a 55%, #ffcc99); }
+    .pistachiocream { background: linear-gradient(135deg, #1a2e14, #3d6b2a 55%, #8bc34a); }
+    .vanillacustard { background: linear-gradient(135deg, #3d2e0a, #b8860b 55%, #ffecb3); }
+    .colaice { background: linear-gradient(135deg, #1a0f08, #4a2812 55%, #8b4513); }
+    .personalizzabile { background: linear-gradient(135deg, #2e1a4a, #6a2c91 25%, #e74c3c 50%, #f39c12 75%, #3498db); }
+
+    .card-body { padding: 16px; }
+    .name {
+      font-size: 1.15rem;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .desc {
+      color: rgba(255,255,255,0.68);
+      font-size: 0.95rem;
+      line-height: 1.55;
+      min-height: 64px;
+    }
+    .bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 12px;
+      margin-top: 18px;
+    }
+    .price small {
+      display: block;
+      color: rgba(255,255,255,0.45);
+      font-size: 0.72rem;
+      margin-bottom: 3px;
+    }
+    .price-discount-tag {
+      display: inline-block;
+      margin-top: 4px;
+      padding: 3px 8px;
+      border-radius: 999px;
+      font-size: 0.68rem;
+      font-weight: 800;
+      letter-spacing: 0.03em;
+      color: #d7ffe7;
+      background: linear-gradient(135deg, rgba(46, 200, 130, 0.38), rgba(20, 140, 100, 0.48));
+      border: 1px solid rgba(100, 240, 180, 0.35);
+      box-shadow: 0 3px 12px rgba(40, 200, 140, 0.2);
+    }
+    .price strong {
+      font-size: 1.55rem;
+      color: #fff8f0;
+      text-shadow: 0 0 20px rgba(255, 200, 120, 0.35);
+    }
+    .price strong.price-pink-glow {
+      color: #ffdff8;
+      text-shadow: 0 0 16px rgba(255, 120, 220, 0.35), 0 0 28px rgba(255, 90, 210, 0.28);
+      animation: pinkSparkle 2.2s ease-in-out infinite;
+    }
+    .price-old {
+      font-size: 0.9rem;
+      color: rgba(255,255,255,0.5);
+      text-decoration: line-through;
+    }
+    .order {
+      padding: 10px 18px;
+      border-radius: 12px;
+      background: linear-gradient(145deg, #4a6fff 0%, #3d4fd9 50%, #2e3cb8 100%);
+      color: #fff;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.9rem;
+      border: 1px solid rgba(160, 190, 255, 0.35);
+      white-space: nowrap;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s, filter 0.2s;
+      box-shadow: 0 4px 18px rgba(60, 90, 220, 0.45), 0 0 24px rgba(80, 120, 255, 0.2);
+    }
+    .order:hover {
+      filter: brightness(1.08);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 28px rgba(70, 110, 240, 0.55), 0 0 36px rgba(100, 150, 255, 0.25);
+    }
+
+    .info-boxes {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+    .info {
+      border-radius: 18px;
+      padding: 22px;
+      background: linear-gradient(160deg, rgba(30, 32, 48, 0.5) 0%, rgba(12, 14, 22, 0.75) 100%);
+      border: 1px solid rgba(120, 150, 220, 0.12);
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .info:hover {
+      border-color: rgba(150, 180, 255, 0.22);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), 0 0 40px rgba(80, 120, 200, 0.1);
+    }
+    .info h3 {
+      font-size: 1.05rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    .info p {
+      color: rgba(255,255,255,0.72);
+      line-height: 1.7;
+    }
+
+    .sr-only-copy {
+      position: absolute;
+      left: -9999px;
+      top: -9999px;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 30%, rgba(40, 60, 120, 0.35), transparent 55%),
+        rgba(3, 3, 10, 0.82);
+      display: none;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 20px;
+      padding-top: max(20px, env(safe-area-inset-top));
+      padding-bottom: max(20px, env(safe-area-inset-bottom));
+      z-index: 92;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior: contain;
+    }
+    .modal-overlay.show { display: flex; }
+    .modal {
+      width: min(520px, 100%);
+      max-height: calc(100vh - 40px);
+      max-height: min(92dvh, calc(100dvh - 40px));
+      background: linear-gradient(180deg, rgba(22, 24, 38, 0.98) 0%, rgba(10, 10, 18, 0.99) 100%);
+      backdrop-filter: blur(20px) saturate(1.2);
+      border: 1px solid rgba(130, 170, 255, 0.2);
+      border-radius: 22px;
+      box-shadow:
+        0 24px 80px rgba(0, 0, 0, 0.55),
+        0 0 0 1px rgba(255,255,255,0.05) inset,
+        0 0 100px rgba(60, 100, 200, 0.15);
+      overflow-x: hidden;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior: contain;
+    }
+    .modal-header {
+      padding: 20px 20px 14px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: start;
+    }
+    .modal-title {
+      font-size: 1.3rem;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .modal-subtitle {
+      color: rgba(255,255,255,0.68);
+      line-height: 1.6;
+      font-size: 0.95rem;
+    }
+    .close-btn {
+      background: rgba(255,255,255,0.05);
+      color: #fff;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px;
+      padding: 8px 12px;
+      cursor: pointer;
+      font-weight: 500;
+      font-size: 0.9rem;
+      transition: background 0.2s;
+    }
+    .close-btn:hover { background: rgba(255,255,255,0.08); }
+    .modal-body { padding: 20px; }
+    .nic-section-label {
+      color: rgba(255,255,255,0.82);
+      font-weight: 700;
+      margin-bottom: 14px;
+      display: block;
+    }
+    .nicotine-box {
+      border-radius: 22px;
+      border: 1px solid rgba(120, 160, 255, 0.14);
+      background: linear-gradient(165deg, rgba(35, 40, 65, 0.4) 0%, rgba(15, 16, 28, 0.85) 100%);
+      padding: 18px;
+      margin-bottom: 18px;
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.25), 0 0 32px rgba(70, 110, 200, 0.08);
+    }
+    .nicotine-controls {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 12px;
+    }
+    .nic-btn {
+      width: 52px;
+      height: 52px;
+      border-radius: 16px;
+      border: 1px solid rgba(140, 180, 255, 0.25);
+      background: linear-gradient(180deg, rgba(55, 70, 120, 0.5), rgba(30, 35, 60, 0.7));
+      color: #fff;
+      font-size: 1.6rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.15s, box-shadow 0.15s;
+      box-shadow: 0 4px 14px rgba(40, 80, 180, 0.25);
+    }
+    .nic-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 22px rgba(80, 130, 240, 0.4);
+      border-color: rgba(180, 210, 255, 0.4);
+    }
+    .nic-value-wrap {
+      flex: 1;
+      text-align: center;
+    }
+    .nic-value {
+      font-size: 2.2rem;
+      font-weight: 800;
+      line-height: 1;
+    }
+    .nic-unit {
+      margin-top: 4px;
+      color: rgba(255,255,255,0.66);
+      font-size: 0.9rem;
+    }
+    .nic-hint {
+      color: rgba(255,255,255,0.62);
+      font-size: 0.92rem;
+      line-height: 1.6;
+    }
+    .step-buttons {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+    }
+    .step-chip {
+      border-radius: 999px;
+      padding: 10px 14px;
+      background: rgba(35, 40, 65, 0.45);
+      border: 1px solid rgba(120, 160, 255, 0.18);
+      color: #fff;
+      cursor: pointer;
+      font-weight: 700;
+      transition: background 0.2s, border-color 0.2s, box-shadow 0.2s;
+    }
+    .step-chip:hover {
+      background: rgba(60, 90, 160, 0.45);
+      border-color: rgba(160, 200, 255, 0.35);
+      box-shadow: 0 4px 16px rgba(70, 120, 220, 0.25);
+    }
+    .modal-summary {
+      margin-top: 18px;
+      padding: 0;
+      border-radius: 20px;
+      overflow: hidden;
+      border: 1px solid rgba(100, 180, 255, 0.28);
+      background: linear-gradient(145deg, rgba(35, 50, 90, 0.65) 0%, rgba(14, 16, 28, 0.95) 100%);
+      box-shadow:
+        0 16px 48px rgba(0, 0, 0, 0.45),
+        0 0 60px rgba(60, 120, 220, 0.15),
+        inset 0 1px 0 rgba(255,255,255,0.08);
+    }
+    .order-price-top {
+      padding: 18px 18px 14px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .order-price-label {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: rgba(255,255,255,0.45);
+      font-weight: 700;
+      width: 100%;
+      margin-bottom: 2px;
+    }
+    .order-price-main {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .order-price-euro {
+      font-size: 2.35rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1;
+      color: #f2f7ff;
+      text-shadow: 0 2px 24px rgba(100, 160, 255, 0.35);
+    }
+    .order-price-euro small {
+      font-size: 0.55em;
+      font-weight: 700;
+      opacity: 0.85;
+    }
+    .order-price-was {
+      font-size: 1.05rem;
+      color: rgba(255,255,255,0.38);
+      text-decoration: line-through;
+      font-weight: 600;
+    }
+    .order-price-ref-hint {
+      width: 100%;
+      margin-top: 8px;
+      font-size: 0.78rem;
+      line-height: 1.45;
+      color: rgba(255,255,255,0.48);
+      font-weight: 500;
+    }
+    .order-discount-pill {
+      display: inline-flex;
+      align-items: center;
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 0.82rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, rgba(46, 200, 130, 0.4), rgba(20, 140, 100, 0.5));
+      border: 1px solid rgba(100, 240, 180, 0.4);
+      color: #c8ffe8;
+      box-shadow: 0 4px 18px rgba(40, 200, 140, 0.25), 0 0 20px rgba(60, 220, 160, 0.12);
+    }
+    .order-price-nic {
+      padding: 12px 18px;
+      border-top: 1px solid rgba(255,255,255,0.07);
+      font-size: 0.88rem;
+      color: rgba(255,255,255,0.72);
+      line-height: 1.5;
+      background: rgba(0,0,0,0.2);
+    }
+    .order-price-nic strong { color: #9ecbff; font-weight: 600; }
+    .order-detail-lines {
+      padding: 12px 18px 16px;
+      font-size: 0.88rem;
+      color: rgba(255,255,255,0.72);
+      line-height: 1.65;
+      border-top: 1px solid rgba(255,255,255,0.06);
+    }
+    .order-volume-badge {
+      margin-top: 10px;
+      display: inline-block;
+      padding: 6px 12px;
+      border-radius: 10px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      background: rgba(255, 180, 80, 0.12);
+      border: 1px solid rgba(255, 200, 120, 0.25);
+      color: #ffd9a0;
+    }
+    .modal-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 18px;
+      flex-wrap: wrap;
+    }
+
+    .age-gate {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      background: rgba(2, 2, 8, 0.92);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .age-gate.hidden { display: none; }
+    .age-card {
+      width: min(520px, 100%);
+      border-radius: 30px;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: linear-gradient(180deg, rgba(22,22,32,0.98), rgba(10,10,16,0.99));
+      box-shadow: 0 30px 90px rgba(0,0,0,0.5);
+      padding: 30px 24px;
+      text-align: center;
+    }
+    .age-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 74px;
+      height: 74px;
+      border-radius: 999px;
+      font-size: 1.5rem;
+      font-weight: 800;
+      margin-bottom: 18px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    .age-title {
+      font-size: clamp(1.8rem, 3vw, 2.5rem);
+      font-weight: 800;
+      margin-bottom: 12px;
+    }
+    .age-text {
+      color: rgba(255,255,255,0.72);
+      line-height: 1.7;
+      margin-bottom: 22px;
+    }
+    .age-actions {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .age-note {
+      margin-top: 18px;
+      color: rgba(255,255,255,0.5);
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
+    .age-disclaimer {
+      margin-top: 20px;
+      text-align: left;
+      border-radius: 20px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      padding: 16px;
+      max-height: 240px;
+      overflow: auto;
+    }
+    .age-disclaimer h3 {
+      font-size: 1rem;
+      margin-bottom: 10px;
+    }
+    .age-disclaimer ul {
+      padding-left: 18px;
+      color: rgba(255,255,255,0.76);
+      line-height: 1.6;
+      display: grid;
+      gap: 8px;
+    }
+    .age-consent {
+      margin-top: 16px;
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      text-align: left;
+      color: rgba(255,255,255,0.78);
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+    .age-consent input {
+      margin-top: 4px;
+      transform: scale(1.15);
+    }
+
+    footer {
+      padding: 26px 0 40px;
+      color: rgba(255,255,255,0.56);
+      text-align: center;
+      cursor: default;
+      border-top: 1px solid rgba(120, 150, 220, 0.08);
+      box-shadow: 0 -20px 50px rgba(40, 60, 120, 0.08);
+    }
+    .card.sold-out:hover {
+      transform: none;
+      border-color: rgba(120, 150, 220, 0.12);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+    }
+    .card.sold-out .card-top { opacity: 0.7; }
+    .card.sold-out .order {
+      background: rgba(80,80,90,0.6);
+      border-color: rgba(255,255,255,0.08);
+      box-shadow: none;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+    .card.sold-out .sold-out-badge {
+      position: absolute; top: 12px; right: 12px; z-index: 2;
+      background: rgba(200,60,60,0.9); color: #fff; padding: 4px 10px; border-radius: 8px;
+      font-size: 0.75rem; font-weight: 600;
+    }
+    .pin-modal-overlay {
+      position: fixed; inset: 0; background: rgba(3,3,8,0.85); display: none;
+      align-items: flex-start; justify-content: center; padding: 20px;
+      padding-top: max(20px, env(safe-area-inset-top));
+      z-index: 200;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior: contain;
+    }
+    .pin-modal-overlay.show { display: flex; }
+    .pin-modal {
+      width: min(360px, 100%); background: rgba(18,18,26,0.98); border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 20px; padding: 28px; box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+    }
+    .pin-modal h3 { font-size: 1.2rem; font-weight: 600; margin-bottom: 16px; }
+    .pin-modal input { width: 100%; padding: 14px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.05); color: #fff; font-size: 1.2rem; text-align: center; letter-spacing: 6px; }
+    .pin-modal .pin-error { color: #ff6b6b; font-size: 0.9rem; margin-top: 10px; display: none; }
+    .pin-modal .pin-error.show { display: block; }
+    .pin-modal .pin-actions { margin-top: 20px; display: flex; gap: 10px; }
+    .pin-modal .pin-actions button { flex: 1; padding: 12px; border-radius: 12px; font-weight: 600; cursor: pointer;
+      border: none; transition: all 0.2s; }
+    .pin-modal .pin-btn-ok { background: #2e59d8; color: #fff; }
+    .pin-modal .pin-btn-ok:hover { background: #3d6ae8; }
+    .pin-modal .pin-btn-cancel { background: rgba(255,255,255,0.06); color: #fff; border: 1px solid rgba(255,255,255,0.1); }
+    .pin-modal .pin-btn-cancel:hover { background: rgba(255,255,255,0.1); }
+
+    @media (max-width: 1024px) {
+      .grid { grid-template-columns: repeat(2, 1fr); }
+      .info-boxes { grid-template-columns: 1fr; }
+      .review-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      body::before { animation: none; }
+      .btn-complete { animation: none; }
+      .wa-float { animation: none; }
+    }
+
+    @media (max-width: 640px) {
+      .wa-float { bottom: 18px; right: 18px; width: 56px; height: 56px; }
+      .wa-float svg { width: 28px; height: 28px; }
+      .grid { grid-template-columns: 1fr; }
+      .hero-content { padding: 26px 18px 16px; }
+      .card-top { height: 148px; }
+      .bottom { flex-direction: column; align-items: stretch; }
+      .order { text-align: center; }
+      .modal-header, .modal-body { padding: 18px; }
+      .modal-actions { flex-direction: column; }
+      .nicotine-controls { gap: 10px; }
+      .nic-btn { width: 48px; height: 48px; }
+      .review-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div id="ageGate" class="age-gate">
+    <div class="age-card">
+      <div class="age-badge">18+</div>
+      <div class="age-title">Sei maggiorenne?</div>
+      <div class="age-text">
+        Per entrare nel sito devi confermare di avere almeno 18 anni. Se non sei maggiorenne, non puoi proseguire.
+      </div>
+      <div class="age-disclaimer">
+        <h3>Avviso importante</h3>
+        <ul>
+          <li>La nicotina crea dipendenza ed è dannosa per la salute.</li>
+          <li>L’accesso è riservato ai maggiorenni.</li>
+          <li>Se non accetti queste condizioni o non sei maggiorenne, non puoi proseguire.</li>
+        </ul>
+      </div>
+      <label class="age-consent" for="cookieConsent">
+        <input id="cookieConsent" type="checkbox" onchange="aggiornaConsensoIngresso()" />
+        <span>Dichiaro di aver letto l’avviso sopra, di essere maggiorenne e di accettare cookie tecnici minimi necessari al funzionamento della pagina.</span>
+      </label>
+      <div class="age-actions">
+        <button id="adultYesBtn" class="btn btn-primary btn-disabled" type="button" onclick="confermaMaggiorenne(true)">Sì, sono maggiorenne</button>
+        <button class="btn btn-secondary" type="button" onclick="confermaMaggiorenne(false)">No</button>
+      </div>
+      <div id="ageGateMessage" class="age-note">Per continuare devi prima spuntare la casella di conferma.</div>
+    </div>
+  </div>
+
+  <header>
+    <div class="container nav">
+      <div class="brand">Icon <span>Liquid</span></div>
+      <div class="nav-right">
+        <nav class="nav-links">
+          <a href="#catalogo">Catalogo</a>
+          <a href="#come">Come ordinare</a>
+        </nav>
+        <button type="button" class="cart-nav-btn" id="cartOpenBtn" onclick="apriCarrello()" aria-label="Apri carrello" title="Carrello">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+          <span id="cartBadge" class="cart-badge">0</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div id="cartBackdrop" class="cart-backdrop" aria-hidden="true" onclick="chiudiCarrello()"></div>
+  <div id="cartDrawer" class="cart-drawer" aria-hidden="true">
+    <div class="cart-drawer-panel">
+      <div class="cart-drawer-header">
+        <h2>Carrello</h2>
+        <button class="close-btn" type="button" onclick="chiudiCarrello()">Chiudi</button>
+      </div>
+      <div id="cartList" class="cart-list"></div>
+      <div class="cart-drawer-footer">
+        <button type="button" class="btn btn-complete" id="cartCompleteBtn" onclick="completaOrdineCarrello()" disabled>Completa ordine</button>
+      </div>
+    </div>
+  </div>
+
+  <main>
+    <section class="hero">
+      <div class="container">
+        <div class="hero-box">
+          <div class="hero-content">
+            <div class="badge">Flaconi da 100ml • Ordini in privato</div>
+            <h1>I nostri flaconi da 100ml</h1>
+            <p class="sub">
+              Scegli il gusto, regola volume e nicotina, poi aggiungi al carrello. Apri il carrello dall’icona in alto, controlla le righe e premi «Completa ordine» per inviare tutto su WhatsApp in un unico messaggio.
+            </p>
+            <div class="hero-actions">
+              <a class="btn btn-primary" href="#catalogo">Guarda il catalogo</a>
+            </div>
+            <div id="copyStatus" class="copy-status" aria-live="polite"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="catalogo">
+      <div class="container">
+        <h2 class="section-title">Catalogo aromi</h2>
+
+        <div id="productGrid" class="grid">
+          <!-- prodotti caricati dinamicamente -->
+          <article class="card"><div class="card-top limon"><img class="card-image" src="images/limoncello.png" alt="Limoncello" onerror="this.style.display='none'" /><div class="card-overlay"></div><div class="card-label-wrap"><div class="flavour-label">Limoncello</div></div></div><div class="card-body"><div class="name">Limoncello 100ml</div><div class="desc">Agrumato forte, brillante e profumato, con un carattere fresco che resta molto riconoscibile.</div><div class="bottom"><div class="price"><small>Prezzo</small><div class="price-old">€50</div><strong>€48</strong></div><button class="order" type="button" onclick="apriOrdine('Limoncello 100ml')">Aggiungi al carrello</button></div></div></article>
+          <article class="card"><div class="card-top mango"><img class="card-image" src="images/mango-ice.png" alt="Mango Ice" onerror="this.style.display='none'" /><div class="card-overlay"></div><div class="card-label-wrap"><div class="flavour-label">Mango Ice</div></div></div><div class="card-body"><div class="name">Mango Ice 100ml</div><div class="desc">Tropicale, pieno e fresco, con una nota ghiacciata che rende il mango più netto e deciso.</div><div class="bottom"><div class="price"><small>Prezzo</small><div class="price-old">€50</div><strong>€48</strong></div><button class="order" type="button" onclick="apriOrdine('Mango Ice 100ml')">Aggiungi al carrello</button></div></div></article>
+          <article class="card"><div class="card-top tobacco"><img class="card-image" src="images/wild-tobacco.png" alt="Wild Tobacco" onerror="this.style.display='none'" /><div class="card-overlay"></div><div class="card-label-wrap"><div class="flavour-label">Wild Tobacco</div></div></div><div class="card-body"><div class="name">Wild Tobacco 100ml</div><div class="desc">Profilo più scuro e secco, con un taglio deciso, adatto a chi preferisce gusti più maturi.</div><div class="bottom"><div class="price"><small>Prezzo</small><div class="price-old">€50</div><strong>€48</strong></div><button class="order" type="button" onclick="apriOrdine('Wild Tobacco 100ml')">Aggiungi al carrello</button></div></div></article>
+          <article class="card"><div class="card-top vanilla"><img class="card-image" src="images/caramel-vanilla.png" alt="Caramel Vanilla" onerror="this.style.display='none'" /><div class="card-overlay"></div><div class="card-label-wrap"><div class="flavour-label">Caramel Vanilla</div></div></div><div class="card-body"><div class="name">Caramel Vanilla 100ml</div><div class="desc">Cremoso, dolce e morbido, con vaniglia rotonda e punta caramellata elegante e piena.</div><div class="bottom"><div class="price"><small>Prezzo</small><div class="price-old">€50</div><strong>€48</strong></div><button class="order" type="button" onclick="apriOrdine('Caramel Vanilla 100ml')">Aggiungi al carrello</button></div></div></article>
+          <article class="card"><div class="card-top iceberry"><img class="card-image" src="images/ice-berry.png" alt="Ice Berry" onerror="this.style.display='none'" /><div class="card-overlay"></div><div class="card-label-wrap"><div class="flavour-label">Ice Berry</div></div></div><div class="card-body"><div class="name">Ice Berry 100ml</div><div class="desc">Frutti rossi freddi con spinta ghiacciata, pensato per chi cerca freschezza immediata.</div><div class="bottom"><div class="price"><small>Prezzo</small><div class="price-old">€50</div><strong>€48</strong></div><button class="order" type="button" onclick="apriOrdine('Ice Berry 100ml')">Aggiungi al carrello</button></div></div></article>
+          <article class="card"><div class="card-top greenapple"><img class="card-image" src="images/green-apple.png" alt="Green Apple" onerror="this.style.display='none'" /><div class="card-overlay"></div><div class="card-label-wrap"><div class="flavour-label">Green Apple</div></div></div><div class="card-body"><div class="name">Green Apple 100ml</div><div class="desc">Mela verde vivace, fresca e pulita, con impatto immediato e finale leggermente acidulo.</div><div class="bottom"><div class="price"><small>Prezzo</small><div class="price-old">€50</div><strong>€48</strong></div><button class="order" type="button" onclick="apriOrdine('Green Apple 100ml')">Aggiungi al carrello</button></div></div></article>
+          <article class="card"><div class="card-top colalemon"><img class="card-image" src="images/cola-lemon.png" alt="Cola Lemon" onerror="this.style.display='none'" /><div class="card-overlay"></div><div class="card-label-wrap"><div class="flavour-label">Cola Lemon</div></div></div><div class="card-body"><div class="name">Cola Lemon 100ml</div><div class="desc">Cola intensa con taglio agrumato al limone, più brillante e originale rispetto ai classici.</div><div class="bottom"><div class="price"><small>Prezzo</small><div class="price-old">€50</div><strong>€48</strong></div><button class="order" type="button" onclick="apriOrdine('Cola Lemon 100ml')">Aggiungi al carrello</button></div></div></article>
+          <article class="card"><div class="card-top bluerazzice"><img class="card-image" src="images/blue-razz-ice.png" alt="Blue Razz Ice" onerror="this.style.display='none'" /><div class="card-overlay"></div><div class="card-label-wrap"><div class="flavour-label">Blue Razz Ice</div></div></div><div class="card-body"><div class="name">Blue Razz Ice 100ml</div><div class="desc">Fruttato e fresco, vende tantissimo. Lampone blu ghiacciato con punch immediato.</div><div class="bottom"><div class="price"><small>Prezzo</small><div class="price-old">€50</div><strong>€48</strong></div><button class="order" type="button" onclick="apriOrdine('Blue Razz Ice 100ml')">Aggiungi al carrello</button></div></div></article>
+          <article class="card"><div class="card-top strawberrykiwi"><img class="card-image" src="images/strawberry-kiwi.png" alt="Strawberry Kiwi" onerror="this.style.display='none'" /><div class="card-overlay"></div><div class="card-label-wrap"><div class="flavour-label">Strawberry Kiwi</div></div></div><div class="card-body"><div class="name">Strawberry Kiwi 100ml</div><div class="desc">Classico facile, piace a un sacco di gente. Fragola e kiwi in equilibrio perfetto.</div><div class="bottom"><div class="price"><small>Prezzo</small><div class="price-old">€50</div><strong>€48</strong></div><button class="order" type="button" onclick="apriOrdine('Strawberry Kiwi 100ml')">Aggiungi al carrello</button></div></div></article>
+          <article class="card"><div class="card-top grapeice"><img class="card-image" src="images/grape-ice.png" alt="Grape Ice" onerror="this.style.display='none'" /><div class="card-overlay"></div><div class="card-label-wrap"><div class="flavour-label">Grape Ice</div></div></div><div class="card-body"><div class="name">Grape Ice 100ml</div><div class="desc">Uva ghiacciata, gusto forte e riconoscibile. Fresco e deciso.</div><div class="bottom"><div class="price"><small>Prezzo</small><div class="price-old">€50</div><strong>€48</strong></div><button class="order" type="button" onclick="apriOrdine('Grape Ice 100ml')">Aggiungi al carrello</button></div></div></article>
+          <article class="card"><div class="card-top peachice"><img class="card-image" src="images/peach-ice.png" alt="Peach Ice" onerror="this.style.display='none'" /><div class="card-overlay"></div><div class="card-label-wrap"><div class="flavour-label">Peach Ice</div></div></div><div class="card-body"><div class="name">Peach Ice 100ml</div><div class="desc">Più morbido ma sempre commerciale. Pesca dolce con nota ghiacciata elegante.</div><div class="bottom"><div class="price"><small>Prezzo</small><div class="price-old">€50</div><strong>€48</strong></div><button class="order" type="button" onclick="apriOrdine('Peach Ice 100ml')">Aggiungi al carrello</button></div></div></article>
+          <article class="card"><div class="card-top pistachiocream"><img class="card-image" src="images/pistachio-cream.png" alt="Pistachio Cream" onerror="this.style.display='none'" /><div class="card-overlay"></div><div class="card-label-wrap"><div class="flavour-label">Pistachio Cream</div></div></div><div class="card-body"><div class="name">Pistachio Cream 100ml</div><div class="desc">Cremoso premium, fa salire la percezione del brand. Pistacchio e crema di alta qualità.</div><div class="bottom"><div class="price"><small>Prezzo</small><div class="price-old">€50</div><strong>€48</strong></div><button class="order" type="button" onclick="apriOrdine('Pistachio Cream 100ml')">Aggiungi al carrello</button></div></div></article>
+          <article class="card"><div class="card-top vanillacustard"><img class="card-image" src="images/vanilla-custard.png" alt="Vanilla Custard" onerror="this.style.display='none'" /><div class="card-overlay"></div><div class="card-label-wrap"><div class="flavour-label">Vanilla Custard</div></div></div><div class="card-body"><div class="name">Vanilla Custard 100ml</div><div class="desc">Altro cremoso serio, elegante. Vaniglia e crema pasticcera per un profilo raffinato.</div><div class="bottom"><div class="price"><small>Prezzo</small><div class="price-old">€50</div><strong>€48</strong></div><button class="order" type="button" onclick="apriOrdine('Vanilla Custard 100ml')">Aggiungi al carrello</button></div></div></article>
+          <article class="card"><div class="card-top colaice"><img class="card-image" src="images/cola-ice.png" alt="Cola Ice" onerror="this.style.display='none'" /><div class="card-overlay"></div><div class="card-label-wrap"><div class="flavour-label">Cola Ice</div></div></div><div class="card-body"><div class="name">Cola Ice 100ml</div><div class="desc">Più semplice di Cola Lemon, ma molto richiesto. Cola classica con freschezza ghiacciata.</div><div class="bottom"><div class="price"><small>Prezzo</small><div class="price-old">€50</div><strong>€48</strong></div><button class="order" type="button" onclick="apriOrdine('Cola Ice 100ml')">Aggiungi al carrello</button></div></div></article>
+          <article class="card"><div class="card-top personalizzabile"><img class="card-image" src="images/personalizzabile.png" alt="Personalizzabile" onerror="this.style.display='none'" /><div class="card-overlay"></div><div class="card-label-wrap"><div class="flavour-label">Personalizzabile</div></div></div><div class="card-body"><div class="name">Personalizzabile 100ml</div><div class="desc">Crea il tuo mix su misura. Scegli aromi e intensità. Ideale per chi ama sperimentare.</div><div class="bottom"><div class="price"><small>Prezzo</small><div class="price-old">€50</div><strong>€48</strong></div><button class="order" type="button" onclick="apriOrdine('Personalizzabile 100ml')">Aggiungi al carrello</button></div></div></article>
+        </div>
+      </div>
+    </section>
+
+    <section id="come">
+      <div class="container">
+        <h2 class="section-title">Come ordinare</h2>
+        <div class="info-boxes">
+          <div class="info">
+            <h3>1. Guarda il catalogo</h3>
+            <p>Entra nel catalogo, guarda tutti i gusti disponibili e premi «Aggiungi al carrello» sul prodotto che ti piace di più.</p>
+          </div>
+          <div class="info">
+            <h3>2. Regola il volume</h3>
+            <p>Scegli il volume da 100 a 500 ml e la nicotina a step di 20 ml; extra €4 ogni 20 ml oltre i primi 20. Il riepilogo aggiorna listino, sconto liquido e totale.</p>
+          </div>
+          <div class="info">
+            <h3>3. Invia l’ordine</h3>
+            <p>Apri il carrello, controlla il riepilogo e premi «Completa ordine»: si apre WhatsApp con tutti i gusti in un messaggio numerato.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="recensioni">
+      <div class="container">
+        <h2 class="section-title">Recensioni clienti</h2>
+        <div id="reviewsGrid" class="review-grid"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div id="adminSecretTrigger" class="container" title="">© Icon Liquid</div>
+  </footer>
+
+  <a href="https://wa.me/393519198166" class="wa-float" target="_blank" rel="noopener noreferrer" aria-label="Scrivici su WhatsApp" title="WhatsApp">
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.435 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+  </a>
+
+  <div id="modalOverlay" class="modal-overlay" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalProductName">
+      <div class="modal-header">
+        <div>
+          <div id="modalProductName" class="modal-title">Ordine</div>
+          <div class="modal-subtitle">Volume da 100 a 500 ml (step 50 ml). Nicotina sempre a step di 20 ml (0, 20, 40, 60…). I primi 20 ml senza extra; ogni ulteriore 20 ml di nic costano €4 (es. 40 ml → +€4, 60 ml → +€8).</div>
+        </div>
+        <button class="close-btn" type="button" onclick="chiudiOrdine()">Chiudi</button>
+      </div>
+      <div class="modal-body">
+        <span class="nic-section-label">Volume liquido</span>
+        <div class="nicotine-box">
+          <div class="nicotine-controls">
+            <button class="nic-btn" type="button" onclick="cambiaVolume(-50)">−</button>
+            <div class="nic-value-wrap">
+              <div id="volumeValue" class="nic-value">100</div>
+              <div class="nic-unit">ml totali</div>
+            </div>
+            <button class="nic-btn" type="button" onclick="cambiaVolume(50)">+</button>
+          </div>
+          <div class="nic-hint">Da 100 ml a 500 ml. Ogni clic aggiunge o toglie 50 ml.</div>
+          <div class="step-buttons">
+            <button class="step-chip" type="button" onclick="impostaVolume(100)">100</button>
+            <button class="step-chip" type="button" onclick="impostaVolume(150)">150</button>
+            <button class="step-chip" type="button" onclick="impostaVolume(200)">200</button>
+            <button class="step-chip" type="button" onclick="impostaVolume(250)">250</button>
+            <button class="step-chip" type="button" onclick="impostaVolume(300)">300</button>
+            <button class="step-chip" type="button" onclick="impostaVolume(350)">350</button>
+            <button class="step-chip" type="button" onclick="impostaVolume(400)">400</button>
+            <button class="step-chip" type="button" onclick="impostaVolume(450)">450</button>
+            <button class="step-chip" type="button" onclick="impostaVolume(500)">500</button>
+          </div>
+        </div>
+
+        <span class="nic-section-label">Nicotina da aggiungere</span>
+        <div class="nicotine-box">
+          <div class="nicotine-controls">
+            <button class="nic-btn" type="button" onclick="cambiaNicotina(-1)">−</button>
+            <div class="nic-value-wrap">
+              <div id="nicotineValue" class="nic-value">0</div>
+              <div class="nic-unit">ml di nicotina</div>
+            </div>
+            <button class="nic-btn" type="button" onclick="cambiaNicotina(1)">+</button>
+          </div>
+          <div class="nic-hint">Step fisso <strong>20 ml</strong>. Fino a <strong>20 ml</strong> inclusi: <strong>€0</strong> di extra. Da <strong>40 ml</strong> in su: <strong>€4</strong> ogni 20 ml aggiuntivi (40 → +€4, 60 → +€8, 80 → +€12…).</div>
+          <div class="step-buttons">
+            <button class="step-chip" type="button" onclick="impostaNicotina(0)">0</button>
+            <button class="step-chip" type="button" onclick="impostaNicotina(20)">20</button>
+            <button class="step-chip" type="button" onclick="impostaNicotina(40)">40</button>
+            <button class="step-chip" type="button" onclick="impostaNicotina(60)">60</button>
+            <button class="step-chip" type="button" onclick="impostaNicotina(80)">80</button>
+            <button class="step-chip" type="button" onclick="impostaNicotina(100)">100</button>
+            <button class="step-chip" type="button" onclick="impostaNicotina(120)">120</button>
+            <button class="step-chip" type="button" onclick="impostaNicotina(200)">200</button>
+          </div>
+        </div>
+
+        <div id="modalSummary" class="modal-summary"></div>
+
+        <div class="modal-actions">
+          <button class="btn btn-complete" type="button" onclick="aggiungiAlCarrello()">Aggiungi al carrello</button>
+        </div>
+        <div id="modalStatus" class="modal-status" aria-live="polite"></div>
+      </div>
+    </div>
+  </div>
+
+  <textarea id="copyFallback" class="sr-only-copy" aria-hidden="true"></textarea>
+
+  <div id="pinModalOverlay" class="pin-modal-overlay">
+    <div class="pin-modal">
+      <h3>Inserisci PIN</h3>
+      <input type="password" id="pinInput" maxlength="8" placeholder="••••" inputmode="numeric" autocomplete="off" />
+      <div id="pinError" class="pin-error">PIN errato. Accesso negato.</div>
+      <div class="pin-actions">
+        <button class="pin-btn-ok" type="button" onclick="verificaPin()">Accedi</button>
+        <button class="pin-btn-cancel" type="button" onclick="chiudiPinModal()">Annulla</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/config.js"></script>
+  <script src="js/cart-cache.js"></script>
+  <script>
+    const ADMIN_PIN = '2106';
+    const PRODUCTS_KEY = 'iconLiquid_products';
+    const LOGS_KEY = 'iconLiquid_logs';
+    const APP_CONFIG = window.IconLiquidConfig || {};
+    const PRODUCT_PRICES = APP_CONFIG.productPrices || {};
+    const PRODUCT_OLD_PRICES = APP_CONFIG.productOldPrices || {};
+    const PINK_SPARKLE_PRODUCTS = APP_CONFIG.pinkSparkleProducts || {};
+    const DEFAULT_REVIEWS = APP_CONFIG.defaultReviews || [];
+    const DEFAULT_PRODUCTS = [
+      { id: 'p1', name: 'Astroberry', fullName: 'Astroberry 100ml', img: 'astroberry.png', desc: 'Mix fruttato intenso con frutti di bosco e nota dolce pulita, pensato per chi vuole un gusto pieno.', priceClass: 'astro', quantity: 99, soldOut: false },
+      { id: 'p2', name: 'Limoncello', fullName: 'Limoncello 100ml', img: 'images/limoncello.png', desc: 'Agrumato forte, brillante e profumato, con un carattere fresco che resta molto riconoscibile.', priceClass: 'limon', quantity: 99, soldOut: false },
+      { id: 'p3', name: 'Mango Ice', fullName: 'Mango Ice 100ml', img: 'images/mango-ice.png', desc: 'Tropicale, pieno e fresco, con una nota ghiacciata che rende il mango più netto e deciso.', priceClass: 'mango', quantity: 99, soldOut: false },
+      { id: 'p4', name: 'Wild Tobacco', fullName: 'Wild Tobacco 100ml', img: 'images/wild-tobacco.png', desc: 'Profilo più scuro e secco, con un taglio deciso, adatto a chi preferisce gusti più maturi.', priceClass: 'tobacco', quantity: 99, soldOut: false },
+      { id: 'p5', name: 'Caramel Vanilla', fullName: 'Caramel Vanilla 100ml', img: 'images/caramel-vanilla.png', desc: 'Cremoso, dolce e morbido, con vaniglia rotonda e punta caramellata elegante e piena.', priceClass: 'vanilla', quantity: 99, soldOut: false },
+      { id: 'p6', name: 'Ice Berry', fullName: 'Ice Berry 100ml', img: 'images/ice-berry.png', desc: 'Frutti rossi freddi con spinta ghiacciata, pensato per chi cerca freschezza immediata.', priceClass: 'iceberry', quantity: 99, soldOut: false },
+      { id: 'p7', name: 'Green Apple', fullName: 'Green Apple 100ml', img: 'images/green-apple.png', desc: 'Mela verde vivace, fresca e pulita, con impatto immediato e finale leggermente acidulo.', priceClass: 'greenapple', quantity: 99, soldOut: false },
+      { id: 'p8', name: 'Cola Lemon', fullName: 'Cola Lemon 100ml', img: 'images/cola-lemon.png', desc: 'Cola intensa con taglio agrumato al limone, più brillante e originale rispetto ai classici.', priceClass: 'colalemon', quantity: 99, soldOut: false },
+      { id: 'p9', name: 'Blue Razz Ice', fullName: 'Blue Razz Ice 100ml', img: 'images/blue-razz-ice.png', desc: 'Fruttato e fresco, vende tantissimo. Lampone blu ghiacciato con punch immediato.', priceClass: 'bluerazzice', quantity: 99, soldOut: false },
+      { id: 'p10', name: 'Strawberry Kiwi', fullName: 'Strawberry Kiwi 100ml', img: 'images/strawberry-kiwi.png', desc: 'Classico facile, piace a un sacco di gente. Fragola e kiwi in equilibrio perfetto.', priceClass: 'strawberrykiwi', quantity: 99, soldOut: false },
+      { id: 'p11', name: 'Grape Ice', fullName: 'Grape Ice 100ml', img: 'images/grape-ice.png', desc: 'Uva ghiacciata, gusto forte e riconoscibile. Fresco e deciso.', priceClass: 'grapeice', quantity: 99, soldOut: false },
+      { id: 'p12', name: 'Peach Ice', fullName: 'Peach Ice 100ml', img: 'images/peach-ice.png', desc: 'Più morbido ma sempre commerciale. Pesca dolce con nota ghiacciata elegante.', priceClass: 'peachice', quantity: 99, soldOut: false },
+      { id: 'p13', name: 'Pistachio Cream', fullName: 'Pistachio Cream 100ml', img: 'images/pistachio-cream.png', desc: 'Cremoso premium, fa salire la percezione del brand. Pistacchio e crema di alta qualità.', priceClass: 'pistachiocream', quantity: 99, soldOut: false },
+      { id: 'p14', name: 'Vanilla Custard', fullName: 'Vanilla Custard 100ml', img: 'images/vanilla-custard.png', desc: 'Altro cremoso serio, elegante. Vaniglia e crema pasticcera per un profilo raffinato.', priceClass: 'vanillacustard', quantity: 99, soldOut: false },
+      { id: 'p15', name: 'Cola Ice', fullName: 'Cola Ice 100ml', img: 'images/cola-ice.png', desc: 'Più semplice di Cola Lemon, ma molto richiesto. Cola classica con freschezza ghiacciata.', priceClass: 'colaice', quantity: 99, soldOut: false },
+      { id: 'p16', name: 'Personalizzabile', fullName: 'Personalizzabile 100ml', img: 'images/personalizzabile.png', desc: 'Crea il tuo mix su misura. Scegli aromi e intensità. Ideale per chi ama sperimentare.', priceClass: 'personalizzabile', quantity: 99, soldOut: false }
+    ];
+
+    function getProducts() {
+      try {
+        const s = localStorage.getItem(PRODUCTS_KEY);
+        if (s) return JSON.parse(s);
+      } catch (e) {}
+      localStorage.setItem(PRODUCTS_KEY, JSON.stringify(DEFAULT_PRODUCTS));
+      return DEFAULT_PRODUCTS.slice();
+    }
+    function saveProducts(products) {
+      localStorage.setItem(PRODUCTS_KEY, JSON.stringify(products));
+    }
+
+    const CART_KEY = 'iconLiquid_cart';
+    var carrello = [];
+    function loadCarrello() {
+      try {
+        if (window.IconLiquidCartCache && typeof window.IconLiquidCartCache.getCart === 'function') {
+          carrello = window.IconLiquidCartCache.getCart();
+        } else {
+          var s = localStorage.getItem(CART_KEY);
+          if (s) carrello = JSON.parse(s);
+        }
+      } catch (e) {}
+      if (!Array.isArray(carrello)) carrello = [];
+    }
+    function saveCarrello() {
+      try {
+        if (window.IconLiquidCartCache && typeof window.IconLiquidCartCache.setCart === 'function') {
+          window.IconLiquidCartCache.setCart(carrello);
+        } else {
+          localStorage.setItem(CART_KEY, JSON.stringify(carrello));
+        }
+      } catch (e) {}
+    }
+    function getProductByFullName(fullName) {
+      var products = getProducts();
+      for (var i = 0; i < products.length; i++) {
+        if (products[i].fullName === fullName) return products[i];
+      }
+      return null;
+    }
+    function getProductBasePrice(fullName) {
+      if (PRODUCT_PRICES[fullName] != null) return PRODUCT_PRICES[fullName];
+      return 50;
+    }
+    function getProductOldPrice(fullName) {
+      if (PRODUCT_OLD_PRICES[fullName] != null) return PRODUCT_OLD_PRICES[fullName];
+      return getProductBasePrice(fullName);
+    }
+    function escapeHtml(str) {
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+    function renderCarrello() {
+      var list = document.getElementById('cartList');
+      if (!list) return;
+      if (carrello.length === 0) {
+        list.innerHTML = '<div class="cart-empty">Il carrello è vuoto. Scegli un gusto nel catalogo, regola volume e nicotina, poi premi «Aggiungi al carrello».</div>';
+        return;
+      }
+      var trashIcon = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>';
+      list.innerHTML = carrello.map(function(item) {
+        var bg = 'background-image:url(\'' + String(item.img).replace(/'/g, "\\'") + '\')';
+        var lid = String(item.lineId).replace(/'/g, "\\'");
+        return '<div class="cart-row-wrap" data-line-id="' + escapeHtml(item.lineId) + '">' +
+          '<div class="cart-row-delete" aria-hidden="true">' + trashIcon + '<span>Elimina</span></div>' +
+          '<div class="cart-row-front">' +
+          '<div class="cart-row-banner" style="' + bg + '"></div>' +
+          '<div class="cart-row-info">' +
+          '<div class="cart-row-name">' + escapeHtml(item.fullName) + '</div>' +
+          '<div class="cart-row-meta">Volume <strong>' + item.volumeMl + ' ml</strong> · Nic <strong>' + item.nicotinaMl + ' ml</strong> · <strong>€' + item.prezzo + '</strong></div>' +
+          '</div>' +
+          '<button type="button" class="cart-row-remove-desktop" onclick="event.stopPropagation();rimuoviLineaCarrello(\'' + lid + '\')" aria-label="Rimuovi">' + trashIcon + '</button>' +
+          '</div></div>';
+      }).join('');
+      list.querySelectorAll('.cart-row-wrap').forEach(function(wrap) {
+        var id = wrap.getAttribute('data-line-id');
+        if (id) attachCartRowSwipe(wrap, id);
+      });
+    }
+    function attachCartRowSwipe(wrap, lineId) {
+      var front = wrap.querySelector('.cart-row-front');
+      if (!front) return;
+      var deleteW = 100;
+      var startX = 0;
+      var currentTx = 0;
+      function setTranslate(tx) {
+        tx = Math.max(-deleteW, Math.min(0, tx));
+        currentTx = tx;
+        front.style.transform = 'translateX(' + tx + 'px)';
+      }
+      wrap.addEventListener('touchstart', function(e) {
+        if (e.touches.length !== 1) return;
+        startX = e.touches[0].clientX - currentTx;
+      }, { passive: true });
+      wrap.addEventListener('touchmove', function(e) {
+        if (e.touches.length !== 1) return;
+        var x = e.touches[0].clientX - startX;
+        if (x <= 0) {
+          e.preventDefault();
+          setTranslate(x);
+        }
+      }, { passive: false });
+      wrap.addEventListener('touchend', function() {
+        if (currentTx < -deleteW / 2) rimuoviLineaCarrello(lineId);
+        else setTranslate(0);
+      });
+    }
+    function rimuoviLineaCarrello(lineId) {
+      carrello = carrello.filter(function(l) { return l.lineId !== lineId; });
+      saveCarrello();
+      renderCarrello();
+      updateCartBadge();
+    }
+    function updateCartBadge() {
+      var n = carrello.length;
+      var badge = document.getElementById('cartBadge');
+      if (badge) {
+        badge.textContent = n;
+        badge.style.display = n > 0 ? 'inline-flex' : 'none';
+      }
+      var btn = document.getElementById('cartCompleteBtn');
+      if (btn) btn.disabled = n === 0;
+    }
+    function apriCarrello() {
+      chiudiOrdine();
+      lockBodyScroll();
+      var b = document.getElementById('cartBackdrop');
+      var d = document.getElementById('cartDrawer');
+      if (b) { b.classList.add('show'); b.setAttribute('aria-hidden', 'false'); }
+      if (d) { d.classList.add('open'); d.setAttribute('aria-hidden', 'false'); }
+      renderCarrello();
+    }
+    function chiudiCarrello() {
+      var d = document.getElementById('cartDrawer');
+      if (!d || !d.classList.contains('open')) return;
+      var b = document.getElementById('cartBackdrop');
+      if (b) { b.classList.remove('show'); b.setAttribute('aria-hidden', 'true'); }
+      d.classList.remove('open');
+      d.setAttribute('aria-hidden', 'true');
+      unlockBodyScroll();
+    }
+    function creaMessaggioCarrelloWhatsApp() {
+      // Messaggio WhatsApp richiesto: SOLO gusto/volume/nicotina/prezzo (niente descrizione prodotto).
+      var lines = [];
+      carrello.forEach(function(item) {
+        lines.push('Gusto: ' + item.fullName + ' — Volume: ' + item.volumeMl + ' ml — Nicotina: ' + item.nicotinaMl + ' ml — Prezzo: €' + item.prezzo);
+      });
+      return lines.join('\n').trim();
+    }
+    function completaOrdineCarrello() {
+      if (carrello.length === 0) return;
+      var msg = encodeURIComponent(creaMessaggioCarrelloWhatsApp());
+      window.open('https://wa.me/393519198166?text=' + msg, '_blank');
+    }
+
+    function renderProducts() {
+      const products = getProducts();
+      const grid = document.getElementById('productGrid');
+      if (!grid) return;
+      grid.innerHTML = products.map(function(p) {
+        const isSoldOut = p.quantity <= 0 || p.soldOut;
+        const basePrice = getProductBasePrice(p.fullName);
+        const oldPrice = getProductOldPrice(p.fullName);
+        const hasDiscount = oldPrice > basePrice;
+        const isPink = !!PINK_SPARKLE_PRODUCTS[p.fullName];
+        return '<article class="card' + (isSoldOut ? ' sold-out' : '') + '">' +
+          '<div class="card-top ' + p.priceClass + '">' +
+          (isSoldOut ? '<div class="sold-out-badge">Esaurito</div>' : '') +
+          '<img class="card-image" src="' + p.img + '" alt="' + p.name + '" onerror="this.style.display=\'none\'" />' +
+          '<div class="card-overlay"></div><div class="card-label-wrap"><div class="flavour-label">' + p.name + '</div></div></div>' +
+          '<div class="card-body"><div class="name">' + p.fullName + '</div><div class="desc">' + p.desc + '</div><div class="bottom">' +
+          '<div class="price"><small>Prezzo</small>' +
+          (hasDiscount ? '<div class="price-old">€' + oldPrice + '</div><span class="price-discount-tag">Sconto attivo</span>' : '') +
+          '<strong class="' + (isPink ? 'price-pink-glow' : '') + '">€' + basePrice + '</strong></div>' +
+          (isSoldOut ? '<button class="order" type="button" disabled>Esaurito</button>' : '<button class="order" type="button" onclick="apriOrdine(\'' + p.fullName.replace(/'/g, "\\'") + '\')">Aggiungi al carrello</button>') +
+          '</div></div></article>';
+      }).join('');
+    }
+
+    function renderReviews() {
+      const grid = document.getElementById('reviewsGrid');
+      if (!grid) return;
+
+      grid.innerHTML = DEFAULT_REVIEWS.map(function(r) {
+        const stars = '⭐'.repeat(r.stars);
+        const aria = r.stars + ' su 5';
+        return '<article class="review-card">' +
+          '<div class="review-head">' +
+          '<div>' +
+          '<div class="review-stars" role="img" aria-label="' + escapeHtml(aria) + '">' + stars + '</div>' +
+          '<div class="review-name">' + escapeHtml(r.name) + '</div>' +
+          '</div>' +
+          '<div class="review-date">' + escapeHtml(r.date) + '</div>' +
+          '</div>' +
+          '<div class="review-text">' + escapeHtml(r.text) + '</div>' +
+          '</article>';
+      }).join('');
+    }
+
+    var scrollLockDepth = 0;
+    var scrollLockY = 0;
+    function lockBodyScroll() {
+      if (scrollLockDepth === 0) {
+        scrollLockY = window.scrollY || document.documentElement.scrollTop || 0;
+        document.body.style.overflow = 'hidden';
+        document.body.style.position = 'fixed';
+        document.body.style.top = '-' + scrollLockY + 'px';
+        document.body.style.left = '0';
+        document.body.style.right = '0';
+        document.body.style.width = '100%';
+      }
+      scrollLockDepth++;
+    }
+    function unlockBodyScroll() {
+      if (scrollLockDepth === 0) return;
+      scrollLockDepth--;
+      if (scrollLockDepth > 0) return;
+      document.body.style.overflow = '';
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.left = '';
+      document.body.style.right = '';
+      document.body.style.width = '';
+      window.scrollTo(0, scrollLockY);
+    }
+
+    function apriPinModal() {
+      lockBodyScroll();
+      document.getElementById('pinModalOverlay').classList.add('show');
+      document.getElementById('pinInput').value = '';
+      document.getElementById('pinError').classList.remove('show');
+      setTimeout(function() { document.getElementById('pinInput').focus(); }, 100);
+    }
+    function chiudiPinModal() {
+      var el = document.getElementById('pinModalOverlay');
+      if (!el.classList.contains('show')) return;
+      el.classList.remove('show');
+      unlockBodyScroll();
+    }
+    function verificaPin() {
+      const pin = document.getElementById('pinInput').value.trim();
+      const err = document.getElementById('pinError');
+      if (pin === ADMIN_PIN) {
+        sessionStorage.setItem('iconLiquid_adminAuth', '1');
+        chiudiPinModal();
+        window.location.href = 'admin.html';
+      } else {
+        err.classList.add('show');
+        if (pin === '') err.textContent = 'Inserisci il PIN.'; else err.textContent = 'PIN errato. Accesso negato.';
+      }
+    }
+    document.getElementById('pinInput').addEventListener('keydown', function(e) { if (e.key === 'Enter') verificaPin(); });
+    (function() {
+      var clickCount = 0, t;
+      document.getElementById('adminSecretTrigger').addEventListener('click', function() {
+        clickCount++;
+        clearTimeout(t);
+        if (clickCount >= 3) { clickCount = 0; apriPinModal(); }
+        t = setTimeout(function() { clickCount = 0; }, 1500);
+      });
+    })();
+    document.addEventListener('DOMContentLoaded', function() {
+      loadCarrello();
+      renderProducts();
+      renderCarrello();
+      updateCartBadge();
+      renderReviews();
+    });
+
+    const statoOrdine = {
+      gusto: '',
+      nicotinaMl: 0,
+      volumeMl: 100,
+      basePrice: 50
+    };
+
+    function setCopyStatus(message, type) {
+      const status = document.getElementById('copyStatus');
+      status.textContent = message;
+      status.className = 'copy-status ' + (type || '');
+    }
+
+    function setModalStatus(message, type) {
+      const status = document.getElementById('modalStatus');
+      status.textContent = message;
+      status.className = 'modal-status ' + (type || '');
+    }
+
+    async function tryClipboardApi(text) {
+      if (!navigator.clipboard || !window.isSecureContext) return false;
+      try {
+        await navigator.clipboard.writeText(text);
+        return true;
+      } catch (error) {
+        return false;
+      }
+    }
+
+    function tryExecCommandCopy(text) {
+      const textarea = document.getElementById('copyFallback');
+      textarea.value = text;
+      textarea.focus();
+      textarea.select();
+      textarea.setSelectionRange(0, text.length);
+      try {
+        return document.execCommand('copy');
+      } catch (error) {
+        return false;
+      } finally {
+        textarea.blur();
+        if (window.getSelection) {
+          const selection = window.getSelection();
+          if (selection) selection.removeAllRanges();
+        }
+      }
+    }
+
+    async function copiaTesto(text, onSuccess, onFallback) {
+      const copiedWithClipboardApi = await tryClipboardApi(text);
+      if (copiedWithClipboardApi) {
+        if (typeof onSuccess === 'function') onSuccess();
+        return true;
+      }
+
+      const copiedWithExecCommand = tryExecCommandCopy(text);
+      if (copiedWithExecCommand) {
+        if (typeof onSuccess === 'function') onSuccess();
+        return true;
+      }
+
+      if (typeof onFallback === 'function') onFallback();
+      window.prompt('Copia manualmente questo testo:', text);
+      return false;
+    }
+
+    async function copiaNumero() {
+      const numero = '+39 351 919 8166';
+      await copiaTesto(
+        numero,
+        function () { setCopyStatus('Numero copiato: ' + numero, 'success'); },
+        function () { setCopyStatus('Copia automatica non disponibile qui. Numero da copiare: ' + numero, 'warning'); }
+      );
+    }
+
+    function clampVolume(value) {
+      if (value < 100) return 100;
+      if (value > 500) return 500;
+      return value;
+    }
+
+    /** Massimo ml nicotina (solo multipli di 20). */
+    var NIC_MAX_ML = 200;
+
+    function nicValoriAmmessi() {
+      var v = [];
+      for (var x = 0; x <= NIC_MAX_ML; x += 20) v.push(x);
+      return v;
+    }
+
+    function clampNicotina(value) {
+      if (value <= 0) return 0;
+      if (value >= NIC_MAX_ML) return NIC_MAX_ML;
+      var step = 20;
+      var v = Math.round(value / step) * step;
+      if (v < 0) return 0;
+      if (v > NIC_MAX_ML) return NIC_MAX_ML;
+      return v;
+    }
+
+    function calcolaListinoRiferimento(volumeMl, basePrice) {
+      return Math.round(basePrice * (volumeMl / 100));
+    }
+
+    /** Prezzo del solo liquido (sconti volume più bassi rispetto a prima, listino base più alto). */
+    function calcolaPrezzoLiquido(volumeMl, basePrice) {
+      if (volumeMl === 100) return basePrice;
+      var listino = basePrice * (volumeMl / 100);
+      var scontoPercent = 6 + ((volumeMl - 100) / 400) * 8;
+      if (scontoPercent > 14) scontoPercent = 14;
+      return Math.round(listino * (1 - scontoPercent / 100));
+    }
+
+    /** Primi 20 ml inclusi €0; ogni ulteriore blocco da 20 ml = €4 (40 ml → €4, 60 ml → €8, …). */
+    function supplementoNicotina(nicMl) {
+      if (nicMl <= 20) return 0;
+      return ((nicMl / 20) - 1) * 4;
+    }
+
+    function calcolaTotaleRiga(volumeMl, nicMl, basePrice) {
+      return calcolaPrezzoLiquido(volumeMl, basePrice) + supplementoNicotina(nicMl);
+    }
+
+    function calcolaPrezzo() {
+      return calcolaTotaleRiga(statoOrdine.volumeMl, statoOrdine.nicotinaMl, statoOrdine.basePrice);
+    }
+
+    function calcolaScontoPercentualeVisual(volumeMl) {
+      var listino = calcolaListinoRiferimento(volumeMl, statoOrdine.basePrice);
+      var liquido = calcolaPrezzoLiquido(volumeMl, statoOrdine.basePrice);
+      if (listino <= 0) return 0;
+      return Math.max(0, Math.round((1 - liquido / listino) * 100));
+    }
+
+    function creaMessaggioOrdine() {
+      var prezzo = calcolaPrezzo();
+      var scontoLiq = calcolaScontoPercentualeVisual(statoOrdine.volumeMl);
+      var supNic = supplementoNicotina(statoOrdine.nicotinaMl);
+      return 'Ciao, vorrei ordinare ' + statoOrdine.gusto + ' da ' + statoOrdine.volumeMl + ' ml con ' + statoOrdine.nicotinaMl + ' ml di nicotina. Sconto sul liquido ~' + scontoLiq + '% vs listino. Extra nic (€4 ogni 20 ml oltre i primi 20): €' + supNic + '. Totale: €' + prezzo;
+    }
+
+    function aggiornaVistaOrdine() {
+      document.getElementById('nicotineValue').textContent = statoOrdine.nicotinaMl;
+      document.getElementById('volumeValue').textContent = statoOrdine.volumeMl;
+      document.getElementById('modalProductName').textContent = statoOrdine.gusto;
+
+      var vol = statoOrdine.volumeMl;
+      var nic = statoOrdine.nicotinaMl;
+      var listino = calcolaListinoRiferimento(vol, statoOrdine.basePrice);
+      var liquido = calcolaPrezzoLiquido(vol, statoOrdine.basePrice);
+      var scontoVis = calcolaScontoPercentualeVisual(vol);
+      var supNic = supplementoNicotina(nic);
+      var totale = liquido + supNic;
+      /** Prezzo di riferimento “prima dello sconto sul liquido”: listino liquido + extra nic (la nic non è scontata). */
+      var listinoTotaleRiferimento = Math.round(listino + supNic);
+      var risparmioLiquido = Math.round(listino - liquido);
+
+      var badgeVol = '';
+      if (vol === 300) badgeVol = '<span class="order-volume-badge">🔥 Più scelto — 300 ml</span>';
+      if (vol === 400) badgeVol = '<span class="order-volume-badge">💸 Ottimo rapporto — 400 ml</span>';
+
+      var nicBlock = '';
+      if (supNic > 0) {
+        nicBlock = '<div class="order-price-nic">Extra nicotina: <strong>+€' + supNic + '</strong> (€4 ogni 20 ml oltre i primi 20) · Totale nic <strong>' + nic + ' ml</strong></div>';
+      } else {
+        nicBlock = '<div class="order-price-nic">Nicotina <strong>' + nic + ' ml</strong> — primi 20 ml senza extra</div>';
+      }
+
+      var hintBarrato = '';
+      if (supNic > 0) {
+        hintBarrato = '<p class="order-price-ref-hint">Il barrato è <strong>listino liquido + extra nic</strong> (€' + listino + ' + €' + supNic + '), così il totale €' + totale + ' non sembra più alto del “prezzo pieno”.</p>';
+      }
+
+      document.getElementById('modalSummary').innerHTML =
+        '<div class="order-price-top">' +
+        '<span class="order-price-label">Totale da pagare</span>' +
+        '<div class="order-price-main">' +
+        '<span class="order-price-euro">€' + totale + '</span>' +
+        '<span class="order-price-was">€' + listinoTotaleRiferimento + '</span>' +
+        '<span class="order-discount-pill">−' + scontoVis + '% sul liquido</span>' +
+        '</div>' +
+        hintBarrato +
+        '</div>' +
+        nicBlock +
+        '<div class="order-detail-lines">' +
+        '<strong style="color:rgba(255,255,255,0.92)">' + statoOrdine.gusto + '</strong><br>' +
+        'Liquido · ' + vol + ' ml · listino €' + listino + ' → scontato <strong style="color:#9ecbff">€' + liquido + '</strong> (risparmi €' + risparmioLiquido + ' sul liquido)' +
+        badgeVol +
+        '</div>';
+    }
+
+    function apriOrdine(gusto) {
+      chiudiCarrello();
+      statoOrdine.gusto = gusto;
+      statoOrdine.nicotinaMl = 0;
+      statoOrdine.volumeMl = 100;
+      statoOrdine.basePrice = getProductBasePrice(gusto);
+      aggiornaVistaOrdine();
+      setModalStatus('', '');
+      lockBodyScroll();
+      const overlay = document.getElementById('modalOverlay');
+      overlay.classList.add('show');
+      overlay.setAttribute('aria-hidden', 'false');
+    }
+
+    function chiudiOrdine() {
+      const overlay = document.getElementById('modalOverlay');
+      if (!overlay.classList.contains('show')) return;
+      overlay.classList.remove('show');
+      overlay.setAttribute('aria-hidden', 'true');
+      setModalStatus('', '');
+      unlockBodyScroll();
+    }
+
+    function aggiungiAlCarrello() {
+      var p = getProductByFullName(statoOrdine.gusto);
+      if (!p) return;
+      carrello.push({
+        lineId: 'l' + Date.now() + Math.random().toString(36).slice(2, 10),
+        fullName: p.fullName,
+        desc: p.desc,
+        img: p.img,
+        volumeMl: statoOrdine.volumeMl,
+        nicotinaMl: statoOrdine.nicotinaMl,
+        prezzo: calcolaTotaleRiga(statoOrdine.volumeMl, statoOrdine.nicotinaMl, statoOrdine.basePrice)
+      });
+      saveCarrello();
+      updateCartBadge();
+      chiudiOrdine();
+      apriCarrello();
+    }
+
+    function cambiaVolume(delta) {
+      statoOrdine.volumeMl = clampVolume(statoOrdine.volumeMl + delta);
+      aggiornaVistaOrdine();
+    }
+
+    function impostaVolume(value) {
+      statoOrdine.volumeMl = clampVolume(value);
+      aggiornaVistaOrdine();
+    }
+
+    function cambiaNicotina(direction) {
+      var n = statoOrdine.nicotinaMl;
+      var step = 20;
+      if (direction > 0) {
+        statoOrdine.nicotinaMl = Math.min(n + step, NIC_MAX_ML);
+      } else if (direction < 0) {
+        statoOrdine.nicotinaMl = Math.max(n - step, 0);
+      }
+      aggiornaVistaOrdine();
+    }
+
+    function impostaNicotina(value) {
+      statoOrdine.nicotinaMl = clampNicotina(value);
+      aggiornaVistaOrdine();
+    }
+
+    function aggiornaConsensoIngresso() {
+      const checkbox = document.getElementById('cookieConsent');
+      const yesButton = document.getElementById('adultYesBtn');
+      const message = document.getElementById('ageGateMessage');
+      if (checkbox.checked) {
+        yesButton.classList.remove('btn-disabled');
+        message.textContent = 'Conferma attiva. Ora puoi premere “Sì, sono maggiorenne”.';
+      } else {
+        yesButton.classList.add('btn-disabled');
+        message.textContent = 'Per continuare devi prima spuntare la casella di conferma.';
+      }
+    }
+
+    function confermaMaggiorenne(isAdult) {
+      const gate = document.getElementById('ageGate');
+      const message = document.getElementById('ageGateMessage');
+      const checkbox = document.getElementById('cookieConsent');
+      if (isAdult) {
+        if (!checkbox.checked) {
+          message.textContent = 'Devi prima accettare l’avviso e i cookie tecnici minimi.';
+          return;
+        }
+        gate.classList.add('hidden');
+        document.body.style.overflow = 'auto';
+        try {
+          localStorage.setItem('ageGateAccepted', 'true');
+        } catch (error) {}
+        return;
+      }
+      message.textContent = 'Accesso negato: il sito è riservato ai maggiorenni.';
+      window.location.href = 'https://www.google.com';
+    }
+
+    function runOrderFlowChecks() {
+      const previousState = {
+        gusto: statoOrdine.gusto,
+        nicotinaMl: statoOrdine.nicotinaMl,
+        volumeMl: statoOrdine.volumeMl
+      };
+
+      statoOrdine.gusto = 'Test Aroma';
+      statoOrdine.volumeMl = 100;
+      statoOrdine.nicotinaMl = 0;
+
+      cambiaVolume(50);
+      const t1 = statoOrdine.volumeMl === 150;
+      cambiaVolume(1000);
+      const t2 = statoOrdine.volumeMl === 500;
+      cambiaVolume(-1000);
+      const t3 = statoOrdine.volumeMl === 100;
+      impostaVolume(300);
+      const t4 = statoOrdine.volumeMl === 300;
+      cambiaNicotina(1);
+      const t5 = statoOrdine.nicotinaMl === 20;
+      cambiaNicotina(1);
+      const t5b = statoOrdine.nicotinaMl === 40;
+      impostaNicotina(200);
+      cambiaNicotina(1);
+      const t6 = statoOrdine.nicotinaMl === 200;
+      impostaNicotina(40);
+      cambiaNicotina(-1);
+      const t7 = statoOrdine.nicotinaMl === 20;
+      cambiaNicotina(1);
+      const t8 = statoOrdine.nicotinaMl === 40;
+      const t8b = supplementoNicotina(40) === 4 && supplementoNicotina(60) === 8;
+      const t9 = calcolaPrezzo() > 0;
+      impostaVolume(500);
+      const t10 = calcolaPrezzo() < 260;
+      const msg = creaMessaggioOrdine();
+      const t11 = msg.includes('500 ml');
+      const t12 = msg.includes('ml di nicotina');
+      impostaVolume(300);
+      aggiornaVistaOrdine();
+      const t13 = document.getElementById('modalSummary').innerHTML.includes('Più scelto');
+      impostaVolume(400);
+      aggiornaVistaOrdine();
+      const t14 = document.getElementById('modalSummary').innerHTML.includes('Ottimo rapporto');
+      const t15 = typeof apriOrdine === 'function';
+      const t16 = typeof aggiornaConsensoIngresso === 'function';
+
+      statoOrdine.gusto = previousState.gusto;
+      statoOrdine.nicotinaMl = previousState.nicotinaMl;
+      statoOrdine.volumeMl = previousState.volumeMl;
+      statoOrdine.basePrice = previousState.basePrice || 50;
+      if (statoOrdine.gusto) aggiornaVistaOrdine();
+
+      const checks = [
+        { name: 'step volume 50ml', passed: t1 },
+        { name: 'max 500ml', passed: t2 },
+        { name: 'min 100ml', passed: t3 },
+        { name: 'set volume 300ml', passed: t4 },
+        { name: 'nic +20 ml da 0', passed: t5 },
+        { name: 'nic +20 ancora → 40', passed: t5b },
+        { name: 'nic max 200ml', passed: t6 },
+        { name: 'nic -20 da 40 a 20', passed: t7 },
+        { name: 'nic +20 da 20 a 40', passed: t8 },
+        { name: 'extra nic €4/€8', passed: t8b },
+        { name: 'prezzo calcolato', passed: t9 },
+        { name: 'sconto applicato su 500 ml', passed: t10 },
+        { name: 'messaggio contiene volume', passed: t11 },
+        { name: 'messaggio contiene nicotina', passed: t12 },
+        { name: 'badge 300 ml presente', passed: t13 },
+        { name: 'badge 400 ml presente', passed: t14 },
+        { name: 'funzione apriOrdine disponibile', passed: t15 },
+        { name: 'funzione aggiornaConsensoIngresso disponibile', passed: t16 }
+      ];
+
+      console.table(checks);
+      return checks;
+    }
+
+    function runAgeGateChecks() {
+      const gate = document.getElementById('ageGate');
+      const message = document.getElementById('ageGateMessage');
+      const checkbox = document.getElementById('cookieConsent');
+      const yesButton = document.getElementById('adultYesBtn');
+      const checks = [
+        { name: 'age gate presente', passed: !!gate },
+        { name: 'messaggio age gate presente', passed: !!message },
+        { name: 'checkbox consenso presente', passed: !!checkbox },
+        { name: 'bottone sì presente', passed: !!yesButton },
+        { name: 'funzione confermaMaggiorenne disponibile', passed: typeof confermaMaggiorenne === 'function' },
+        { name: 'funzione aggiornaConsensoIngresso disponibile', passed: typeof aggiornaConsensoIngresso === 'function' },
+        { name: 'checkbox ha onchange valido', passed: checkbox.getAttribute('onchange') === 'aggiornaConsensoIngresso()' }
+      ];
+      console.table(checks);
+      return checks;
+    }
+
+    window.runOrderFlowChecks = runOrderFlowChecks;
+    window.runAgeGateChecks = runAgeGateChecks;
+
+    document.getElementById('modalOverlay').addEventListener('click', function (event) {
+      if (event.target.id === 'modalOverlay') chiudiOrdine();
+    });
+
+    document.addEventListener('keydown', function (event) {
+      if (event.key !== 'Escape') return;
+      var pin = document.getElementById('pinModalOverlay');
+      if (pin && pin.classList.contains('show')) {
+        chiudiPinModal();
+        return;
+      }
+      var cart = document.getElementById('cartDrawer');
+      if (cart && cart.classList.contains('open')) {
+        chiudiCarrello();
+        return;
+      }
+      chiudiOrdine();
+    });
+
+    document.body.style.overflow = 'hidden';
+
+    try {
+      if (localStorage.getItem('ageGateAccepted') === 'true') {
+        document.getElementById('cookieConsent').checked = true;
+        aggiornaConsensoIngresso();
+      }
+    } catch (error) {}
+  </script>
+</body>
+</html>
