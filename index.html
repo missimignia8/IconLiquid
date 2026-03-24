@@ -1096,6 +1096,43 @@
       line-height: 1.5;
       background: rgba(0,0,0,0.14);
     }
+    .order-qty-discount-block {
+      border-top: 1px solid rgba(255,255,255,0.08);
+      padding: 14px 18px 16px;
+      background: rgba(0,0,0,0.14);
+    }
+    .order-qty-discount-title {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: rgba(255,255,255,0.5);
+      font-weight: 800;
+      margin-bottom: 10px;
+    }
+    .order-qty-discount-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      gap: 6px;
+    }
+    .order-qty-discount-list li {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.88rem;
+      padding: 7px 11px;
+      border-radius: 10px;
+      background: rgba(255,255,255,0.04);
+      color: rgba(255,255,255,0.88);
+      font-variant-numeric: tabular-nums;
+    }
+    .order-qty-discount-list li strong { font-weight: 700; color: #e8f0ff; }
+    .order-qty-discount-list li.is-current {
+      border: 1px solid rgba(120, 200, 255, 0.45);
+      background: rgba(45, 70, 130, 0.38);
+    }
     .order-flow-actions .btn-complete:disabled {
       opacity: 0.45;
       cursor: not-allowed;
@@ -1386,7 +1423,7 @@
           </div>
           <div class="info">
             <h3>2. Regola il volume</h3>
-            <p>Scegli il volume da 100 a 500 ml e la nicotina a step di 20 ml; extra €4 ogni 20 ml oltre i primi 20. Il riepilogo aggiorna listino, sconto liquido e totale.</p>
+            <p>Scegli il volume da 100 a 1000 ml (step 100 ml) e la nicotina a step di 20 ml; extra €4 ogni 20 ml oltre i primi 20. I prezzi liquido seguono la tabella sconti quantità mostrata nel riepilogo ordine.</p>
           </div>
           <div class="info">
             <h3>3. Invia l’ordine</h3>
@@ -1420,7 +1457,7 @@
             <span class="order-step-pill" id="orderStepPill">Passo 1 di 4</span>
           </div>
           <div id="modalProductName" class="modal-title">Ordine</div>
-          <div id="modalFlowSubtitle" class="modal-subtitle">Scegli il volume totale del liquido (100–500 ml, step 50 ml).</div>
+          <div id="modalFlowSubtitle" class="modal-subtitle">Scegli il volume totale del liquido (100–1000 ml, step 100 ml).</div>
         </div>
         <button class="close-btn" type="button" onclick="chiudiOrdine()">Chiudi</button>
       </div>
@@ -1429,24 +1466,25 @@
           <span class="nic-section-label">Volume liquido</span>
           <div class="nicotine-box">
             <div class="nicotine-controls">
-              <button class="nic-btn" type="button" onclick="cambiaVolume(-50)">−</button>
+              <button class="nic-btn" type="button" onclick="cambiaVolume(-100)">−</button>
               <div class="nic-value-wrap">
                 <div id="volumeValue" class="nic-value">100</div>
                 <div class="nic-unit">ml totali</div>
               </div>
-              <button class="nic-btn" type="button" onclick="cambiaVolume(50)">+</button>
+              <button class="nic-btn" type="button" onclick="cambiaVolume(100)">+</button>
             </div>
-            <div class="nic-hint">Da 100 ml a 500 ml. Ogni clic aggiunge o toglie 50 ml.</div>
+            <div class="nic-hint">Da 100 ml a 1000 ml. Ogni clic aggiunge o toglie 100 ml.</div>
             <div class="step-buttons">
               <button class="step-chip" type="button" onclick="impostaVolume(100)">100</button>
-              <button class="step-chip" type="button" onclick="impostaVolume(150)">150</button>
               <button class="step-chip" type="button" onclick="impostaVolume(200)">200</button>
-              <button class="step-chip" type="button" onclick="impostaVolume(250)">250</button>
               <button class="step-chip" type="button" onclick="impostaVolume(300)">300</button>
-              <button class="step-chip" type="button" onclick="impostaVolume(350)">350</button>
               <button class="step-chip" type="button" onclick="impostaVolume(400)">400</button>
-              <button class="step-chip" type="button" onclick="impostaVolume(450)">450</button>
               <button class="step-chip" type="button" onclick="impostaVolume(500)">500</button>
+              <button class="step-chip" type="button" onclick="impostaVolume(600)">600</button>
+              <button class="step-chip" type="button" onclick="impostaVolume(700)">700</button>
+              <button class="step-chip" type="button" onclick="impostaVolume(800)">800</button>
+              <button class="step-chip" type="button" onclick="impostaVolume(900)">900</button>
+              <button class="step-chip" type="button" onclick="impostaVolume(1000)">1000</button>
             </div>
           </div>
         </div>
@@ -1838,7 +1876,7 @@
     };
 
     var ORDER_FLOW_HINTS = [
-      'Scegli il volume totale del liquido (100–500 ml, step 50 ml).',
+      'Scegli il volume totale del liquido (100–1000 ml, step 100 ml).',
       'Scegli la nicotina da aggiungere (step fisso 20 ml; extra €4 ogni 20 ml oltre i primi 20).',
       'Scegli il confezionamento del flacone.',
       'Ecco il riepilogo: il prezzo totale include liquido, eventuale extra nicotina e confezionamento.'
@@ -1912,10 +1950,23 @@
       );
     }
 
+    var VOLUME_MIN_ML = 100;
+    var VOLUME_MAX_ML = 1000;
+    var VOLUME_STEP_ML = 100;
+
     function clampVolume(value) {
-      if (value < 100) return 100;
-      if (value > 500) return 500;
-      return value;
+      var v = Math.round(value / VOLUME_STEP_ML) * VOLUME_STEP_ML;
+      if (v < VOLUME_MIN_ML) return VOLUME_MIN_ML;
+      if (v > VOLUME_MAX_ML) return VOLUME_MAX_ML;
+      return v;
+    }
+
+    /** n = numero di blocchi da 100 ml (1…10). */
+    function blocchi100DaVolume(volumeMl) {
+      var n = Math.round(volumeMl / 100);
+      if (n < 1) n = 1;
+      if (n > 10) n = 10;
+      return n;
     }
 
     /** Massimo ml nicotina (solo multipli di 20). */
@@ -1937,17 +1988,64 @@
       return v;
     }
 
+    /** Listino lineare: n × prezzo base (senza sconti quantità). */
     function calcolaListinoRiferimento(volumeMl, basePrice) {
-      return Math.round(basePrice * (volumeMl / 100));
+      var n = blocchi100DaVolume(volumeMl);
+      return Math.round(basePrice * n);
     }
 
-    /** Prezzo del solo liquido (sconti volume più bassi rispetto a prima, listino base più alto). */
+    /**
+     * S (decimale) sugli altri 100 ml in base al totale N blocchi:
+     * 200 ml → 22%, 300 → 24% … 1000 → 38%.
+     */
+    function scontoDecimaleAltriBlocchi(n) {
+      if (n < 2) return 0;
+      if (n > 10) n = 10;
+      return 0.18 + 0.02 * n;
+    }
+
+    /**
+     * Prezzo liquido: primo 100 ml = P − 10; ogni altro 100 ml = P × (1 − S), con S da tabella su N.
+     * Totale = (P − 10) + (N − 1) × P × (1 − S), arrotondato all’euro.
+     */
     function calcolaPrezzoLiquido(volumeMl, basePrice) {
-      if (volumeMl === 100) return basePrice;
-      var listino = basePrice * (volumeMl / 100);
-      var scontoPercent = 6 + ((volumeMl - 100) / 400) * 8;
-      if (scontoPercent > 14) scontoPercent = 14;
-      return Math.round(listino * (1 - scontoPercent / 100));
+      var n = blocchi100DaVolume(volumeMl);
+      var P = Number(basePrice);
+      if (!isFinite(P) || P < 0) P = 0;
+      var primo = P - 10;
+      if (n <= 1) return Math.round(primo);
+      var S = scontoDecimaleAltriBlocchi(n);
+      var raw = primo + (n - 1) * P * (1 - S);
+      return Math.round(raw);
+    }
+
+    /** Sconto % sul liquido vs listino lineare P×N (come da tua formula). */
+    function calcolaScontoTotalePercentualeSuLiquido(volumeMl, basePrice) {
+      var n = blocchi100DaVolume(volumeMl);
+      var P = Number(basePrice);
+      if (!isFinite(P) || P <= 0 || n <= 0) return 0;
+      var pieno = P * n;
+      var finale = calcolaPrezzoLiquido(volumeMl, basePrice);
+      if (pieno <= 0) return 0;
+      return Math.max(0, Math.round(((pieno - finale) / pieno) * 100));
+    }
+
+    function htmlTabellaScontiQuantita(basePrice, volumeSelezionatoMl) {
+      var b = Number(basePrice);
+      if (!isFinite(b) || b < 0) b = 0;
+      var rows = [];
+      for (var ml = 100; ml <= 1000; ml += 100) {
+        var p = calcolaPrezzoLiquido(ml, b);
+        rows.push(
+          '<li' + (volumeSelezionatoMl === ml ? ' class="is-current"' : '') + '><span>' + ml + ' ml</span><strong>€' + p + '</strong></li>'
+        );
+      }
+      return (
+        '<div class="order-qty-discount-block">' +
+        '<div class="order-qty-discount-title">SCONTI QUANTITÀ</div>' +
+        '<ul class="order-qty-discount-list">' + rows.join('') + '</ul>' +
+        '</div>'
+      );
     }
 
     /** Primi 20 ml inclusi €0; ogni ulteriore blocco da 20 ml = €4 (40 ml → €4, 60 ml → €8, …). */
@@ -1965,19 +2063,12 @@
       return calcolaTotaleRiga(statoOrdine.volumeMl, statoOrdine.nicotinaMl, statoOrdine.basePrice, statoOrdine.packagingEuro);
     }
 
-    function calcolaScontoPercentualeVisual(volumeMl) {
-      var listino = calcolaListinoRiferimento(volumeMl, statoOrdine.basePrice);
-      var liquido = calcolaPrezzoLiquido(volumeMl, statoOrdine.basePrice);
-      if (listino <= 0) return 0;
-      return Math.max(0, Math.round((1 - liquido / listino) * 100));
-    }
-
     function creaMessaggioOrdine() {
       var prezzo = calcolaPrezzo();
-      var scontoLiq = calcolaScontoPercentualeVisual(statoOrdine.volumeMl);
       var supNic = supplementoNicotina(statoOrdine.nicotinaMl);
       var pack = statoOrdine.packagingLabel || '—';
-      return 'Ciao, vorrei ordinare ' + statoOrdine.gusto + ' da ' + statoOrdine.volumeMl + ' ml con ' + statoOrdine.nicotinaMl + ' ml di nicotina. Confezionamento: ' + pack + '. Sconto sul liquido ~' + scontoLiq + '% vs listino. Extra nic (€4 ogni 20 ml oltre i primi 20): €' + supNic + '. Totale: €' + prezzo;
+      var pq = calcolaPrezzoLiquido(statoOrdine.volumeMl, statoOrdine.basePrice);
+      return 'Ciao, vorrei ordinare ' + statoOrdine.gusto + ' da ' + statoOrdine.volumeMl + ' ml con ' + statoOrdine.nicotinaMl + ' ml di nicotina. Confezionamento: ' + pack + '. Prezzo liquido (sconti quantità): €' + pq + '. Extra nic (€4 ogni 20 ml oltre i primi 20): €' + supNic + '. Totale: €' + prezzo;
     }
 
     function aggiornaValoriVolumeNicUI() {
@@ -2000,11 +2091,11 @@
       var packLabel = statoOrdine.packagingLabel || '—';
       var listino = calcolaListinoRiferimento(vol, statoOrdine.basePrice);
       var liquido = calcolaPrezzoLiquido(vol, statoOrdine.basePrice);
-      var scontoVis = calcolaScontoPercentualeVisual(vol);
       var supNic = supplementoNicotina(nic);
       var totale = liquido + supNic + packEuro;
       var listinoTotaleRiferimento = Math.round(listino + supNic + packEuro);
-      var risparmioLiquido = Math.round(listino - liquido);
+      var qtyTableHtml = htmlTabellaScontiQuantita(statoOrdine.basePrice, vol);
+      var scontoTotLiquidoPct = calcolaScontoTotalePercentualeSuLiquido(vol, statoOrdine.basePrice);
 
       var badgeVol = '';
       if (vol === 300) badgeVol = '<span class="order-volume-badge">🔥 Più scelto — 300 ml</span>';
@@ -2035,7 +2126,6 @@
         '<div class="order-price-main">' +
         '<span class="order-price-euro">€' + totale + '</span>' +
         '<span class="order-price-was">€' + listinoTotaleRiferimento + '</span>' +
-        '<span class="order-discount-pill">−' + scontoVis + '% sul liquido</span>' +
         '</div>' +
         hintBarrato +
         '</div>' +
@@ -2043,9 +2133,10 @@
         packBlock +
         '<div class="order-detail-lines">' +
         '<strong style="color:rgba(255,255,255,0.92)">' + escapeHtml(statoOrdine.gusto) + '</strong><br>' +
-        'Liquido · ' + vol + ' ml · listino €' + listino + ' → scontato <strong style="color:#9ecbff">€' + liquido + '</strong> (risparmi €' + risparmioLiquido + ' sul liquido)' +
+        'Liquido · <strong>' + vol + ' ml</strong> · totale liquido: <strong style="color:#9ecbff">€' + liquido + '</strong> · sconto vs listino (P×N): <strong>−' + scontoTotLiquidoPct + '%</strong>' +
         badgeVol +
-        '</div>';
+        '</div>' +
+        qtyTableHtml;
     }
 
     function syncOrderFlowPanels() {
@@ -2237,10 +2328,10 @@
       statoOrdine.packagingEuro = 0;
       statoOrdine.packagingLabel = 'Flacone standard Chubby (€0)';
 
-      cambiaVolume(50);
-      const t1 = statoOrdine.volumeMl === 150;
+      cambiaVolume(100);
+      const t1 = statoOrdine.volumeMl === 200;
       cambiaVolume(1000);
-      const t2 = statoOrdine.volumeMl === 500;
+      const t2 = statoOrdine.volumeMl === 1000;
       cambiaVolume(-1000);
       const t3 = statoOrdine.volumeMl === 100;
       impostaVolume(300);
@@ -2262,6 +2353,11 @@
       const tPack = calcolaTotaleRiga(100, 0, 50, 3) === calcolaTotaleRiga(100, 0, 50, 0) + 3;
       statoOrdine.packagingEuro = 0;
       const t9 = calcolaPrezzo() > 0;
+      const tExP50N300 = calcolaPrezzoLiquido(300, 50) === 116;
+      const tExP56N300 = calcolaPrezzoLiquido(300, 56) === 131;
+      const tExP63N500 = calcolaPrezzoLiquido(500, 63) === 234;
+      const tExP40N100 = calcolaPrezzoLiquido(100, 40) === 30;
+      const tExP40N1000 = calcolaPrezzoLiquido(1000, 40) === 253;
       impostaVolume(500);
       const t10 = calcolaPrezzo() < 260;
       const msg = creaMessaggioOrdine();
@@ -2270,6 +2366,7 @@
       impostaVolume(300);
       aggiornaRiepilogoOrdine();
       const t13 = document.getElementById('modalSummary').innerHTML.includes('Più scelto');
+      const t13b = document.getElementById('modalSummary').innerHTML.includes('SCONTI QUANTITÀ');
       impostaVolume(400);
       aggiornaRiepilogoOrdine();
       const t14 = document.getElementById('modalSummary').innerHTML.includes('Ottimo rapporto');
@@ -2290,8 +2387,8 @@
       }
 
       const checks = [
-        { name: 'step volume 50ml', passed: t1 },
-        { name: 'max 500ml', passed: t2 },
+        { name: 'step volume 100ml', passed: t1 },
+        { name: 'max 1000ml', passed: t2 },
         { name: 'min 100ml', passed: t3 },
         { name: 'set volume 300ml', passed: t4 },
         { name: 'nic +20 ml da 0', passed: t5 },
@@ -2302,10 +2399,16 @@
         { name: 'extra nic €4/€8', passed: t8b },
         { name: 'supplemento confezione +€3', passed: tPack },
         { name: 'prezzo calcolato', passed: t9 },
-        { name: 'sconto applicato su 500 ml', passed: t10 },
+        { name: 'es. P=50, 300 ml → €116', passed: tExP50N300 },
+        { name: 'es. P=56, 300 ml → €131', passed: tExP56N300 },
+        { name: 'es. P=63, 500 ml → €234', passed: tExP63N500 },
+        { name: 'es. P=40, 100 ml → €30 (P−10)', passed: tExP40N100 },
+        { name: 'es. P=40, 1000 ml → €253', passed: tExP40N1000 },
+        { name: 'prezzo 500 ml sotto soglia test', passed: t10 },
         { name: 'messaggio contiene volume', passed: t11 },
         { name: 'messaggio contiene nicotina', passed: t12 },
         { name: 'badge 300 ml presente', passed: t13 },
+        { name: 'tabella SCONTI QUANTITÀ nel riepilogo', passed: t13b },
         { name: 'badge 400 ml presente', passed: t14 },
         { name: 'funzione apriOrdine disponibile', passed: t15 },
         { name: 'funzione aggiornaConsensoIngresso disponibile', passed: t16 }
