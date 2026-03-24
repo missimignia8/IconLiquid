@@ -1295,7 +1295,90 @@
       .wa-float { animation: none; }
     }
 
+    .catalog-toolbar {
+      margin-bottom: 16px;
+    }
+    .catalog-search-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .catalog-search-input {
+      flex: 1;
+      min-width: 0;
+      padding: 12px 14px;
+      border-radius: 14px;
+      border: 1px solid rgba(120, 160, 255, 0.22);
+      background: rgba(20, 22, 38, 0.85);
+      color: #fff;
+      font-size: 0.95rem;
+      font-weight: 500;
+    }
+    .catalog-search-input::placeholder {
+      color: rgba(255,255,255,0.45);
+    }
+    .catalog-search-btn {
+      flex-shrink: 0;
+      padding: 12px 18px;
+      border-radius: 14px;
+      border: 1px solid rgba(140, 180, 255, 0.35);
+      background: linear-gradient(180deg, rgba(55, 75, 140, 0.55), rgba(30, 35, 65, 0.85));
+      color: #fff;
+      font-weight: 600;
+      font-size: 0.92rem;
+      cursor: pointer;
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .catalog-search-btn:hover {
+      border-color: rgba(180, 210, 255, 0.5);
+      box-shadow: 0 4px 18px rgba(60, 100, 200, 0.3);
+    }
+    .catalog-empty {
+      margin-bottom: 16px;
+      padding: 18px 16px;
+      border-radius: 16px;
+      border: 1px solid rgba(130, 170, 255, 0.2);
+      background: rgba(18, 20, 35, 0.75);
+      text-align: center;
+    }
+    .catalog-empty-text {
+      color: rgba(255,255,255,0.75);
+      font-size: 0.95rem;
+      margin-bottom: 8px;
+    }
+    .catalog-empty-hint {
+      color: rgba(255,255,255,0.55);
+      font-size: 0.9rem;
+      margin-bottom: 14px;
+      line-height: 1.5;
+    }
+    .catalog-empty-cta { width: 100%; max-width: 320px; }
+    .catalog-show-wrap {
+      margin-top: 16px;
+      display: flex;
+      justify-content: center;
+    }
+    .catalog-show-all-btn {
+      padding: 12px 28px;
+      border-radius: 14px;
+      border: 1px solid rgba(140, 180, 255, 0.35);
+      background: rgba(35, 45, 85, 0.5);
+      color: #e8eeff;
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .catalog-show-all-btn:hover {
+      background: rgba(50, 65, 120, 0.55);
+      border-color: rgba(180, 210, 255, 0.45);
+    }
+
     @media (max-width: 640px) {
+      .catalog-grid.catalog-grid--collapsed .card:nth-child(n+4) {
+        display: none;
+      }
       .wa-float { bottom: 18px; right: 18px; width: 56px; height: 56px; }
       .wa-float svg { width: 28px; height: 28px; }
       .grid { grid-template-columns: 1fr; }
@@ -1392,8 +1475,24 @@
       <div class="container">
         <h2 class="section-title">Catalogo aromi</h2>
 
-        <div id="productGrid" class="grid">
-          <!-- Catalogo: solo renderProducts() (prezzi da config + fallback Astroberry) -->
+        <div class="catalog-toolbar">
+          <div class="catalog-search-row">
+            <input type="search" id="catalogSearchInput" class="catalog-search-input" placeholder="Cerca gusto o parola chiave…" autocomplete="off" inputmode="search" aria-label="Cerca nel catalogo" />
+            <button type="button" class="catalog-search-btn" id="catalogSearchBtn">Cerca</button>
+          </div>
+        </div>
+
+        <div id="catalogEmpty" class="catalog-empty" hidden>
+          <p class="catalog-empty-text">Nessun risultato per «<span id="catalogEmptyQuery"></span>».</p>
+          <p class="catalog-empty-hint">Puoi creare un mix <strong>personalizzato</strong> su misura.</p>
+          <button type="button" class="btn btn-complete catalog-empty-cta" id="catalogPersonalizzaBtn" onclick="apriOrdine('Personalizzabile 100ml')">Apri Personalizzabile 100ml</button>
+        </div>
+
+        <div id="productGrid" class="grid catalog-grid">
+          <!-- renderProducts() -->
+        </div>
+        <div id="catalogShowWrap" class="catalog-show-wrap" hidden>
+          <button type="button" class="catalog-show-all-btn" id="catalogShowAllBtn">Mostra tutto</button>
         </div>
       </div>
     </section>
@@ -1743,28 +1842,89 @@
       window.open('https://wa.me/393519198166?text=' + msg, '_blank');
     }
 
+    var catalogMobileExpanded = false;
+
+    function buildProductCardHtml(p) {
+      const isSoldOut = p.quantity <= 0 || p.soldOut;
+      const basePrice = getProductBasePrice(p.fullName);
+      const oldPrice = getProductOldPrice(p.fullName);
+      const hasDiscount = oldPrice > basePrice;
+      const isPink = !!PINK_SPARKLE_PRODUCTS[p.fullName];
+      return '<article class="card' + (isSoldOut ? ' sold-out' : '') + '">' +
+        '<div class="card-top ' + p.priceClass + '">' +
+        (isSoldOut ? '<div class="sold-out-badge">Esaurito</div>' : '') +
+        '<img class="card-image" src="' + p.img + '" alt="' + p.name + '" onerror="this.style.display=\'none\'" />' +
+        '<div class="card-overlay"></div><div class="card-label-wrap"><div class="flavour-label">' + p.name + '</div></div></div>' +
+        '<div class="card-body"><div class="name">' + p.fullName + '</div><div class="desc">' + p.desc + '</div><div class="bottom">' +
+        '<div class="price"><small>Prezzo</small>' +
+        (hasDiscount ? '<div class="price-old">€' + oldPrice + '</div>' : '') +
+        '<strong class="' + (isPink ? 'price-pink-glow' : '') + '">€' + basePrice + '</strong></div>' +
+        (isSoldOut ? '<button class="order" type="button" disabled>Esaurito</button>' : '<button class="order" type="button" onclick="apriOrdine(\'' + p.fullName.replace(/'/g, "\\'") + '\')">Aggiungi al carrello</button>') +
+        '</div></div></article>';
+    }
+
+    function getFilteredCatalogProducts() {
+      var input = document.getElementById('catalogSearchInput');
+      var q = input ? input.value.trim().toLowerCase() : '';
+      var products = getProducts();
+      if (!q) return products;
+      return products.filter(function(p) {
+        var hay = (p.name + ' ' + p.fullName + ' ' + (p.desc || '')).toLowerCase();
+        return hay.indexOf(q) >= 0;
+      });
+    }
+
+    function syncCatalogMobileChrome() {
+      var grid = document.getElementById('productGrid');
+      var wrap = document.getElementById('catalogShowWrap');
+      var emptyEl = document.getElementById('catalogEmpty');
+      if (!grid || !wrap) return;
+      if (emptyEl && !emptyEl.hidden) {
+        wrap.hidden = true;
+        return;
+      }
+      var mobile = window.matchMedia('(max-width: 640px)').matches;
+      var input = document.getElementById('catalogSearchInput');
+      var q = input ? input.value.trim() : '';
+      if (!mobile || catalogMobileExpanded || q) {
+        grid.classList.remove('catalog-grid--collapsed');
+        wrap.hidden = true;
+        return;
+      }
+      var n = grid.querySelectorAll('.card').length;
+      if (n > 3) {
+        grid.classList.add('catalog-grid--collapsed');
+        wrap.hidden = false;
+      } else {
+        grid.classList.remove('catalog-grid--collapsed');
+        wrap.hidden = true;
+      }
+    }
+
     function renderProducts() {
-      const products = getProducts();
-      const grid = document.getElementById('productGrid');
+      var products = getFilteredCatalogProducts();
+      var grid = document.getElementById('productGrid');
+      var emptyEl = document.getElementById('catalogEmpty');
       if (!grid) return;
-      grid.innerHTML = products.map(function(p) {
-        const isSoldOut = p.quantity <= 0 || p.soldOut;
-        const basePrice = getProductBasePrice(p.fullName);
-        const oldPrice = getProductOldPrice(p.fullName);
-        const hasDiscount = oldPrice > basePrice;
-        const isPink = !!PINK_SPARKLE_PRODUCTS[p.fullName];
-        return '<article class="card' + (isSoldOut ? ' sold-out' : '') + '">' +
-          '<div class="card-top ' + p.priceClass + '">' +
-          (isSoldOut ? '<div class="sold-out-badge">Esaurito</div>' : '') +
-          '<img class="card-image" src="' + p.img + '" alt="' + p.name + '" onerror="this.style.display=\'none\'" />' +
-          '<div class="card-overlay"></div><div class="card-label-wrap"><div class="flavour-label">' + p.name + '</div></div></div>' +
-          '<div class="card-body"><div class="name">' + p.fullName + '</div><div class="desc">' + p.desc + '</div><div class="bottom">' +
-          '<div class="price"><small>Prezzo</small>' +
-          (hasDiscount ? '<div class="price-old">€' + oldPrice + '</div>' : '') +
-          '<strong class="' + (isPink ? 'price-pink-glow' : '') + '">€' + basePrice + '</strong></div>' +
-          (isSoldOut ? '<button class="order" type="button" disabled>Esaurito</button>' : '<button class="order" type="button" onclick="apriOrdine(\'' + p.fullName.replace(/'/g, "\\'") + '\')">Aggiungi al carrello</button>') +
-          '</div></div></article>';
-      }).join('');
+
+      if (products.length === 0) {
+        grid.innerHTML = '';
+        grid.classList.remove('catalog-grid--collapsed');
+        if (emptyEl) {
+          emptyEl.hidden = false;
+          var eq = document.getElementById('catalogEmptyQuery');
+          var inp = document.getElementById('catalogSearchInput');
+          var raw = inp ? inp.value.trim() : '';
+          if (eq) eq.textContent = raw || '—';
+        }
+        var wrap = document.getElementById('catalogShowWrap');
+        if (wrap) wrap.hidden = true;
+        return;
+      }
+
+      if (emptyEl) emptyEl.hidden = true;
+      grid.innerHTML = products.map(buildProductCardHtml).join('');
+      syncCatalogMobileChrome();
     }
 
     function renderReviews() {
@@ -1855,6 +2015,32 @@
       renderCarrello();
       updateCartBadge();
       renderReviews();
+
+      var searchBtn = document.getElementById('catalogSearchBtn');
+      var searchInput = document.getElementById('catalogSearchInput');
+      var showAllBtn = document.getElementById('catalogShowAllBtn');
+      if (searchBtn && searchInput) {
+        searchBtn.addEventListener('click', function() {
+          if (!searchInput.value.trim()) catalogMobileExpanded = false;
+          renderProducts();
+        });
+        searchInput.addEventListener('keydown', function(e) {
+          if (e.key === 'Enter') {
+            e.preventDefault();
+            if (!searchInput.value.trim()) catalogMobileExpanded = false;
+            renderProducts();
+          }
+        });
+      }
+      if (showAllBtn) {
+        showAllBtn.addEventListener('click', function() {
+          catalogMobileExpanded = true;
+          syncCatalogMobileChrome();
+        });
+      }
+      window.addEventListener('resize', function() {
+        syncCatalogMobileChrome();
+      });
     });
 
     const statoOrdine = {
