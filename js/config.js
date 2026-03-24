@@ -15,7 +15,13 @@ window.IconLiquidConfig = Object.freeze({
     'Vanilla Custard 100ml': 53,
     'Cola Ice 100ml': 40,
     'Personalizzabile 100ml': 40,
-    'Astroberry 100ml': 40
+    'Astroberry 100ml': 40,
+    'TRAPPLE 100ml': 70,
+    'BLUE RAZZ 100ml': 70,
+    'STRAW GUAW 100ml': 70,
+    'GRAPE 100ml': 70,
+    'PANGO 100ml': 70,
+    'MELONS 100ml': 70
   },
   productOldPrices: {
     'Limoncello 100ml': 50,
@@ -33,7 +39,13 @@ window.IconLiquidConfig = Object.freeze({
     'Vanilla Custard 100ml': 63,
     'Cola Ice 100ml': 50,
     'Personalizzabile 100ml': 50,
-    'Astroberry 100ml': 50
+    'Astroberry 100ml': 50,
+    'TRAPPLE 100ml': 70,
+    'BLUE RAZZ 100ml': 70,
+    'STRAW GUAW 100ml': 70,
+    'GRAPE 100ml': 70,
+    'PANGO 100ml': 70,
+    'MELONS 100ml': 70
   },
   pinkSparkleProducts: {
     'Vanilla Custard 100ml': true

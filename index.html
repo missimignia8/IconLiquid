@@ -7,6 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&display=swap" rel="stylesheet" />
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     @keyframes ambientShift {
@@ -16,6 +17,20 @@
     @keyframes ctaGlow {
       0%, 100% { box-shadow: 0 4px 24px rgba(80, 140, 255, 0.35), 0 0 0 1px rgba(255,255,255,0.08) inset; }
       50% { box-shadow: 0 8px 36px rgba(120, 170, 255, 0.5), 0 0 48px rgba(100, 160, 255, 0.2), 0 0 0 1px rgba(255,255,255,0.1) inset; }
+    }
+    @keyframes premiumLinePulse {
+      0%, 100% {
+        box-shadow:
+          0 6px 32px rgba(212, 175, 80, 0.35),
+          0 0 48px rgba(180, 140, 255, 0.2),
+          0 0 0 1px rgba(255, 215, 140, 0.35) inset;
+      }
+      50% {
+        box-shadow:
+          0 10px 44px rgba(255, 200, 100, 0.5),
+          0 0 64px rgba(200, 150, 255, 0.28),
+          0 0 0 1px rgba(255, 230, 170, 0.5) inset;
+      }
     }
     @keyframes waGlow {
       0%, 100% { box-shadow: 0 6px 28px rgba(37, 211, 102, 0.5), 0 0 0 0 rgba(37, 211, 102, 0.35); }
@@ -1293,6 +1308,11 @@
       body::before { animation: none; }
       .btn-complete { animation: none; }
       .wa-float { animation: none; }
+      .btn-premium-line { animation: none; }
+      .premium-catalog-anim,
+      .premium-catalog-anim.is-open {
+        transition: none;
+      }
     }
 
     .catalog-toolbar {
@@ -1373,6 +1393,145 @@
       font-size: 0.95rem;
       line-height: 1.5;
     }
+
+    .premium-line-cta-wrap {
+      margin-top: 28px;
+      display: flex;
+      justify-content: center;
+      padding-bottom: 6px;
+    }
+    .btn-premium-line {
+      font-family: 'Syne', 'Plus Jakarta Sans', sans-serif;
+      font-weight: 800;
+      font-size: clamp(0.95rem, 2.8vw, 1.08rem);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #1a1208;
+      padding: 16px 32px;
+      border-radius: 999px;
+      border: 2px solid rgba(255, 215, 130, 0.85);
+      cursor: pointer;
+      background: linear-gradient(145deg, #ffe6a8 0%, #d4a84b 38%, #b8862d 72%, #f0d78c 100%);
+      text-shadow: 0 1px 0 rgba(255,255,255,0.35);
+      animation: premiumLinePulse 3.2s ease-in-out infinite;
+      transition: transform 0.22s ease, filter 0.22s ease, letter-spacing 0.22s ease;
+    }
+    .btn-premium-line:hover {
+      transform: translateY(-3px) scale(1.02);
+      filter: brightness(1.08) saturate(1.12);
+      letter-spacing: 0.14em;
+    }
+    .btn-premium-line:focus-visible {
+      outline: 2px solid rgba(200, 230, 255, 0.9);
+      outline-offset: 4px;
+    }
+    .btn-premium-line:active {
+      transform: translateY(0) scale(0.99);
+    }
+
+    .premium-catalog-anim {
+      display: grid;
+      grid-template-rows: 0fr;
+      opacity: 0;
+      transition: grid-template-rows 0.55s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease;
+    }
+    .premium-catalog-anim.is-open {
+      grid-template-rows: 1fr;
+      opacity: 1;
+    }
+    .premium-catalog-anim-inner {
+      overflow: hidden;
+      min-height: 0;
+    }
+    .catalog-premium-block {
+      margin-top: 22px;
+      padding: clamp(22px, 4vw, 40px) clamp(18px, 3vw, 32px) clamp(28px, 4vw, 46px);
+      border-radius: 24px;
+      background:
+        radial-gradient(ellipse 90% 60% at 50% 0%, rgba(212, 175, 80, 0.12), transparent 55%),
+        radial-gradient(ellipse 70% 50% at 100% 80%, rgba(120, 80, 200, 0.1), transparent 45%),
+        linear-gradient(165deg, rgba(6, 6, 10, 0.98) 0%, rgba(4, 4, 8, 1) 45%, rgba(10, 8, 16, 0.98) 100%);
+      border: 1px solid rgba(212, 175, 80, 0.22);
+      box-shadow:
+        0 24px 80px rgba(0, 0, 0, 0.55),
+        0 0 80px rgba(180, 140, 60, 0.06),
+        inset 0 1px 0 rgba(255, 215, 140, 0.12);
+    }
+    .catalog-premium-head {
+      text-align: center;
+      margin-bottom: 22px;
+      max-width: 560px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .catalog-premium-title {
+      font-family: 'Syne', 'Plus Jakarta Sans', sans-serif;
+      font-weight: 800;
+      font-size: clamp(1.65rem, 4vw, 2.15rem);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #f8e6c0;
+      text-shadow:
+        0 0 28px rgba(212, 175, 80, 0.45),
+        0 2px 16px rgba(0, 0, 0, 0.6);
+      margin-bottom: 10px;
+    }
+    .catalog-premium-sub {
+      font-family: 'Syne', sans-serif;
+      font-weight: 600;
+      font-size: clamp(0.92rem, 2.2vw, 1.02rem);
+      color: rgba(255, 230, 200, 0.72);
+      letter-spacing: 0.04em;
+      line-height: 1.55;
+    }
+    .catalog-premium-catalog-title {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 1.05rem;
+      color: rgba(255, 255, 255, 0.76);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid rgba(212, 175, 80, 0.18);
+    }
+    .card.card--premium {
+      background: linear-gradient(180deg, rgba(255, 215, 130, 0.07) 0%, rgba(8, 8, 14, 0.94) 100%);
+      border: 1px solid rgba(212, 175, 80, 0.32);
+      box-shadow:
+        0 8px 32px rgba(0, 0, 0, 0.45),
+        0 0 40px rgba(200, 160, 80, 0.08);
+    }
+    .card.card--premium:hover {
+      border-color: rgba(255, 220, 140, 0.5);
+      box-shadow:
+        0 16px 48px rgba(0, 0, 0, 0.5),
+        0 0 56px rgba(212, 175, 100, 0.2);
+    }
+    .card.card--premium .card-body .name {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      letter-spacing: 0.02em;
+      color: rgba(255, 245, 220, 0.98);
+    }
+    .card.card--premium .card-body .desc {
+      color: rgba(255, 235, 210, 0.68);
+    }
+    .card.card--premium .order {
+      background: linear-gradient(145deg, #3d2e0c, #8b6914 45%, #c9a227);
+      border: 1px solid rgba(255, 215, 130, 0.45);
+      box-shadow: 0 6px 22px rgba(200, 160, 60, 0.35);
+    }
+    .card.card--premium .order:hover {
+      filter: brightness(1.12);
+      box-shadow: 0 8px 28px rgba(255, 200, 100, 0.4);
+    }
+    .prem-trapple { background: linear-gradient(135deg, #140505, #5a1810 45%, #c73718); }
+    .prem-blue-razz { background: linear-gradient(135deg, #020814, #0a1e48 50%, #1e6caa); }
+    .prem-straw-guaw { background: linear-gradient(135deg, #18051a, #4a1268 50%, #c02090); }
+    .prem-grape { background: linear-gradient(135deg, #0c0418, #2a0f48 50%, #6a20a0); }
+    .prem-pango { background: linear-gradient(135deg, #140804, #4a2208 50%, #c05010); }
+    .prem-melons { background: linear-gradient(135deg, #030f05, #0a3218 50%, #1a8040); }
     .catalog-show-all-btn {
       padding: 12px 28px;
       border-radius: 14px;
@@ -1501,6 +1660,23 @@
         </div>
         <div id="catalogShowWrap" class="catalog-show-wrap" hidden>
           <button type="button" class="catalog-show-all-btn" id="catalogShowAllBtn">Mostra tutto</button>
+        </div>
+
+        <div class="premium-line-cta-wrap">
+          <button type="button" class="btn-premium-line" id="togglePremiumCatalogBtn" aria-expanded="false" aria-controls="premiumCatalogPanel">MOSTRA LINEA PREMIUM</button>
+        </div>
+
+        <div id="premiumCatalogAnim" class="premium-catalog-anim" aria-hidden="true">
+          <div class="premium-catalog-anim-inner">
+            <div id="premiumCatalogPanel" class="catalog-premium-block">
+              <div class="catalog-premium-head">
+                <h2 class="catalog-premium-title">LINEA PREMIUM</h2>
+                <p class="catalog-premium-sub">Selezione esclusiva di aromi di alta qualità</p>
+              </div>
+              <h3 class="catalog-premium-catalog-title">Catalogo Premium</h3>
+              <div id="premiumProductGrid" class="grid catalog-grid catalog-premium-grid"></div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -1669,6 +1845,14 @@
         PRODUCT_OLD_PRICES['Astroberry 100ml'] = 50;
       }
     })();
+    (function ensurePremiumCatalogPrices() {
+      var names = ['TRAPPLE 100ml', 'BLUE RAZZ 100ml', 'STRAW GUAW 100ml', 'GRAPE 100ml', 'PANGO 100ml', 'MELONS 100ml'];
+      for (var i = 0; i < names.length; i++) {
+        var n = names[i];
+        if (PRODUCT_PRICES[n] == null) PRODUCT_PRICES[n] = 70;
+        if (PRODUCT_OLD_PRICES[n] == null) PRODUCT_OLD_PRICES[n] = 70;
+      }
+    })();
     const PINK_SPARKLE_PRODUCTS = APP_CONFIG.pinkSparkleProducts || {};
     const DEFAULT_REVIEWS = APP_CONFIG.defaultReviews || [];
     const DEFAULT_PRODUCTS = [
@@ -1688,6 +1872,15 @@
       { id: 'p14', name: 'Vanilla Custard', fullName: 'Vanilla Custard 100ml', img: 'images/vanilla-custard.png', desc: 'Altro cremoso serio, elegante. Vaniglia e crema pasticcera per un profilo raffinato.', priceClass: 'vanillacustard', quantity: 99, soldOut: false },
       { id: 'p15', name: 'Cola Ice', fullName: 'Cola Ice 100ml', img: 'images/cola-ice.png', desc: 'Più semplice di Cola Lemon, ma molto richiesto. Cola classica con freschezza ghiacciata.', priceClass: 'colaice', quantity: 99, soldOut: false },
       { id: 'p16', name: 'Personalizzabile', fullName: 'Personalizzabile 100ml', img: 'images/personalizzabile.png', desc: 'Crea il tuo mix su misura. Scegli aromi e intensità. Ideale per chi ama sperimentare.', priceClass: 'personalizzabile', quantity: 99, soldOut: false }
+    ];
+
+    const PREMIUM_PRODUCTS = [
+      { id: 'pr1', name: 'TRAPPLE', fullName: 'TRAPPLE 100ml', img: 'images/premium/trappler.png', desc: 'Mix intenso di mela rossa e verde con un tocco fruttato deciso. Un gusto potente e fresco, pensato per chi vuole un liquido premium dal carattere forte.', priceClass: 'prem-trapple', quantity: 99, soldOut: false, isPremium: true },
+      { id: 'pr2', name: 'BLUE RAZZ', fullName: 'BLUE RAZZ 100ml', img: 'images/premium/blue-razz.png', desc: 'Lampone blu dal sapore dolce e leggermente ghiacciato. Uno dei gusti più amati, equilibrato e persistente, perfetto per un utilizzo quotidiano.', priceClass: 'prem-blue-razz', quantity: 99, soldOut: false, isPremium: true },
+      { id: 'pr3', name: 'STRAW GUAW', fullName: 'STRAW GUAW 100ml', img: 'images/premium/straw-guaw.png', desc: 'Fragola e guava tropicale in una combinazione dolce e succosa. Un aroma ricco e morbido che lascia un retrogusto intenso.', priceClass: 'prem-straw-guaw', quantity: 99, soldOut: false, isPremium: true },
+      { id: 'pr4', name: 'GRAPE', fullName: 'GRAPE 100ml', img: 'images/premium/grape.png', desc: 'Uva piena e corposa, dal sapore fruttato e rotondo. Ideale per chi cerca un gusto deciso e costante.', priceClass: 'prem-grape', quantity: 99, soldOut: false, isPremium: true },
+      { id: 'pr5', name: 'PANGO', fullName: 'PANGO 100ml', img: 'images/premium/pango.png', desc: 'Pesca e mango tropicale in una miscela fresca e avvolgente. Un liquido premium dal profilo esotico e molto aromatico.', priceClass: 'prem-pango', quantity: 99, soldOut: false, isPremium: true },
+      { id: 'pr6', name: 'MELONS', fullName: 'MELONS 100ml', img: 'images/premium/melons.png', desc: 'Blend di meloni dolci e succosi, leggermente rinfrescante. Un gusto morbido e pulito, perfetto per sessioni lunghe.', priceClass: 'prem-melons', quantity: 99, soldOut: false, isPremium: true }
     ];
 
     function getProducts() {
@@ -1728,6 +1921,9 @@
       var products = getProducts();
       for (var i = 0; i < products.length; i++) {
         if (products[i].fullName === fullName) return products[i];
+      }
+      for (var j = 0; j < PREMIUM_PRODUCTS.length; j++) {
+        if (PREMIUM_PRODUCTS[j].fullName === fullName) return PREMIUM_PRODUCTS[j];
       }
       return null;
     }
@@ -1858,7 +2054,8 @@
       const oldPrice = getProductOldPrice(p.fullName);
       const hasDiscount = oldPrice > basePrice;
       const isPink = !!PINK_SPARKLE_PRODUCTS[p.fullName];
-      return '<article class="card' + (isSoldOut ? ' sold-out' : '') + '">' +
+      const isPremium = !!p.isPremium;
+      return '<article class="card' + (isSoldOut ? ' sold-out' : '') + (isPremium ? ' card--premium' : '') + '">' +
         '<div class="card-top ' + p.priceClass + '">' +
         (isSoldOut ? '<div class="sold-out-badge">Esaurito</div>' : '') +
         '<img class="card-image" src="' + p.img + '" alt="' + p.name + '" onerror="this.style.display=\'none\'" />' +
@@ -1911,6 +2108,23 @@
         grid.classList.add('catalog-grid--collapsed');
         if (btn) btn.textContent = 'Mostra tutto';
       }
+    }
+
+    function renderPremiumCatalog() {
+      var grid = document.getElementById('premiumProductGrid');
+      if (!grid) return;
+      grid.innerHTML = PREMIUM_PRODUCTS.map(function (p) { return buildProductCardHtml(p); }).join('');
+    }
+
+    function togglePremiumCatalog() {
+      var anim = document.getElementById('premiumCatalogAnim');
+      var btn = document.getElementById('togglePremiumCatalogBtn');
+      if (!anim || !btn) return;
+      var open = !anim.classList.contains('is-open');
+      anim.classList.toggle('is-open', open);
+      btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      anim.setAttribute('aria-hidden', open ? 'false' : 'true');
+      btn.textContent = open ? 'NASCONDI LINEA PREMIUM' : 'MOSTRA LINEA PREMIUM';
     }
 
     function renderProducts() {
@@ -2023,9 +2237,13 @@
     document.addEventListener('DOMContentLoaded', function() {
       loadCarrello();
       renderProducts();
+      renderPremiumCatalog();
       renderCarrello();
       updateCartBadge();
       renderReviews();
+
+      var premiumBtn = document.getElementById('togglePremiumCatalogBtn');
+      if (premiumBtn) premiumBtn.addEventListener('click', togglePremiumCatalog);
 
       var searchBtn = document.getElementById('catalogSearchBtn');
       var searchInput = document.getElementById('catalogSearchInput');
