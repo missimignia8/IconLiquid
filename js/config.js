@@ -15,7 +15,7 @@ window.IconLiquidConfig = Object.freeze({
     'Vanilla Custard 100ml': 53,
     'Cola Ice 100ml': 40,
     'Personalizzabile 100ml': 40,
-    'Astroberry 100ml': 50
+    'Astroberry 100ml': 40
   },
   productOldPrices: {
     'Limoncello 100ml': 50,
@@ -32,7 +32,8 @@ window.IconLiquidConfig = Object.freeze({
     'Pistachio Cream 100ml': 50,
     'Vanilla Custard 100ml': 63,
     'Cola Ice 100ml': 50,
-    'Personalizzabile 100ml': 50
+    'Personalizzabile 100ml': 50,
+    'Astroberry 100ml': 50
   },
   pinkSparkleProducts: {
     'Vanilla Custard 100ml': true
