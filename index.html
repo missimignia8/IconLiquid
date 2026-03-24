@@ -2013,39 +2013,39 @@
     }
 
     /**
-     * Prezzo liquido: primo 100 ml = P − 10; ogni altro 100 ml = P × (1 − S), con S da tabella su N.
-     * Totale = (P − 10) + (N − 1) × P × (1 − S), arrotondato all’euro.
+     * P = prezzo listino “vero” per 100 ml (come sul catalogo barrato, es. 50 €), non il prezzo già scontato in scheda (40 €).
+     * Primo 100 ml = P − 10; altri blocchi = P × (1 − S). Totale = (P − 10) + (N − 1) × P × (1 − S).
      */
-    function calcolaPrezzoLiquido(volumeMl, basePrice) {
+    function calcolaPrezzoLiquidoConP(volumeMl, P) {
       var n = blocchi100DaVolume(volumeMl);
-      var P = Number(basePrice);
-      if (!isFinite(P) || P < 0) P = 0;
-      var primo = P - 10;
+      var p = Number(P);
+      if (!isFinite(p) || p < 0) p = 0;
+      var primo = p - 10;
       if (n <= 1) return Math.round(primo);
       var S = scontoDecimaleAltriBlocchi(n);
-      var raw = primo + (n - 1) * P * (1 - S);
+      var raw = primo + (n - 1) * p * (1 - S);
       return Math.round(raw);
     }
 
+    function calcolaPrezzoLiquido(volumeMl, fullName) {
+      return calcolaPrezzoLiquidoConP(volumeMl, getProductOldPrice(fullName));
+    }
+
     /**
-     * Sconto % sul liquido rispetto al prezzo originale (listino catalogo barrato), non rispetto al P già promozionale.
-     * prezzo_pieno = P_originale × N, prezzo_finale = formula ordine con P attuale.
+     * Sconto % sul liquido vs listino originale (P×N con P = prezzo barrato).
      */
     function calcolaScontoTotalePercentualeSuLiquido(volumeMl, fullName) {
       var n = blocchi100DaVolume(volumeMl);
       var pieno = Number(getProductOldPrice(fullName)) * n;
-      var P = getProductBasePrice(fullName);
-      var finale = calcolaPrezzoLiquido(volumeMl, P);
+      var finale = calcolaPrezzoLiquido(volumeMl, fullName);
       if (!isFinite(pieno) || pieno <= 0 || n <= 0) return 0;
       return Math.max(0, Math.round(((pieno - finale) / pieno) * 100));
     }
 
-    function htmlTabellaScontiQuantita(basePrice, volumeSelezionatoMl) {
-      var b = Number(basePrice);
-      if (!isFinite(b) || b < 0) b = 0;
+    function htmlTabellaScontiQuantita(fullName, volumeSelezionatoMl) {
       var rows = [];
       for (var ml = 100; ml <= 1000; ml += 100) {
-        var p = calcolaPrezzoLiquido(ml, b);
+        var p = calcolaPrezzoLiquido(ml, fullName);
         rows.push(
           '<li' + (volumeSelezionatoMl === ml ? ' class="is-current"' : '') + '><span>' + ml + ' ml</span><strong>€' + p + '</strong></li>'
         );
@@ -2064,20 +2064,20 @@
       return ((nicMl / 20) - 1) * 4;
     }
 
-    function calcolaTotaleRiga(volumeMl, nicMl, basePrice, packagingEuro) {
+    function calcolaTotaleRiga(volumeMl, nicMl, fullName, packagingEuro) {
       var extraPack = packagingEuro == null || isNaN(packagingEuro) ? 0 : packagingEuro;
-      return calcolaPrezzoLiquido(volumeMl, basePrice) + supplementoNicotina(nicMl) + extraPack;
+      return calcolaPrezzoLiquido(volumeMl, fullName) + supplementoNicotina(nicMl) + extraPack;
     }
 
     function calcolaPrezzo() {
-      return calcolaTotaleRiga(statoOrdine.volumeMl, statoOrdine.nicotinaMl, statoOrdine.basePrice, statoOrdine.packagingEuro);
+      return calcolaTotaleRiga(statoOrdine.volumeMl, statoOrdine.nicotinaMl, statoOrdine.gusto, statoOrdine.packagingEuro);
     }
 
     function creaMessaggioOrdine() {
       var prezzo = calcolaPrezzo();
       var supNic = supplementoNicotina(statoOrdine.nicotinaMl);
       var pack = statoOrdine.packagingLabel || '—';
-      var pq = calcolaPrezzoLiquido(statoOrdine.volumeMl, statoOrdine.basePrice);
+      var pq = calcolaPrezzoLiquido(statoOrdine.volumeMl, statoOrdine.gusto);
       return 'Ciao, vorrei ordinare ' + statoOrdine.gusto + ' da ' + statoOrdine.volumeMl + ' ml con ' + statoOrdine.nicotinaMl + ' ml di nicotina. Confezionamento: ' + pack + '. Prezzo liquido (sconti quantità): €' + pq + '. Extra nic (€4 ogni 20 ml oltre i primi 20): €' + supNic + '. Totale: €' + prezzo;
     }
 
@@ -2100,11 +2100,11 @@
       var packEuro = statoOrdine.packagingEuro == null || isNaN(statoOrdine.packagingEuro) ? 0 : statoOrdine.packagingEuro;
       var packLabel = statoOrdine.packagingLabel || '—';
       var listinoOriginale = calcolaListinoLiquidoOriginale(vol, statoOrdine.gusto);
-      var liquido = calcolaPrezzoLiquido(vol, statoOrdine.basePrice);
+      var liquido = calcolaPrezzoLiquido(vol, statoOrdine.gusto);
       var supNic = supplementoNicotina(nic);
       var totale = liquido + supNic + packEuro;
       var listinoTotaleRiferimento = Math.round(listinoOriginale + supNic + packEuro);
-      var qtyTableHtml = htmlTabellaScontiQuantita(statoOrdine.basePrice, vol);
+      var qtyTableHtml = htmlTabellaScontiQuantita(statoOrdine.gusto, vol);
       var scontoTotLiquidoPct = calcolaScontoTotalePercentualeSuLiquido(vol, statoOrdine.gusto);
 
       var badgeVol = '';
@@ -2250,7 +2250,7 @@
         packagingId: statoOrdine.packagingId,
         packagingLabel: statoOrdine.packagingLabel,
         packagingEuro: statoOrdine.packagingEuro,
-        prezzo: calcolaTotaleRiga(statoOrdine.volumeMl, statoOrdine.nicotinaMl, statoOrdine.basePrice, statoOrdine.packagingEuro)
+        prezzo: calcolaTotaleRiga(statoOrdine.volumeMl, statoOrdine.nicotinaMl, statoOrdine.gusto, statoOrdine.packagingEuro)
       });
       saveCarrello();
       updateCartBadge();
@@ -2360,14 +2360,15 @@
       const t8 = statoOrdine.nicotinaMl === 40;
       const t8b = supplementoNicotina(40) === 4 && supplementoNicotina(60) === 8;
       statoOrdine.packagingEuro = 3;
-      const tPack = calcolaTotaleRiga(100, 0, 50, 3) === calcolaTotaleRiga(100, 0, 50, 0) + 3;
+      const tPack = calcolaTotaleRiga(100, 0, 'Test Aroma', 3) === calcolaTotaleRiga(100, 0, 'Test Aroma', 0) + 3;
       statoOrdine.packagingEuro = 0;
       const t9 = calcolaPrezzo() > 0;
-      const tExP50N300 = calcolaPrezzoLiquido(300, 50) === 116;
-      const tExP56N300 = calcolaPrezzoLiquido(300, 56) === 131;
-      const tExP63N500 = calcolaPrezzoLiquido(500, 63) === 234;
-      const tExP40N100 = calcolaPrezzoLiquido(100, 40) === 30;
-      const tExP40N1000 = calcolaPrezzoLiquido(1000, 40) === 253;
+      const tExP50N300 = calcolaPrezzoLiquidoConP(300, 50) === 116;
+      const tExP56N300 = calcolaPrezzoLiquidoConP(300, 56) === 131;
+      const tExP63N500 = calcolaPrezzoLiquidoConP(500, 63) === 234;
+      const tExP40N100 = calcolaPrezzoLiquidoConP(100, 40) === 30;
+      const tExP40N1000 = calcolaPrezzoLiquidoConP(1000, 40) === 253;
+      const tLimon100 = calcolaPrezzoLiquido(100, 'Limoncello 100ml') === 40;
       impostaVolume(500);
       const t10 = calcolaPrezzo() < 260;
       const msg = creaMessaggioOrdine();
@@ -2414,6 +2415,7 @@
         { name: 'es. P=63, 500 ml → €234', passed: tExP63N500 },
         { name: 'es. P=40, 100 ml → €30 (P−10)', passed: tExP40N100 },
         { name: 'es. P=40, 1000 ml → €253', passed: tExP40N1000 },
+        { name: 'Limoncello 100 ml: P listino 50 → €40 liquido', passed: tLimon100 },
         { name: 'prezzo 500 ml sotto soglia test', passed: t10 },
         { name: 'messaggio contiene volume', passed: t11 },
         { name: 'messaggio contiene nicotina', passed: t12 },
