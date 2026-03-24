@@ -421,6 +421,32 @@
       margin-bottom: 12px;
       text-shadow: 0 2px 28px rgba(100, 140, 255, 0.2);
     }
+    .hero .hero-brand-title {
+      font-family: 'Syne', 'Plus Jakarta Sans', sans-serif;
+      font-weight: 800;
+      font-size: clamp(2.55rem, 7.5vw, 4.6rem);
+      letter-spacing: 0.07em;
+      line-height: 1.05;
+      margin-bottom: 18px;
+      margin-top: 0;
+      text-transform: none;
+      background: linear-gradient(118deg, #ffffff 0%, #e4ecff 22%, #c4b5fd 48%, #93c5fd 72%, #fcd34d 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      color: #f2f6ff;
+      filter: drop-shadow(0 4px 24px rgba(60, 100, 200, 0.45)) drop-shadow(0 0 72px rgba(130, 170, 255, 0.4));
+    }
+    @supports not ((-webkit-background-clip: text) or (background-clip: text)) {
+      .hero .hero-brand-title {
+        background: none;
+        -webkit-text-fill-color: unset;
+        color: #f2f6ff;
+        text-shadow:
+          0 0 60px rgba(130, 180, 255, 0.55),
+          0 4px 36px rgba(50, 90, 200, 0.45);
+      }
+    }
     .sub {
       color: rgba(255,255,255,0.72);
       font-size: 1.06rem;
@@ -609,6 +635,10 @@
       overflow: hidden;
       box-shadow: 0 4px 20px rgba(0,0,0,0.25);
       transition: border-color 0.25s, box-shadow 0.25s, transform 0.25s;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      min-height: 0;
     }
     .card:hover {
       border-color: rgba(140, 180, 255, 0.35);
@@ -667,7 +697,13 @@
     .colaice { background: linear-gradient(135deg, #1a0f08, #4a2812 55%, #8b4513); }
     .personalizzabile { background: linear-gradient(135deg, #2e1a4a, #6a2c91 25%, #e74c3c 50%, #f39c12 75%, #3498db); }
 
-    .card-body { padding: 16px; }
+    .card-body {
+      padding: 16px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+    }
     .name {
       font-size: 1.15rem;
       font-weight: 600;
@@ -677,14 +713,16 @@
       color: rgba(255,255,255,0.68);
       font-size: 0.95rem;
       line-height: 1.55;
-      min-height: 64px;
+      flex: 1 1 auto;
+      min-height: 0;
     }
     .bottom {
       display: flex;
       justify-content: space-between;
       align-items: end;
       gap: 12px;
-      margin-top: 18px;
+      margin-top: auto;
+      padding-top: 18px;
     }
     .price small {
       display: block;
@@ -1876,7 +1914,7 @@
         <div class="hero-box">
           <div class="hero-content">
             <div class="badge">Volume a scelta • Ordini in privato</div>
-            <h1>I nostri aromi</h1>
+            <h1 class="hero-brand-title">Icon Liquid</h1>
             <p class="sub">
               Scegli il gusto, regola volume e nicotina, poi aggiungi al carrello. Apri il carrello dall’icona in alto, controlla le righe e premi «Completa ordine» per inviare tutto su WhatsApp in un unico messaggio.
             </p>
@@ -2104,8 +2142,10 @@
       var names = ['TRAPPLE', 'BLUE RAZZ', 'STRAW GUAW', 'GRAPE', 'PANGO', 'MELONS'];
       for (var i = 0; i < names.length; i++) {
         var n = names[i];
-        if (PRODUCT_PRICES[n] == null) PRODUCT_PRICES[n] = 70;
         if (PRODUCT_OLD_PRICES[n] == null) PRODUCT_OLD_PRICES[n] = 70;
+        if (PRODUCT_PRICES[n] == null || PRODUCT_PRICES[n] >= PRODUCT_OLD_PRICES[n]) {
+          PRODUCT_PRICES[n] = 60;
+        }
       }
     })();
     const PINK_SPARKLE_PRODUCTS = (function () {

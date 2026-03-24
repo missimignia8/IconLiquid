@@ -16,12 +16,12 @@ window.IconLiquidConfig = Object.freeze({
     'Cola Ice': 40,
     'Personalizzabile': 40,
     'Astroberry': 40,
-    'TRAPPLE': 70,
-    'BLUE RAZZ': 70,
-    'STRAW GUAW': 70,
-    'GRAPE': 70,
-    'PANGO': 70,
-    'MELONS': 70
+    'TRAPPLE': 60,
+    'BLUE RAZZ': 60,
+    'STRAW GUAW': 60,
+    'GRAPE': 60,
+    'PANGO': 60,
+    'MELONS': 60
   },
   productOldPrices: {
     'Limoncello': 50,
