@@ -1988,10 +1988,18 @@
       return v;
     }
 
-    /** Listino lineare: n × prezzo base (senza sconti quantità). */
+    /** Listino lineare al prezzo catalogo attuale P: n × P (senza sconti quantità ordine). */
     function calcolaListinoRiferimento(volumeMl, basePrice) {
       var n = blocchi100DaVolume(volumeMl);
       return Math.round(basePrice * n);
+    }
+
+    /** Listino “originale” prima del prezzo promozionale: n × prezzo barrato in catalogo. */
+    function calcolaListinoLiquidoOriginale(volumeMl, fullName) {
+      var n = blocchi100DaVolume(volumeMl);
+      var p0 = Number(getProductOldPrice(fullName));
+      if (!isFinite(p0) || p0 < 0) p0 = 0;
+      return Math.round(p0 * n);
     }
 
     /**
@@ -2019,14 +2027,16 @@
       return Math.round(raw);
     }
 
-    /** Sconto % sul liquido vs listino lineare P×N (come da tua formula). */
-    function calcolaScontoTotalePercentualeSuLiquido(volumeMl, basePrice) {
+    /**
+     * Sconto % sul liquido rispetto al prezzo originale (listino catalogo barrato), non rispetto al P già promozionale.
+     * prezzo_pieno = P_originale × N, prezzo_finale = formula ordine con P attuale.
+     */
+    function calcolaScontoTotalePercentualeSuLiquido(volumeMl, fullName) {
       var n = blocchi100DaVolume(volumeMl);
-      var P = Number(basePrice);
-      if (!isFinite(P) || P <= 0 || n <= 0) return 0;
-      var pieno = P * n;
-      var finale = calcolaPrezzoLiquido(volumeMl, basePrice);
-      if (pieno <= 0) return 0;
+      var pieno = Number(getProductOldPrice(fullName)) * n;
+      var P = getProductBasePrice(fullName);
+      var finale = calcolaPrezzoLiquido(volumeMl, P);
+      if (!isFinite(pieno) || pieno <= 0 || n <= 0) return 0;
       return Math.max(0, Math.round(((pieno - finale) / pieno) * 100));
     }
 
@@ -2089,13 +2099,13 @@
       var nic = statoOrdine.nicotinaMl;
       var packEuro = statoOrdine.packagingEuro == null || isNaN(statoOrdine.packagingEuro) ? 0 : statoOrdine.packagingEuro;
       var packLabel = statoOrdine.packagingLabel || '—';
-      var listino = calcolaListinoRiferimento(vol, statoOrdine.basePrice);
+      var listinoOriginale = calcolaListinoLiquidoOriginale(vol, statoOrdine.gusto);
       var liquido = calcolaPrezzoLiquido(vol, statoOrdine.basePrice);
       var supNic = supplementoNicotina(nic);
       var totale = liquido + supNic + packEuro;
-      var listinoTotaleRiferimento = Math.round(listino + supNic + packEuro);
+      var listinoTotaleRiferimento = Math.round(listinoOriginale + supNic + packEuro);
       var qtyTableHtml = htmlTabellaScontiQuantita(statoOrdine.basePrice, vol);
-      var scontoTotLiquidoPct = calcolaScontoTotalePercentualeSuLiquido(vol, statoOrdine.basePrice);
+      var scontoTotLiquidoPct = calcolaScontoTotalePercentualeSuLiquido(vol, statoOrdine.gusto);
 
       var badgeVol = '';
       if (vol === 300) badgeVol = '<span class="order-volume-badge">🔥 Più scelto — 300 ml</span>';
@@ -2117,7 +2127,7 @@
 
       var hintBarrato = '';
       if (supNic > 0 || packEuro > 0) {
-        hintBarrato = '<p class="order-price-ref-hint">Il barrato è <strong>listino liquido + extra nic + confezionamento</strong> (€' + listino + ' + €' + supNic + (packEuro > 0 ? ' + €' + packEuro : '') + ').</p>';
+        hintBarrato = '<p class="order-price-ref-hint">Il barrato è <strong>listino originale liquido + extra nic + confezionamento</strong> (€' + listinoOriginale + ' + €' + supNic + (packEuro > 0 ? ' + €' + packEuro : '') + ').</p>';
       }
 
       box.innerHTML =
@@ -2133,7 +2143,7 @@
         packBlock +
         '<div class="order-detail-lines">' +
         '<strong style="color:rgba(255,255,255,0.92)">' + escapeHtml(statoOrdine.gusto) + '</strong><br>' +
-        'Liquido · <strong>' + vol + ' ml</strong> · totale liquido: <strong style="color:#9ecbff">€' + liquido + '</strong> · sconto vs listino (P×N): <strong>−' + scontoTotLiquidoPct + '%</strong>' +
+        'Liquido · <strong>' + vol + ' ml</strong> · totale liquido: <strong style="color:#9ecbff">€' + liquido + '</strong> · sconto vs prezzo originale: <strong>−' + scontoTotLiquidoPct + '%</strong>' +
         badgeVol +
         '</div>' +
         qtyTableHtml;
