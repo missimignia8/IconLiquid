@@ -1459,41 +1459,43 @@
     }
     .catalog-premium-head {
       text-align: center;
-      margin-bottom: 22px;
-      max-width: 560px;
+      margin-bottom: 26px;
+      max-width: 620px;
       margin-left: auto;
       margin-right: auto;
     }
     .catalog-premium-title {
       font-family: 'Syne', 'Plus Jakarta Sans', sans-serif;
       font-weight: 800;
-      font-size: clamp(1.65rem, 4vw, 2.15rem);
+      font-size: clamp(1.85rem, 4.6vw, 2.35rem);
       letter-spacing: 0.08em;
       text-transform: uppercase;
       color: #f8e6c0;
       text-shadow:
         0 0 28px rgba(212, 175, 80, 0.45),
         0 2px 16px rgba(0, 0, 0, 0.6);
-      margin-bottom: 10px;
+      margin-bottom: 14px;
+      line-height: 1.38;
     }
     .catalog-premium-sub {
       font-family: 'Syne', sans-serif;
-      font-weight: 600;
-      font-size: clamp(0.92rem, 2.2vw, 1.02rem);
-      color: rgba(255, 230, 200, 0.72);
-      letter-spacing: 0.04em;
-      line-height: 1.55;
+      font-weight: 700;
+      font-size: clamp(1rem, 2.6vw, 1.12rem);
+      color: rgba(255, 236, 210, 0.88);
+      letter-spacing: 0.03em;
+      line-height: 1.52;
     }
     .catalog-premium-catalog-title {
       font-family: 'Syne', sans-serif;
-      font-weight: 700;
-      font-size: 1.05rem;
-      color: rgba(255, 255, 255, 0.76);
+      font-weight: 800;
+      font-size: clamp(1.05rem, 2.4vw, 1.14rem);
+      color: rgba(255, 255, 255, 0.86);
       letter-spacing: 0.06em;
       text-transform: uppercase;
-      margin-bottom: 16px;
-      padding-bottom: 12px;
+      margin-bottom: 18px;
+      padding-bottom: 14px;
       border-bottom: 1px solid rgba(212, 175, 80, 0.18);
+      line-height: 1.45;
     }
     .card.card--premium {
       background: linear-gradient(180deg, rgba(255, 215, 130, 0.07) 0%, rgba(8, 8, 14, 0.94) 100%);
@@ -1508,14 +1510,49 @@
         0 16px 48px rgba(0, 0, 0, 0.5),
         0 0 56px rgba(212, 175, 100, 0.2);
     }
+    .card.card--premium .card-body {
+      padding: 17px 17px 18px;
+    }
     .card.card--premium .card-body .name {
       font-family: 'Syne', sans-serif;
       font-weight: 800;
+      font-size: clamp(1.25rem, 3.8vw, 1.375rem);
+      line-height: 1.45;
       letter-spacing: 0.02em;
-      color: rgba(255, 245, 220, 0.98);
+      color: rgba(255, 248, 225, 0.98);
+      margin-bottom: 10px;
     }
     .card.card--premium .card-body .desc {
-      color: rgba(255, 235, 210, 0.68);
+      font-size: 14px;
+      line-height: 1.5;
+      font-weight: 600;
+      opacity: 0.9;
+      color: rgba(255, 235, 210, 0.95);
+      min-height: 0;
+    }
+    .card.card--premium .price small {
+      font-weight: 700;
+      color: rgba(255, 230, 200, 0.65);
+      margin-bottom: 5px;
+    }
+    .card.card--premium .price strong {
+      font-size: 22px;
+      font-weight: 700;
+      color: #FFD700;
+      text-shadow:
+        0 0 20px rgba(255, 215, 0, 0.45),
+        0 2px 12px rgba(0, 0, 0, 0.55);
+    }
+    .card.card--premium .price strong.price-pink-glow {
+      color: #FFD700;
+      animation: none;
+      text-shadow:
+        0 0 20px rgba(255, 215, 0, 0.45),
+        0 2px 12px rgba(0, 0, 0, 0.55);
+    }
+    .card.card--premium .price-old {
+      color: rgba(255, 220, 180, 0.55);
+      font-weight: 600;
     }
     .card.card--premium .order {
       background: linear-gradient(145deg, #3d2e0c, #8b6914 45%, #c9a227);
@@ -1630,8 +1667,8 @@
       <div class="container">
         <div class="hero-box">
           <div class="hero-content">
-            <div class="badge">Flaconi da 100ml • Ordini in privato</div>
-            <h1>I nostri flaconi da 100ml</h1>
+            <div class="badge">Volume a scelta • Ordini in privato</div>
+            <h1>I nostri aromi</h1>
             <p class="sub">
               Scegli il gusto, regola volume e nicotina, poi aggiungi al carrello. Apri il carrello dall’icona in alto, controlla le righe e premi «Completa ordine» per inviare tutto su WhatsApp in un unico messaggio.
             </p>
@@ -1837,62 +1874,101 @@
     const APP_CONFIG = window.IconLiquidConfig || {};
     const PRODUCT_PRICES = Object.assign({}, APP_CONFIG.productPrices || {});
     const PRODUCT_OLD_PRICES = Object.assign({}, APP_CONFIG.productOldPrices || {});
+    (function migrateLegacy100mlPriceKeys() {
+      [PRODUCT_PRICES, PRODUCT_OLD_PRICES].forEach(function (obj) {
+        Object.keys(obj).forEach(function (k) {
+          if (/ 100ml$/.test(k)) {
+            var nk = k.replace(/ 100ml$/, '');
+            if (obj[nk] == null) obj[nk] = obj[k];
+          }
+        });
+      });
+    })();
     (function ensureAstroberryCatalogDiscount() {
-      var b = PRODUCT_PRICES['Astroberry 100ml'];
-      var o = PRODUCT_OLD_PRICES['Astroberry 100ml'];
+      var b = PRODUCT_PRICES['Astroberry'];
+      var o = PRODUCT_OLD_PRICES['Astroberry'];
       if (o == null || b === o) {
-        PRODUCT_PRICES['Astroberry 100ml'] = 40;
-        PRODUCT_OLD_PRICES['Astroberry 100ml'] = 50;
+        PRODUCT_PRICES['Astroberry'] = 40;
+        PRODUCT_OLD_PRICES['Astroberry'] = 50;
       }
     })();
     (function ensurePremiumCatalogPrices() {
-      var names = ['TRAPPLE 100ml', 'BLUE RAZZ 100ml', 'STRAW GUAW 100ml', 'GRAPE 100ml', 'PANGO 100ml', 'MELONS 100ml'];
+      var names = ['TRAPPLE', 'BLUE RAZZ', 'STRAW GUAW', 'GRAPE', 'PANGO', 'MELONS'];
       for (var i = 0; i < names.length; i++) {
         var n = names[i];
         if (PRODUCT_PRICES[n] == null) PRODUCT_PRICES[n] = 70;
         if (PRODUCT_OLD_PRICES[n] == null) PRODUCT_OLD_PRICES[n] = 70;
       }
     })();
-    const PINK_SPARKLE_PRODUCTS = APP_CONFIG.pinkSparkleProducts || {};
+    const PINK_SPARKLE_PRODUCTS = (function () {
+      var raw = APP_CONFIG.pinkSparkleProducts || {};
+      var out = {};
+      Object.keys(raw).forEach(function (k) {
+        var nk = / 100ml$/.test(k) ? k.replace(/ 100ml$/, '') : k;
+        out[nk] = raw[k];
+      });
+      return out;
+    })();
     const DEFAULT_REVIEWS = APP_CONFIG.defaultReviews || [];
     const DEFAULT_PRODUCTS = [
-      { id: 'p1', name: 'Astroberry', fullName: 'Astroberry 100ml', img: 'astroberry.png', desc: 'Mix fruttato intenso con frutti di bosco e nota dolce pulita, pensato per chi vuole un gusto pieno.', priceClass: 'astro', quantity: 99, soldOut: false },
-      { id: 'p2', name: 'Limoncello', fullName: 'Limoncello 100ml', img: 'images/limoncello.png', desc: 'Agrumato forte, brillante e profumato, con un carattere fresco che resta molto riconoscibile.', priceClass: 'limon', quantity: 99, soldOut: false },
-      { id: 'p3', name: 'Mango Ice', fullName: 'Mango Ice 100ml', img: 'images/mango-ice.png', desc: 'Tropicale, pieno e fresco, con una nota ghiacciata che rende il mango più netto e deciso.', priceClass: 'mango', quantity: 99, soldOut: false },
-      { id: 'p4', name: 'Wild Tobacco', fullName: 'Wild Tobacco 100ml', img: 'images/wild-tobacco.png', desc: 'Profilo più scuro e secco, con un taglio deciso, adatto a chi preferisce gusti più maturi.', priceClass: 'tobacco', quantity: 99, soldOut: false },
-      { id: 'p5', name: 'Caramel Vanilla', fullName: 'Caramel Vanilla 100ml', img: 'images/caramel-vanilla.png', desc: 'Cremoso, dolce e morbido, con vaniglia rotonda e punta caramellata elegante e piena.', priceClass: 'vanilla', quantity: 99, soldOut: false },
-      { id: 'p6', name: 'Ice Berry', fullName: 'Ice Berry 100ml', img: 'images/ice-berry.png', desc: 'Frutti rossi freddi con spinta ghiacciata, pensato per chi cerca freschezza immediata.', priceClass: 'iceberry', quantity: 99, soldOut: false },
-      { id: 'p7', name: 'Green Apple', fullName: 'Green Apple 100ml', img: 'images/green-apple.png', desc: 'Mela verde vivace, fresca e pulita, con impatto immediato e finale leggermente acidulo.', priceClass: 'greenapple', quantity: 99, soldOut: false },
-      { id: 'p8', name: 'Cola Lemon', fullName: 'Cola Lemon 100ml', img: 'images/cola-lemon.png', desc: 'Cola intensa con taglio agrumato al limone, più brillante e originale rispetto ai classici.', priceClass: 'colalemon', quantity: 99, soldOut: false },
-      { id: 'p9', name: 'Blue Razz Ice', fullName: 'Blue Razz Ice 100ml', img: 'images/blue-razz-ice.png', desc: 'Fruttato e fresco, vende tantissimo. Lampone blu ghiacciato con punch immediato.', priceClass: 'bluerazzice', quantity: 99, soldOut: false },
-      { id: 'p10', name: 'Strawberry Kiwi', fullName: 'Strawberry Kiwi 100ml', img: 'images/strawberry-kiwi.png', desc: 'Classico facile, piace a un sacco di gente. Fragola e kiwi in equilibrio perfetto.', priceClass: 'strawberrykiwi', quantity: 99, soldOut: false },
-      { id: 'p11', name: 'Grape Ice', fullName: 'Grape Ice 100ml', img: 'images/grape-ice.png', desc: 'Uva ghiacciata, gusto forte e riconoscibile. Fresco e deciso.', priceClass: 'grapeice', quantity: 99, soldOut: false },
-      { id: 'p12', name: 'Peach Ice', fullName: 'Peach Ice 100ml', img: 'images/peach-ice.png', desc: 'Più morbido ma sempre commerciale. Pesca dolce con nota ghiacciata elegante.', priceClass: 'peachice', quantity: 99, soldOut: false },
-      { id: 'p13', name: 'Pistachio Cream', fullName: 'Pistachio Cream 100ml', img: 'images/pistachio-cream.png', desc: 'Cremoso premium, fa salire la percezione del brand. Pistacchio e crema di alta qualità.', priceClass: 'pistachiocream', quantity: 99, soldOut: false },
-      { id: 'p14', name: 'Vanilla Custard', fullName: 'Vanilla Custard 100ml', img: 'images/vanilla-custard.png', desc: 'Altro cremoso serio, elegante. Vaniglia e crema pasticcera per un profilo raffinato.', priceClass: 'vanillacustard', quantity: 99, soldOut: false },
-      { id: 'p15', name: 'Cola Ice', fullName: 'Cola Ice 100ml', img: 'images/cola-ice.png', desc: 'Più semplice di Cola Lemon, ma molto richiesto. Cola classica con freschezza ghiacciata.', priceClass: 'colaice', quantity: 99, soldOut: false },
-      { id: 'p16', name: 'Personalizzabile', fullName: 'Personalizzabile 100ml', img: 'images/personalizzabile.png', desc: 'Crea il tuo mix su misura. Scegli aromi e intensità. Ideale per chi ama sperimentare.', priceClass: 'personalizzabile', quantity: 99, soldOut: false }
+      { id: 'p1', name: 'Astroberry', fullName: 'Astroberry', img: 'astroberry.png', desc: 'Mix fruttato intenso con frutti di bosco e nota dolce pulita, pensato per chi vuole un gusto pieno.', priceClass: 'astro', quantity: 99, soldOut: false },
+      { id: 'p2', name: 'Limoncello', fullName: 'Limoncello', img: 'images/limoncello.png', desc: 'Agrumato forte, brillante e profumato, con un carattere fresco che resta molto riconoscibile.', priceClass: 'limon', quantity: 99, soldOut: false },
+      { id: 'p3', name: 'Mango Ice', fullName: 'Mango Ice', img: 'images/mango-ice.png', desc: 'Tropicale, pieno e fresco, con una nota ghiacciata che rende il mango più netto e deciso.', priceClass: 'mango', quantity: 99, soldOut: false },
+      { id: 'p4', name: 'Wild Tobacco', fullName: 'Wild Tobacco', img: 'images/wild-tobacco.png', desc: 'Profilo più scuro e secco, con un taglio deciso, adatto a chi preferisce gusti più maturi.', priceClass: 'tobacco', quantity: 99, soldOut: false },
+      { id: 'p5', name: 'Caramel Vanilla', fullName: 'Caramel Vanilla', img: 'images/caramel-vanilla.png', desc: 'Cremoso, dolce e morbido, con vaniglia rotonda e punta caramellata elegante e piena.', priceClass: 'vanilla', quantity: 99, soldOut: false },
+      { id: 'p6', name: 'Ice Berry', fullName: 'Ice Berry', img: 'images/ice-berry.png', desc: 'Frutti rossi freddi con spinta ghiacciata, pensato per chi cerca freschezza immediata.', priceClass: 'iceberry', quantity: 99, soldOut: false },
+      { id: 'p7', name: 'Green Apple', fullName: 'Green Apple', img: 'images/green-apple.png', desc: 'Mela verde vivace, fresca e pulita, con impatto immediato e finale leggermente acidulo.', priceClass: 'greenapple', quantity: 99, soldOut: false },
+      { id: 'p8', name: 'Cola Lemon', fullName: 'Cola Lemon', img: 'images/cola-lemon.png', desc: 'Cola intensa con taglio agrumato al limone, più brillante e originale rispetto ai classici.', priceClass: 'colalemon', quantity: 99, soldOut: false },
+      { id: 'p9', name: 'Blue Razz Ice', fullName: 'Blue Razz Ice', img: 'images/blue-razz-ice.png', desc: 'Fruttato e fresco, vende tantissimo. Lampone blu ghiacciato con punch immediato.', priceClass: 'bluerazzice', quantity: 99, soldOut: false },
+      { id: 'p10', name: 'Strawberry Kiwi', fullName: 'Strawberry Kiwi', img: 'images/strawberry-kiwi.png', desc: 'Classico facile, piace a un sacco di gente. Fragola e kiwi in equilibrio perfetto.', priceClass: 'strawberrykiwi', quantity: 99, soldOut: false },
+      { id: 'p11', name: 'Grape Ice', fullName: 'Grape Ice', img: 'images/grape-ice.png', desc: 'Uva ghiacciata, gusto forte e riconoscibile. Fresco e deciso.', priceClass: 'grapeice', quantity: 99, soldOut: false },
+      { id: 'p12', name: 'Peach Ice', fullName: 'Peach Ice', img: 'images/peach-ice.png', desc: 'Più morbido ma sempre commerciale. Pesca dolce con nota ghiacciata elegante.', priceClass: 'peachice', quantity: 99, soldOut: false },
+      { id: 'p13', name: 'Pistachio Cream', fullName: 'Pistachio Cream', img: 'images/pistachio-cream.png', desc: 'Cremoso premium, fa salire la percezione del brand. Pistacchio e crema di alta qualità.', priceClass: 'pistachiocream', quantity: 99, soldOut: false },
+      { id: 'p14', name: 'Vanilla Custard', fullName: 'Vanilla Custard', img: 'images/vanilla-custard.png', desc: 'Altro cremoso serio, elegante. Vaniglia e crema pasticcera per un profilo raffinato.', priceClass: 'vanillacustard', quantity: 99, soldOut: false },
+      { id: 'p15', name: 'Cola Ice', fullName: 'Cola Ice', img: 'images/cola-ice.png', desc: 'Più semplice di Cola Lemon, ma molto richiesto. Cola classica con freschezza ghiacciata.', priceClass: 'colaice', quantity: 99, soldOut: false },
+      { id: 'p16', name: 'Personalizzabile', fullName: 'Personalizzabile', img: 'images/personalizzabile.png', desc: 'Crea il tuo mix su misura. Scegli aromi e intensità. Ideale per chi ama sperimentare.', priceClass: 'personalizzabile', quantity: 99, soldOut: false }
     ];
 
     const PREMIUM_PRODUCTS = [
-      { id: 'pr1', name: 'TRAPPLE', fullName: 'TRAPPLE 100ml', img: 'images/premium/trappler.png', desc: 'Mix intenso di mela rossa e verde con un tocco fruttato deciso. Un gusto potente e fresco, pensato per chi vuole un liquido premium dal carattere forte.', priceClass: 'prem-trapple', quantity: 99, soldOut: false, isPremium: true },
-      { id: 'pr2', name: 'BLUE RAZZ', fullName: 'BLUE RAZZ 100ml', img: 'images/premium/blue-razz.png', desc: 'Lampone blu dal sapore dolce e leggermente ghiacciato. Uno dei gusti più amati, equilibrato e persistente, perfetto per un utilizzo quotidiano.', priceClass: 'prem-blue-razz', quantity: 99, soldOut: false, isPremium: true },
-      { id: 'pr3', name: 'STRAW GUAW', fullName: 'STRAW GUAW 100ml', img: 'images/premium/straw-guaw.png', desc: 'Fragola e guava tropicale in una combinazione dolce e succosa. Un aroma ricco e morbido che lascia un retrogusto intenso.', priceClass: 'prem-straw-guaw', quantity: 99, soldOut: false, isPremium: true },
-      { id: 'pr4', name: 'GRAPE', fullName: 'GRAPE 100ml', img: 'images/premium/grape.png', desc: 'Uva piena e corposa, dal sapore fruttato e rotondo. Ideale per chi cerca un gusto deciso e costante.', priceClass: 'prem-grape', quantity: 99, soldOut: false, isPremium: true },
-      { id: 'pr5', name: 'PANGO', fullName: 'PANGO 100ml', img: 'images/premium/pango.png', desc: 'Pesca e mango tropicale in una miscela fresca e avvolgente. Un liquido premium dal profilo esotico e molto aromatico.', priceClass: 'prem-pango', quantity: 99, soldOut: false, isPremium: true },
-      { id: 'pr6', name: 'MELONS', fullName: 'MELONS 100ml', img: 'images/premium/melons.png', desc: 'Blend di meloni dolci e succosi, leggermente rinfrescante. Un gusto morbido e pulito, perfetto per sessioni lunghe.', priceClass: 'prem-melons', quantity: 99, soldOut: false, isPremium: true }
+      { id: 'pr1', name: 'TRAPPLE', fullName: 'TRAPPLE', img: 'images/premium/trappler.png', desc: 'Mix intenso di mela rossa e verde con un tocco fruttato deciso. Un gusto potente e fresco, pensato per chi vuole un liquido premium dal carattere forte.', priceClass: 'prem-trapple', quantity: 99, soldOut: false, isPremium: true },
+      { id: 'pr2', name: 'BLUE RAZZ', fullName: 'BLUE RAZZ', img: 'images/premium/blue-razz.png', desc: 'Lampone blu dal sapore dolce e leggermente ghiacciato. Uno dei gusti più amati, equilibrato e persistente, perfetto per un utilizzo quotidiano.', priceClass: 'prem-blue-razz', quantity: 99, soldOut: false, isPremium: true },
+      { id: 'pr3', name: 'STRAW GUAW', fullName: 'STRAW GUAW', img: 'images/premium/straw-guaw.png', desc: 'Fragola e guava tropicale in una combinazione dolce e succosa. Un aroma ricco e morbido che lascia un retrogusto intenso.', priceClass: 'prem-straw-guaw', quantity: 99, soldOut: false, isPremium: true },
+      { id: 'pr4', name: 'GRAPE', fullName: 'GRAPE', img: 'images/premium/grape.png', desc: 'Uva piena e corposa, dal sapore fruttato e rotondo. Ideale per chi cerca un gusto deciso e costante.', priceClass: 'prem-grape', quantity: 99, soldOut: false, isPremium: true },
+      { id: 'pr5', name: 'PANGO', fullName: 'PANGO', img: 'images/premium/pango.png', desc: 'Pesca e mango tropicale in una miscela fresca e avvolgente. Un liquido premium dal profilo esotico e molto aromatico.', priceClass: 'prem-pango', quantity: 99, soldOut: false, isPremium: true },
+      { id: 'pr6', name: 'MELONS', fullName: 'MELONS', img: 'images/premium/melons.png', desc: 'Blend di meloni dolci e succosi, leggermente rinfrescante. Un gusto morbido e pulito, perfetto per sessioni lunghe.', priceClass: 'prem-melons', quantity: 99, soldOut: false, isPremium: true }
     ];
+
+    function saveProducts(products) {
+      localStorage.setItem(PRODUCTS_KEY, JSON.stringify(products));
+    }
+
+    function stripFullName100ml(fullName) {
+      if (!fullName || typeof fullName !== 'string') return fullName;
+      return / 100ml$/i.test(fullName) ? fullName.replace(/\s*100ml$/i, '').trim() : fullName;
+    }
+
+    function migrateCatalogProductNames(products) {
+      if (!Array.isArray(products)) return products;
+      var changed = false;
+      var out = products.map(function (p) {
+        var next = stripFullName100ml(p.fullName);
+        if (next !== p.fullName) {
+          changed = true;
+          return Object.assign({}, p, { fullName: next });
+        }
+        return p;
+      });
+      if (changed) saveProducts(out);
+      return out;
+    }
 
     function getProducts() {
       try {
         const s = localStorage.getItem(PRODUCTS_KEY);
-        if (s) return JSON.parse(s);
+        if (s) return migrateCatalogProductNames(JSON.parse(s));
       } catch (e) {}
       localStorage.setItem(PRODUCTS_KEY, JSON.stringify(DEFAULT_PRODUCTS));
       return DEFAULT_PRODUCTS.slice();
-    }
-    function saveProducts(products) {
-      localStorage.setItem(PRODUCTS_KEY, JSON.stringify(products));
     }
 
     const CART_KEY = 'iconLiquid_cart';
@@ -1907,6 +1983,16 @@
         }
       } catch (e) {}
       if (!Array.isArray(carrello)) carrello = [];
+      var cartChanged = false;
+      carrello.forEach(function (item) {
+        if (!item || !item.fullName) return;
+        var next = stripFullName100ml(item.fullName);
+        if (next !== item.fullName) {
+          item.fullName = next;
+          cartChanged = true;
+        }
+      });
+      if (cartChanged) saveCarrello();
     }
     function saveCarrello() {
       try {
@@ -1918,21 +2004,27 @@
       } catch (e) {}
     }
     function getProductByFullName(fullName) {
+      if (!fullName) return null;
+      var norm = stripFullName100ml(fullName);
       var products = getProducts();
       for (var i = 0; i < products.length; i++) {
-        if (products[i].fullName === fullName) return products[i];
+        if (products[i].fullName === norm) return products[i];
       }
       for (var j = 0; j < PREMIUM_PRODUCTS.length; j++) {
-        if (PREMIUM_PRODUCTS[j].fullName === fullName) return PREMIUM_PRODUCTS[j];
+        if (PREMIUM_PRODUCTS[j].fullName === norm) return PREMIUM_PRODUCTS[j];
       }
       return null;
     }
     function getProductBasePrice(fullName) {
       if (PRODUCT_PRICES[fullName] != null) return PRODUCT_PRICES[fullName];
+      var leg = fullName + ' 100ml';
+      if (PRODUCT_PRICES[leg] != null) return PRODUCT_PRICES[leg];
       return 50;
     }
     function getProductOldPrice(fullName) {
       if (PRODUCT_OLD_PRICES[fullName] != null) return PRODUCT_OLD_PRICES[fullName];
+      var leg = fullName + ' 100ml';
+      if (PRODUCT_OLD_PRICES[leg] != null) return PRODUCT_OLD_PRICES[leg];
       return getProductBasePrice(fullName);
     }
     function escapeHtml(str) {
@@ -2136,7 +2228,7 @@
         catalogMobileExpanded = false;
         var inp = document.getElementById('catalogSearchInput');
         var raw = inp ? inp.value.trim() : '';
-        var pers = getProductByFullName('Personalizzabile 100ml');
+        var pers = getProductByFullName('Personalizzabile');
         var safeQ = escapeHtml(raw || '—');
         var hint = '<p class="catalog-no-match-msg" role="status">Nessun risultato per «' + safeQ + '». Puoi ordinare subito il mix personalizzato:</p>';
         grid.innerHTML = pers ? hint + buildProductCardHtml(pers) : '<p class="catalog-no-match-msg" role="alert">Nessun risultato.</p>';
@@ -2776,7 +2868,7 @@
       const tExP63N500 = calcolaPrezzoLiquidoConP(500, 63) === 234;
       const tExP40N100 = calcolaPrezzoLiquidoConP(100, 40) === 30;
       const tExP40N1000 = calcolaPrezzoLiquidoConP(1000, 40) === 253;
-      const tLimon100 = calcolaPrezzoLiquido(100, 'Limoncello 100ml') === 40;
+      const tLimon100 = calcolaPrezzoLiquido(100, 'Limoncello') === 40;
       impostaVolume(500);
       const t10 = calcolaPrezzo() < 260;
       const msg = creaMessaggioOrdine();
