@@ -677,19 +677,6 @@
       font-size: 0.72rem;
       margin-bottom: 3px;
     }
-    .price-discount-tag {
-      display: inline-block;
-      margin-top: 4px;
-      padding: 3px 8px;
-      border-radius: 999px;
-      font-size: 0.68rem;
-      font-weight: 800;
-      letter-spacing: 0.03em;
-      color: #d7ffe7;
-      background: linear-gradient(135deg, rgba(46, 200, 130, 0.38), rgba(20, 140, 100, 0.48));
-      border: 1px solid rgba(100, 240, 180, 0.35);
-      box-shadow: 0 3px 12px rgba(40, 200, 140, 0.2);
-    }
     .price strong {
       font-size: 1.55rem;
       color: #fff8f0;
@@ -1608,7 +1595,7 @@
           '<div class="card-overlay"></div><div class="card-label-wrap"><div class="flavour-label">' + p.name + '</div></div></div>' +
           '<div class="card-body"><div class="name">' + p.fullName + '</div><div class="desc">' + p.desc + '</div><div class="bottom">' +
           '<div class="price"><small>Prezzo</small>' +
-          (hasDiscount ? '<div class="price-old">€' + oldPrice + '</div><span class="price-discount-tag">Sconto attivo</span>' : '') +
+          (hasDiscount ? '<div class="price-old">€' + oldPrice + '</div>' : '') +
           '<strong class="' + (isPink ? 'price-pink-glow' : '') + '">€' + basePrice + '</strong></div>' +
           (isSoldOut ? '<button class="order" type="button" disabled>Esaurito</button>' : '<button class="order" type="button" onclick="apriOrdine(\'' + p.fullName.replace(/'/g, "\\'") + '\')">Aggiungi al carrello</button>') +
           '</div></div></article>';
