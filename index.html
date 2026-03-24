@@ -330,7 +330,32 @@
       font-size: 1rem;
     }
     @media (min-width: 900px) {
-      .cart-row-remove-desktop { display: flex; }
+      .cart-row-delete { display: none; }
+      .cart-row-front {
+        grid-template-columns: 96px 1fr auto;
+        touch-action: auto;
+        cursor: default;
+      }
+      .cart-row-front:active { cursor: default; }
+      .cart-row-info { padding-right: 12px; }
+      .cart-row-remove-desktop {
+        display: inline-flex;
+        position: static;
+        width: auto;
+        min-width: 112px;
+        height: auto;
+        border-radius: 0;
+        border: 0;
+        border-left: 1px solid rgba(255,255,255,0.08);
+        background: linear-gradient(180deg, #c62828 0%, #b71c1c 100%);
+        padding: 0 16px;
+        gap: 8px;
+        font-size: 0.9rem;
+        font-weight: 600;
+      }
+      .cart-row-remove-desktop::after { content: 'Elimina'; }
+      .cart-row-remove-desktop svg { width: 18px; height: 18px; }
+      .cart-row-remove-desktop:hover { background: linear-gradient(180deg, #d32f2f 0%, #c62828 100%); }
     }
 
     .hero { padding: 56px 0 28px; }
