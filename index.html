@@ -1359,6 +1359,20 @@
       display: flex;
       justify-content: center;
     }
+    .catalog-show-wrap[hidden] {
+      display: none !important;
+    }
+    .catalog-no-match-msg {
+      grid-column: 1 / -1;
+      margin: 0 0 14px;
+      padding: 14px 16px;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(130, 170, 255, 0.18);
+      color: rgba(255,255,255,0.82);
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
     .catalog-show-all-btn {
       padding: 12px 28px;
       border-radius: 14px;
@@ -1480,12 +1494,6 @@
             <input type="search" id="catalogSearchInput" class="catalog-search-input" placeholder="Cerca gusto o parola chiave…" autocomplete="off" inputmode="search" aria-label="Cerca nel catalogo" />
             <button type="button" class="catalog-search-btn" id="catalogSearchBtn">Cerca</button>
           </div>
-        </div>
-
-        <div id="catalogEmpty" class="catalog-empty" hidden>
-          <p class="catalog-empty-text">Nessun risultato per «<span id="catalogEmptyQuery"></span>».</p>
-          <p class="catalog-empty-hint">Puoi creare un mix <strong>personalizzato</strong> su misura.</p>
-          <button type="button" class="btn btn-complete catalog-empty-cta" id="catalogPersonalizzaBtn" onclick="apriOrdine('Personalizzabile 100ml')">Apri Personalizzabile 100ml</button>
         </div>
 
         <div id="productGrid" class="grid catalog-grid">
@@ -1877,52 +1885,55 @@
     function syncCatalogMobileChrome() {
       var grid = document.getElementById('productGrid');
       var wrap = document.getElementById('catalogShowWrap');
-      var emptyEl = document.getElementById('catalogEmpty');
+      var btn = document.getElementById('catalogShowAllBtn');
       if (!grid || !wrap) return;
-      if (emptyEl && !emptyEl.hidden) {
-        wrap.hidden = true;
-        return;
-      }
       var mobile = window.matchMedia('(max-width: 640px)').matches;
       var input = document.getElementById('catalogSearchInput');
       var q = input ? input.value.trim() : '';
-      if (!mobile || catalogMobileExpanded || q) {
+      if (!mobile || q) {
         grid.classList.remove('catalog-grid--collapsed');
         wrap.hidden = true;
+        if (btn) btn.textContent = 'Mostra tutto';
         return;
       }
       var n = grid.querySelectorAll('.card').length;
-      if (n > 3) {
-        grid.classList.add('catalog-grid--collapsed');
-        wrap.hidden = false;
-      } else {
+      if (n <= 3) {
         grid.classList.remove('catalog-grid--collapsed');
         wrap.hidden = true;
+        if (btn) btn.textContent = 'Mostra tutto';
+        return;
+      }
+      wrap.hidden = false;
+      if (catalogMobileExpanded) {
+        grid.classList.remove('catalog-grid--collapsed');
+        if (btn) btn.textContent = 'Mostra meno';
+      } else {
+        grid.classList.add('catalog-grid--collapsed');
+        if (btn) btn.textContent = 'Mostra tutto';
       }
     }
 
     function renderProducts() {
       var products = getFilteredCatalogProducts();
       var grid = document.getElementById('productGrid');
-      var emptyEl = document.getElementById('catalogEmpty');
       if (!grid) return;
 
       if (products.length === 0) {
-        grid.innerHTML = '';
+        catalogMobileExpanded = false;
+        var inp = document.getElementById('catalogSearchInput');
+        var raw = inp ? inp.value.trim() : '';
+        var pers = getProductByFullName('Personalizzabile 100ml');
+        var safeQ = escapeHtml(raw || '—');
+        var hint = '<p class="catalog-no-match-msg" role="status">Nessun risultato per «' + safeQ + '». Puoi ordinare subito il mix personalizzato:</p>';
+        grid.innerHTML = pers ? hint + buildProductCardHtml(pers) : '<p class="catalog-no-match-msg" role="alert">Nessun risultato.</p>';
         grid.classList.remove('catalog-grid--collapsed');
-        if (emptyEl) {
-          emptyEl.hidden = false;
-          var eq = document.getElementById('catalogEmptyQuery');
-          var inp = document.getElementById('catalogSearchInput');
-          var raw = inp ? inp.value.trim() : '';
-          if (eq) eq.textContent = raw || '—';
-        }
         var wrap = document.getElementById('catalogShowWrap');
+        var btn = document.getElementById('catalogShowAllBtn');
         if (wrap) wrap.hidden = true;
+        if (btn) btn.textContent = 'Mostra tutto';
         return;
       }
 
-      if (emptyEl) emptyEl.hidden = true;
       grid.innerHTML = products.map(buildProductCardHtml).join('');
       syncCatalogMobileChrome();
     }
@@ -2034,7 +2045,7 @@
       }
       if (showAllBtn) {
         showAllBtn.addEventListener('click', function() {
-          catalogMobileExpanded = true;
+          catalogMobileExpanded = !catalogMobileExpanded;
           syncCatalogMobileChrome();
         });
       }
