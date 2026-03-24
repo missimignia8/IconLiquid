@@ -1155,14 +1155,14 @@
       box-shadow: none;
     }
 
-    /* Modale ordine: tema premium oro (stesso flusso, resa più esclusiva) */
-    #modalOverlay.modal-overlay {
+    /* Modale ordine: tema premium oro solo per prodotti Linea Premium */
+    #modalOverlay.modal-overlay.modal-order-premium {
       background:
         radial-gradient(ellipse 85% 55% at 50% 18%, rgba(120, 85, 40, 0.38), transparent 52%),
         radial-gradient(ellipse 55% 45% at 85% 75%, rgba(160, 110, 50, 0.14), transparent 48%),
         rgba(3, 2, 8, 0.86);
     }
-    #modalOverlay .modal {
+    #modalOverlay.modal-order-premium .modal {
       border: 1px solid rgba(212, 175, 80, 0.34);
       background: linear-gradient(180deg, rgba(20, 16, 12, 0.98) 0%, rgba(6, 5, 10, 0.99) 100%);
       box-shadow:
@@ -1170,80 +1170,80 @@
         0 0 0 1px rgba(255, 215, 140, 0.08) inset,
         0 0 88px rgba(190, 140, 55, 0.12);
     }
-    #modalOverlay .modal-header {
+    #modalOverlay.modal-order-premium .modal-header {
       border-bottom: 1px solid rgba(212, 175, 80, 0.16);
     }
-    #modalOverlay .modal-title {
+    #modalOverlay.modal-order-premium .modal-title {
       font-family: 'Syne', 'Plus Jakarta Sans', sans-serif;
       font-weight: 800;
       letter-spacing: 0.02em;
       color: #f8e6c8;
       text-shadow: 0 0 32px rgba(212, 175, 80, 0.28);
     }
-    #modalOverlay .modal-subtitle {
+    #modalOverlay.modal-order-premium .modal-subtitle {
       color: rgba(255, 232, 205, 0.8);
       line-height: 1.65;
       font-weight: 600;
     }
-    #modalOverlay .modal-header .close-btn {
+    #modalOverlay.modal-order-premium .modal-header .close-btn {
       border-color: rgba(212, 175, 80, 0.3);
       background: rgba(255, 215, 120, 0.07);
       font-weight: 600;
     }
-    #modalOverlay .modal-header .close-btn:hover {
+    #modalOverlay.modal-order-premium .modal-header .close-btn:hover {
       background: rgba(255, 215, 120, 0.14);
       border-color: rgba(255, 220, 160, 0.42);
       color: #fff8e8;
     }
-    #modalOverlay .order-step-pill {
+    #modalOverlay.modal-order-premium .order-step-pill {
       color: rgba(255, 228, 185, 0.96);
       border-color: rgba(212, 175, 80, 0.48);
       background: linear-gradient(135deg, rgba(58, 44, 22, 0.55), rgba(28, 22, 12, 0.72));
       box-shadow: 0 0 26px rgba(200, 150, 60, 0.18);
       letter-spacing: 0.06em;
     }
-    #modalOverlay .nic-section-label {
+    #modalOverlay.modal-order-premium .nic-section-label {
       color: rgba(255, 238, 215, 0.94);
       font-weight: 800;
     }
-    #modalOverlay .nicotine-box {
+    #modalOverlay.modal-order-premium .nicotine-box {
       border: 1px solid rgba(212, 175, 80, 0.24);
       background: linear-gradient(165deg, rgba(48, 40, 24, 0.58) 0%, rgba(10, 8, 8, 0.9) 100%);
       box-shadow: 0 6px 30px rgba(0, 0, 0, 0.38), 0 0 44px rgba(170, 120, 50, 0.08);
     }
-    #modalOverlay .nic-btn {
+    #modalOverlay.modal-order-premium .nic-btn {
       border: 1px solid rgba(212, 175, 80, 0.38);
       background: linear-gradient(180deg, rgba(95, 72, 38, 0.82), rgba(42, 32, 18, 0.88));
       box-shadow: 0 4px 18px rgba(90, 65, 30, 0.4);
     }
-    #modalOverlay .nic-btn:hover {
+    #modalOverlay.modal-order-premium .nic-btn:hover {
       border-color: rgba(255, 220, 150, 0.55);
       box-shadow: 0 8px 26px rgba(190, 140, 55, 0.42);
     }
-    #modalOverlay .nic-value {
+    #modalOverlay.modal-order-premium .nic-value {
       color: #ffecc4;
       text-shadow: 0 0 28px rgba(255, 200, 110, 0.22);
     }
-    #modalOverlay .nic-unit {
+    #modalOverlay.modal-order-premium .nic-unit {
       color: rgba(255, 222, 185, 0.68);
       font-weight: 600;
     }
-    #modalOverlay .nic-hint {
+    #modalOverlay.modal-order-premium .nic-hint {
       color: rgba(255, 218, 185, 0.65);
       line-height: 1.65;
     }
-    #modalOverlay .step-chip {
+    #modalOverlay.modal-order-premium .step-chip {
       background: rgba(52, 44, 26, 0.58);
       border: 1px solid rgba(200, 165, 95, 0.32);
       color: #fff6e8;
       font-weight: 800;
     }
-    #modalOverlay .step-chip:hover {
+    #modalOverlay.modal-order-premium .step-chip:hover {
       background: rgba(78, 62, 32, 0.72);
       border-color: rgba(255, 210, 130, 0.48);
       box-shadow: 0 4px 18px rgba(175, 125, 50, 0.25);
     }
-    #modalOverlay .modal-summary {
+    #modalOverlay.modal-order-premium .modal-summary {
       border: 1px solid rgba(212, 175, 80, 0.3);
       background: linear-gradient(145deg, rgba(58, 48, 30, 0.68) 0%, rgba(10, 9, 14, 0.96) 100%);
       box-shadow:
@@ -1251,94 +1251,94 @@
         0 0 52px rgba(175, 130, 50, 0.1),
         inset 0 1px 0 rgba(255, 215, 140, 0.07);
     }
-    #modalOverlay .order-price-label {
+    #modalOverlay.modal-order-premium .order-price-label {
       color: rgba(255, 210, 160, 0.58);
     }
-    #modalOverlay .order-price-euro {
+    #modalOverlay.modal-order-premium .order-price-euro {
       color: #FFD700;
       text-shadow: 0 0 32px rgba(255, 215, 0, 0.38), 0 2px 14px rgba(0, 0, 0, 0.45);
     }
-    #modalOverlay .order-price-was {
+    #modalOverlay.modal-order-premium .order-price-was {
       color: rgba(255, 210, 180, 0.42);
     }
-    #modalOverlay .order-price-ref-hint {
+    #modalOverlay.modal-order-premium .order-price-ref-hint {
       color: rgba(255, 210, 175, 0.48);
     }
-    #modalOverlay .order-price-nic {
+    #modalOverlay.modal-order-premium .order-price-nic {
       border-top-color: rgba(212, 175, 80, 0.12);
       color: rgba(255, 230, 205, 0.75);
     }
-    #modalOverlay .order-price-nic strong {
+    #modalOverlay.modal-order-premium .order-price-nic strong {
       color: #e8c878;
     }
-    #modalOverlay .order-detail-lines {
+    #modalOverlay.modal-order-premium .order-detail-lines {
       border-top-color: rgba(212, 175, 80, 0.1);
       color: rgba(255, 225, 200, 0.78);
     }
-    #modalOverlay .order-price-pack {
+    #modalOverlay.modal-order-premium .order-price-pack {
       border-top-color: rgba(212, 175, 80, 0.12);
       color: rgba(255, 225, 200, 0.76);
     }
-    #modalOverlay .order-volume-badge {
+    #modalOverlay.modal-order-premium .order-volume-badge {
       background: rgba(255, 200, 100, 0.14);
       border-color: rgba(255, 215, 130, 0.38);
       color: #ffe8b8;
       font-weight: 800;
     }
-    #modalOverlay .order-discount-pill {
+    #modalOverlay.modal-order-premium .order-discount-pill {
       background: linear-gradient(135deg, rgba(200, 160, 70, 0.5), rgba(90, 65, 28, 0.55));
       border: 1px solid rgba(255, 215, 140, 0.42);
       color: #fff4d8;
       box-shadow: 0 4px 20px rgba(170, 125, 45, 0.28);
     }
-    #modalOverlay .order-qty-discount-block {
+    #modalOverlay.modal-order-premium .order-qty-discount-block {
       border-top-color: rgba(212, 175, 80, 0.1);
       background: rgba(0, 0, 0, 0.2);
     }
-    #modalOverlay .order-qty-discount-title {
+    #modalOverlay.modal-order-premium .order-qty-discount-title {
       color: rgba(255, 210, 165, 0.55);
     }
-    #modalOverlay .order-qty-discount-list li {
+    #modalOverlay.modal-order-premium .order-qty-discount-list li {
       background: rgba(255, 255, 255, 0.05);
       color: rgba(255, 240, 220, 0.9);
     }
-    #modalOverlay .order-qty-discount-list li strong {
+    #modalOverlay.modal-order-premium .order-qty-discount-list li strong {
       color: #f5e6cc;
     }
-    #modalOverlay .order-qty-discount-list li.is-current {
+    #modalOverlay.modal-order-premium .order-qty-discount-list li.is-current {
       border: 1px solid rgba(212, 175, 80, 0.55);
       background: rgba(65, 52, 28, 0.5);
     }
-    #modalOverlay .packaging-choice {
+    #modalOverlay.modal-order-premium .packaging-choice {
       border: 2px solid rgba(185, 150, 80, 0.3);
       background: linear-gradient(165deg, rgba(50, 42, 26, 0.6) 0%, rgba(12, 10, 8, 0.88) 100%);
     }
-    #modalOverlay .packaging-choice:hover {
+    #modalOverlay.modal-order-premium .packaging-choice:hover {
       border-color: rgba(255, 210, 130, 0.52);
     }
-    #modalOverlay .packaging-choice.is-selected {
+    #modalOverlay.modal-order-premium .packaging-choice.is-selected {
       border-color: rgba(255, 215, 110, 0.9);
       box-shadow:
         0 0 0 1px rgba(255, 200, 100, 0.22) inset,
         0 10px 32px rgba(170, 120, 45, 0.38);
     }
-    #modalOverlay .packaging-title {
+    #modalOverlay.modal-order-premium .packaging-title {
       font-weight: 800;
     }
-    #modalOverlay .packaging-price-tag {
+    #modalOverlay.modal-order-premium .packaging-price-tag {
       color: rgba(255, 224, 185, 0.92);
       font-weight: 700;
     }
-    #modalOverlay .order-flow-actions .close-btn.order-nav-back {
+    #modalOverlay.modal-order-premium .order-flow-actions .close-btn.order-nav-back {
       border-color: rgba(212, 175, 80, 0.26);
       background: rgba(255, 215, 120, 0.06);
       font-weight: 600;
     }
-    #modalOverlay .order-flow-actions .close-btn.order-nav-back:hover {
+    #modalOverlay.modal-order-premium .order-flow-actions .close-btn.order-nav-back:hover {
       background: rgba(255, 215, 120, 0.12);
       border-color: rgba(255, 220, 150, 0.4);
     }
-    #modalOverlay .order-flow-actions .btn-complete {
+    #modalOverlay.modal-order-premium .order-flow-actions .btn-complete {
       background: linear-gradient(145deg, #ffe8b0 0%, #d4a84b 38%, #9a7018 100%);
       color: #1a1208;
       border: 1px solid rgba(255, 225, 160, 0.55);
@@ -1349,15 +1349,15 @@
       letter-spacing: 0.045em;
       text-transform: none;
     }
-    #modalOverlay .order-flow-actions .btn-complete:hover {
+    #modalOverlay.modal-order-premium .order-flow-actions .btn-complete:hover {
       filter: brightness(1.09) saturate(1.05);
     }
-    #modalOverlay .order-flow-actions .btn-complete:disabled {
+    #modalOverlay.modal-order-premium .order-flow-actions .btn-complete:disabled {
       animation: none;
       filter: grayscale(0.35) brightness(0.88);
       box-shadow: none;
     }
-    #modalOverlay .modal-status {
+    #modalOverlay.modal-order-premium .modal-status {
       color: rgba(255, 220, 190, 0.72);
       font-weight: 500;
     }
@@ -1516,7 +1516,7 @@
       .btn-complete { animation: none; }
       .wa-float { animation: none; }
       .btn-premium-line { animation: none; }
-      #modalOverlay .order-flow-actions .btn-complete { animation: none; }
+      #modalOverlay.modal-order-premium .order-flow-actions .btn-complete { animation: none; }
       .premium-catalog-anim,
       .premium-catalog-anim.is-open {
         transition: none;
@@ -2368,15 +2368,29 @@
         '</div></div></article>';
     }
 
+    function productMatchesCatalogQuery(p, q) {
+      if (!q) return true;
+      var hay = (p.name + ' ' + p.fullName + ' ' + (p.desc || '')).toLowerCase();
+      return hay.indexOf(q) >= 0;
+    }
+
     function getFilteredCatalogProducts() {
       var input = document.getElementById('catalogSearchInput');
       var q = input ? input.value.trim().toLowerCase() : '';
       var products = getProducts();
       if (!q) return products;
-      return products.filter(function(p) {
-        var hay = (p.name + ' ' + p.fullName + ' ' + (p.desc || '')).toLowerCase();
-        return hay.indexOf(q) >= 0;
+      var std = products.filter(function (p) { return productMatchesCatalogQuery(p, q); });
+      var prem = PREMIUM_PRODUCTS.filter(function (p) { return productMatchesCatalogQuery(p, q); });
+      var seen = {};
+      var out = [];
+      std.forEach(function (p) { seen[p.fullName] = true; out.push(p); });
+      prem.forEach(function (p) {
+        if (!seen[p.fullName]) {
+          seen[p.fullName] = true;
+          out.push(p);
+        }
       });
+      return out;
     }
 
     function syncCatalogMobileChrome() {
@@ -2413,6 +2427,12 @@
     function renderPremiumCatalog() {
       var grid = document.getElementById('premiumProductGrid');
       if (!grid) return;
+      var input = document.getElementById('catalogSearchInput');
+      var q = input ? input.value.trim().toLowerCase() : '';
+      if (q) {
+        grid.innerHTML = '';
+        return;
+      }
       grid.innerHTML = PREMIUM_PRODUCTS.map(function (p) { return buildProductCardHtml(p); }).join('');
     }
 
@@ -2445,11 +2465,13 @@
         var btn = document.getElementById('catalogShowAllBtn');
         if (wrap) wrap.hidden = true;
         if (btn) btn.textContent = 'Mostra tutto';
+        renderPremiumCatalog();
         return;
       }
 
       grid.innerHTML = products.map(buildProductCardHtml).join('');
       syncCatalogMobileChrome();
+      renderPremiumCatalog();
     }
 
     function renderReviews() {
@@ -2931,6 +2953,9 @@
       setModalStatus('', '');
       lockBodyScroll();
       const overlay = document.getElementById('modalOverlay');
+      var ordProd = getProductByFullName(gusto);
+      if (ordProd && ordProd.isPremium) overlay.classList.add('modal-order-premium');
+      else overlay.classList.remove('modal-order-premium');
       overlay.classList.add('show');
       overlay.setAttribute('aria-hidden', 'false');
     }
@@ -2939,6 +2964,7 @@
       const overlay = document.getElementById('modalOverlay');
       if (!overlay.classList.contains('show')) return;
       overlay.classList.remove('show');
+      overlay.classList.remove('modal-order-premium');
       overlay.setAttribute('aria-hidden', 'true');
       setModalStatus('', '');
       unlockBodyScroll();
