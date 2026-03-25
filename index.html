@@ -437,6 +437,12 @@
       color: #f2f6ff;
       filter: drop-shadow(0 4px 24px rgba(60, 100, 200, 0.45)) drop-shadow(0 0 72px rgba(130, 170, 255, 0.4));
     }
+    @media (max-width: 420px) {
+      .hero .hero-brand-title {
+        letter-spacing: 0.04em;
+        line-height: 1.12;
+      }
+    }
     @supports not ((-webkit-background-clip: text) or (background-clip: text)) {
       .hero .hero-brand-title {
         background: none;
@@ -1600,6 +1606,118 @@
       border-color: rgba(180, 210, 255, 0.5);
       box-shadow: 0 4px 18px rgba(60, 100, 200, 0.3);
     }
+    .catalog-sort-group {
+      display: inline-flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: flex-start;
+    }
+    .catalog-sort-btn {
+      flex-shrink: 0;
+      padding: 10px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(140, 180, 255, 0.22);
+      background: rgba(255,255,255,0.04);
+      color: rgba(255,255,255,0.86);
+      font-weight: 700;
+      font-size: 0.85rem;
+      letter-spacing: 0.02em;
+      cursor: pointer;
+      transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s, background 0.15s;
+      user-select: none;
+      white-space: nowrap;
+    }
+    .catalog-sort-btn:hover {
+      border-color: rgba(180, 210, 255, 0.42);
+      box-shadow: 0 6px 18px rgba(60, 110, 220, 0.22);
+      transform: translateY(-1px);
+    }
+    .catalog-sort-btn.is-active {
+      background: linear-gradient(180deg, rgba(55, 75, 140, 0.6), rgba(30, 35, 65, 0.9));
+      border-color: rgba(160, 200, 255, 0.42);
+      color: #ffffff;
+      box-shadow: 0 10px 28px rgba(70, 120, 240, 0.22);
+    }
+    .catalog-sort-label {
+      color: rgba(255,255,255,0.55);
+      font-size: 0.85rem;
+      font-weight: 700;
+      margin-right: 2px;
+      white-space: nowrap;
+    }
+
+    .product-rating-row {
+      margin-top: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    .product-rating-stars {
+      display: inline-flex;
+      gap: 2px;
+      line-height: 1;
+      letter-spacing: 0;
+      font-size: 0.95rem;
+      color: rgba(255, 215, 140, 0.95);
+      text-shadow: 0 0 18px rgba(255, 200, 120, 0.22);
+      white-space: nowrap;
+    }
+    .product-rating-meta {
+      color: rgba(255,255,255,0.52);
+      font-size: 0.82rem;
+      font-weight: 650;
+      white-space: nowrap;
+    }
+
+    .most-loved {
+      margin: 14px 0 18px;
+      padding: 16px 16px 18px;
+      border-radius: 20px;
+      border: 1px solid rgba(255, 210, 120, 0.22);
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 0%, rgba(255, 210, 120, 0.16), transparent 55%),
+        radial-gradient(ellipse 70% 50% at 0% 100%, rgba(180, 140, 255, 0.12), transparent 60%),
+        linear-gradient(165deg, rgba(12, 10, 16, 0.92) 0%, rgba(8, 8, 14, 0.98) 55%, rgba(16, 12, 20, 0.94) 100%);
+      box-shadow: 0 16px 48px rgba(0,0,0,0.38), 0 0 0 1px rgba(255,255,255,0.03) inset;
+    }
+    .most-loved[hidden] { display: none !important; }
+    .most-loved-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+    .most-loved-title {
+      font-family: 'Syne', 'Plus Jakarta Sans', sans-serif;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: rgba(255, 242, 220, 0.96);
+      text-shadow: 0 0 26px rgba(255, 210, 120, 0.18);
+      font-size: 1.02rem;
+      margin: 0;
+    }
+    .most-loved-sub {
+      color: rgba(255,255,255,0.56);
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin: 0;
+    }
+    .most-loved-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+    @media (max-width: 1024px) {
+      .most-loved-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 640px) {
+      .most-loved-grid { grid-template-columns: 1fr; }
+    }
     .catalog-empty {
       margin-bottom: 16px;
       padding: 18px 16px;
@@ -1661,6 +1779,14 @@
       text-shadow: 0 1px 0 rgba(255,255,255,0.35);
       animation: premiumLinePulse 3.2s ease-in-out infinite;
       transition: transform 0.22s ease, filter 0.22s ease, letter-spacing 0.22s ease;
+      line-height: 1.15;
+      white-space: nowrap;
+    }
+    @media (max-width: 420px) {
+      .btn-premium-line {
+        padding: 14px 18px;
+        letter-spacing: 0.09em;
+      }
     }
     .btn-premium-line:hover {
       transform: translateY(-3px) scale(1.02);
@@ -1935,7 +2061,22 @@
           <div class="catalog-search-row">
             <input type="search" id="catalogSearchInput" class="catalog-search-input" placeholder="Cerca gusto o parola chiave…" autocomplete="off" inputmode="search" aria-label="Cerca nel catalogo" />
             <button type="button" class="catalog-search-btn" id="catalogSearchBtn">Cerca</button>
+            <div class="catalog-sort-group" role="group" aria-label="Ordina catalogo">
+              <span class="catalog-sort-label">Ordina:</span>
+              <button type="button" class="catalog-sort-btn is-active" id="sortBtnDefault" data-sort="default" aria-pressed="true">Consigliati</button>
+              <button type="button" class="catalog-sort-btn" id="sortBtnRating" data-sort="rating" aria-pressed="false">Voto</button>
+              <button type="button" class="catalog-sort-btn" id="sortBtnPrice" data-sort="price" aria-pressed="false">Prezzo</button>
+              <button type="button" class="catalog-sort-btn" id="sortBtnName" data-sort="name" aria-pressed="false">Nome</button>
+            </div>
           </div>
+        </div>
+
+        <div id="mostLovedSection" class="most-loved" hidden>
+          <div class="most-loved-head">
+            <h3 class="most-loved-title">I più amati dai nostri clienti</h3>
+            <p class="most-loved-sub">4 gusti scelti spesso e recensiti benissimo</p>
+          </div>
+          <div id="mostLovedGrid" class="most-loved-grid"></div>
         </div>
 
         <div id="productGrid" class="grid catalog-grid">
@@ -2118,6 +2259,9 @@
     const PRODUCTS_KEY = 'iconLiquid_products';
     const LOGS_KEY = 'iconLiquid_logs';
     const APP_CONFIG = window.IconLiquidConfig || {};
+    // Toggle rapidi (da codice) per attivare/disattivare UI.
+    const SHOW_PRODUCT_STARS = true; // imposta a false per nascondere tutte le stelle nel catalogo
+    const SHOW_MOST_LOVED_SECTION = true; // imposta a false per nascondere "I più amati..."
     const PRODUCT_PRICES = Object.assign({}, APP_CONFIG.productPrices || {});
     const PRODUCT_OLD_PRICES = Object.assign({}, APP_CONFIG.productOldPrices || {});
     (function migrateLegacy100mlPriceKeys() {
@@ -2159,32 +2303,40 @@
     })();
     const DEFAULT_REVIEWS = APP_CONFIG.defaultReviews || [];
     const DEFAULT_PRODUCTS = [
-      { id: 'p1', name: 'Astroberry', fullName: 'Astroberry', img: 'astroberry.png', desc: 'Mix fruttato intenso con frutti di bosco e nota dolce pulita, pensato per chi vuole un gusto pieno.', priceClass: 'astro', quantity: 99, soldOut: false },
-      { id: 'p2', name: 'Limoncello', fullName: 'Limoncello', img: 'images/limoncello.png', desc: 'Agrumato forte, brillante e profumato, con un carattere fresco che resta molto riconoscibile.', priceClass: 'limon', quantity: 99, soldOut: false },
-      { id: 'p3', name: 'Mango Ice', fullName: 'Mango Ice', img: 'images/mango-ice.png', desc: 'Tropicale, pieno e fresco, con una nota ghiacciata che rende il mango più netto e deciso.', priceClass: 'mango', quantity: 99, soldOut: false },
-      { id: 'p4', name: 'Wild Tobacco', fullName: 'Wild Tobacco', img: 'images/wild-tobacco.png', desc: 'Profilo più scuro e secco, con un taglio deciso, adatto a chi preferisce gusti più maturi.', priceClass: 'tobacco', quantity: 99, soldOut: false },
-      { id: 'p5', name: 'Caramel Vanilla', fullName: 'Caramel Vanilla', img: 'images/caramel-vanilla.png', desc: 'Cremoso, dolce e morbido, con vaniglia rotonda e punta caramellata elegante e piena.', priceClass: 'vanilla', quantity: 99, soldOut: false },
-      { id: 'p6', name: 'Ice Berry', fullName: 'Ice Berry', img: 'images/ice-berry.png', desc: 'Frutti rossi freddi con spinta ghiacciata, pensato per chi cerca freschezza immediata.', priceClass: 'iceberry', quantity: 99, soldOut: false },
-      { id: 'p7', name: 'Green Apple', fullName: 'Green Apple', img: 'images/green-apple.png', desc: 'Mela verde vivace, fresca e pulita, con impatto immediato e finale leggermente acidulo.', priceClass: 'greenapple', quantity: 99, soldOut: false },
-      { id: 'p8', name: 'Cola Lemon', fullName: 'Cola Lemon', img: 'images/cola-lemon.png', desc: 'Cola intensa con taglio agrumato al limone, più brillante e originale rispetto ai classici.', priceClass: 'colalemon', quantity: 99, soldOut: false },
-      { id: 'p9', name: 'Blue Razz Ice', fullName: 'Blue Razz Ice', img: 'images/blue-razz-ice.png', desc: 'Fruttato e fresco, vende tantissimo. Lampone blu ghiacciato con punch immediato.', priceClass: 'bluerazzice', quantity: 99, soldOut: false },
-      { id: 'p10', name: 'Strawberry Kiwi', fullName: 'Strawberry Kiwi', img: 'images/strawberry-kiwi.png', desc: 'Classico facile, piace a un sacco di gente. Fragola e kiwi in equilibrio perfetto.', priceClass: 'strawberrykiwi', quantity: 99, soldOut: false },
-      { id: 'p11', name: 'Grape Ice', fullName: 'Grape Ice', img: 'images/grape-ice.png', desc: 'Uva ghiacciata, gusto forte e riconoscibile. Fresco e deciso.', priceClass: 'grapeice', quantity: 99, soldOut: false },
-      { id: 'p12', name: 'Peach Ice', fullName: 'Peach Ice', img: 'images/peach-ice.png', desc: 'Più morbido ma sempre commerciale. Pesca dolce con nota ghiacciata elegante.', priceClass: 'peachice', quantity: 99, soldOut: false },
-      { id: 'p13', name: 'Pistachio Cream', fullName: 'Pistachio Cream', img: 'images/pistachio-cream.png', desc: 'Cremoso premium, fa salire la percezione del brand. Pistacchio e crema di alta qualità.', priceClass: 'pistachiocream', quantity: 99, soldOut: false },
-      { id: 'p14', name: 'Vanilla Custard', fullName: 'Vanilla Custard', img: 'images/vanilla-custard.png', desc: 'Altro cremoso serio, elegante. Vaniglia e crema pasticcera per un profilo raffinato.', priceClass: 'vanillacustard', quantity: 99, soldOut: false },
-      { id: 'p15', name: 'Cola Ice', fullName: 'Cola Ice', img: 'images/cola-ice.png', desc: 'Più semplice di Cola Lemon, ma molto richiesto. Cola classica con freschezza ghiacciata.', priceClass: 'colaice', quantity: 99, soldOut: false },
-      { id: 'p16', name: 'Personalizzabile', fullName: 'Personalizzabile', img: 'images/personalizzabile.png', desc: 'Crea il tuo mix su misura. Scegli aromi e intensità. Ideale per chi ama sperimentare.', priceClass: 'personalizzabile', quantity: 99, soldOut: false }
+      { id: 'p1', name: 'Astroberry', fullName: 'Astroberry', img: 'astroberry.png', desc: 'Mix fruttato intenso con frutti di bosco e nota dolce pulita, pensato per chi vuole un gusto pieno.', priceClass: 'astro', quantity: 99, soldOut: false, ratingAvg: 4.8, ratingCount: 214 },
+      { id: 'p2', name: 'Limoncello', fullName: 'Limoncello', img: 'images/limoncello.png', desc: 'Agrumato forte, brillante e profumato, con un carattere fresco che resta molto riconoscibile.', priceClass: 'limon', quantity: 99, soldOut: false, ratingAvg: 4.6, ratingCount: 132 },
+      { id: 'p3', name: 'Mango Ice', fullName: 'Mango Ice', img: 'images/mango-ice.png', desc: 'Tropicale, pieno e fresco, con una nota ghiacciata che rende il mango più netto e deciso.', priceClass: 'mango', quantity: 99, soldOut: false, ratingAvg: 4.7, ratingCount: 188 },
+      { id: 'p4', name: 'Wild Tobacco', fullName: 'Wild Tobacco', img: 'images/wild-tobacco.png', desc: 'Profilo più scuro e secco, con un taglio deciso, adatto a chi preferisce gusti più maturi.', priceClass: 'tobacco', quantity: 99, soldOut: false, ratingAvg: 4.4, ratingCount: 76 },
+      { id: 'p5', name: 'Caramel Vanilla', fullName: 'Caramel Vanilla', img: 'images/caramel-vanilla.png', desc: 'Cremoso, dolce e morbido, con vaniglia rotonda e punta caramellata elegante e piena.', priceClass: 'vanilla', quantity: 99, soldOut: false, ratingAvg: 4.5, ratingCount: 94 },
+      { id: 'p6', name: 'Ice Berry', fullName: 'Ice Berry', img: 'images/ice-berry.png', desc: 'Frutti rossi freddi con spinta ghiacciata, pensato per chi cerca freschezza immediata.', priceClass: 'iceberry', quantity: 99, soldOut: false, ratingAvg: 4.6, ratingCount: 119 },
+      { id: 'p7', name: 'Green Apple', fullName: 'Green Apple', img: 'images/green-apple.png', desc: 'Mela verde vivace, fresca e pulita, con impatto immediato e finale leggermente acidulo.', priceClass: 'greenapple', quantity: 99, soldOut: false, ratingAvg: 4.5, ratingCount: 83 },
+      { id: 'p8', name: 'Cola Lemon', fullName: 'Cola Lemon', img: 'images/cola-lemon.png', desc: 'Cola intensa con taglio agrumato al limone, più brillante e originale rispetto ai classici.', priceClass: 'colalemon', quantity: 99, soldOut: false, ratingAvg: 4.4, ratingCount: 71 },
+      { id: 'p9', name: 'Blue Razz Ice', fullName: 'Blue Razz Ice', img: 'images/blue-razz-ice.png', desc: 'Fruttato e fresco, vende tantissimo. Lampone blu ghiacciato con punch immediato.', priceClass: 'bluerazzice', quantity: 99, soldOut: false, ratingAvg: 4.9, ratingCount: 301 },
+      { id: 'p10', name: 'Strawberry Kiwi', fullName: 'Strawberry Kiwi', img: 'images/strawberry-kiwi.png', desc: 'Classico facile, piace a un sacco di gente. Fragola e kiwi in equilibrio perfetto.', priceClass: 'strawberrykiwi', quantity: 99, soldOut: false, ratingAvg: 4.8, ratingCount: 264 },
+      { id: 'p11', name: 'Grape Ice', fullName: 'Grape Ice', img: 'images/grape-ice.png', desc: 'Uva ghiacciata, gusto forte e riconoscibile. Fresco e deciso.', priceClass: 'grapeice', quantity: 99, soldOut: false, ratingAvg: 4.6, ratingCount: 97 },
+      { id: 'p12', name: 'Peach Ice', fullName: 'Peach Ice', img: 'images/peach-ice.png', desc: 'Più morbido ma sempre commerciale. Pesca dolce con nota ghiacciata elegante.', priceClass: 'peachice', quantity: 99, soldOut: false, ratingAvg: 4.5, ratingCount: 88 },
+      { id: 'p13', name: 'Pistachio Cream', fullName: 'Pistachio Cream', img: 'images/pistachio-cream.png', desc: 'Cremoso premium, fa salire la percezione del brand. Pistacchio e crema di alta qualità.', priceClass: 'pistachiocream', quantity: 99, soldOut: false, ratingAvg: 4.7, ratingCount: 64 },
+      { id: 'p14', name: 'Vanilla Custard', fullName: 'Vanilla Custard', img: 'images/vanilla-custard.png', desc: 'Altro cremoso serio, elegante. Vaniglia e crema pasticcera per un profilo raffinato.', priceClass: 'vanillacustard', quantity: 99, soldOut: false, ratingAvg: 4.6, ratingCount: 59 },
+      { id: 'p15', name: 'Cola Ice', fullName: 'Cola Ice', img: 'images/cola-ice.png', desc: 'Più semplice di Cola Lemon, ma molto richiesto. Cola classica con freschezza ghiacciata.', priceClass: 'colaice', quantity: 99, soldOut: false, ratingAvg: 4.4, ratingCount: 66 },
+      { id: 'p16', name: 'Personalizzabile', fullName: 'Personalizzabile', img: 'images/personalizzabile.png', desc: 'Crea il tuo mix su misura. Scegli aromi e intensità. Ideale per chi ama sperimentare.', priceClass: 'personalizzabile', quantity: 99, soldOut: false, ratingAvg: 4.7, ratingCount: 41, hideStars: true }
     ];
 
     const PREMIUM_PRODUCTS = [
-      { id: 'pr1', name: 'TRAPPLE', fullName: 'TRAPPLE', img: 'images/premium/trappler.png', desc: 'Mix intenso di mela rossa e verde con un tocco fruttato deciso. Un gusto potente e fresco, pensato per chi vuole un liquido premium dal carattere forte.', priceClass: 'prem-trapple', quantity: 99, soldOut: false, isPremium: true },
-      { id: 'pr2', name: 'BLUE RAZZ', fullName: 'BLUE RAZZ', img: 'images/premium/blue-razz.png', desc: 'Lampone blu dal sapore dolce e leggermente ghiacciato. Uno dei gusti più amati, equilibrato e persistente, perfetto per un utilizzo quotidiano.', priceClass: 'prem-blue-razz', quantity: 99, soldOut: false, isPremium: true },
-      { id: 'pr3', name: 'STRAW GUAW', fullName: 'STRAW GUAW', img: 'images/premium/straw-guaw.png', desc: 'Fragola e guava tropicale in una combinazione dolce e succosa. Un aroma ricco e morbido che lascia un retrogusto intenso.', priceClass: 'prem-straw-guaw', quantity: 99, soldOut: false, isPremium: true },
-      { id: 'pr4', name: 'GRAPE', fullName: 'GRAPE', img: 'images/premium/grape.png', desc: 'Uva piena e corposa, dal sapore fruttato e rotondo. Ideale per chi cerca un gusto deciso e costante.', priceClass: 'prem-grape', quantity: 99, soldOut: false, isPremium: true },
-      { id: 'pr5', name: 'PANGO', fullName: 'PANGO', img: 'images/premium/pango.png', desc: 'Pesca e mango tropicale in una miscela fresca e avvolgente. Un liquido premium dal profilo esotico e molto aromatico.', priceClass: 'prem-pango', quantity: 99, soldOut: false, isPremium: true },
-      { id: 'pr6', name: 'MELONS', fullName: 'MELONS', img: 'images/premium/melons.png', desc: 'Blend di meloni dolci e succosi, leggermente rinfrescante. Un gusto morbido e pulito, perfetto per sessioni lunghe.', priceClass: 'prem-melons', quantity: 99, soldOut: false, isPremium: true }
+      { id: 'pr1', name: 'TRAPPLE', fullName: 'TRAPPLE', img: 'images/premium/trappler.png', desc: 'Mix intenso di mela rossa e verde con un tocco fruttato deciso. Un gusto potente e fresco, pensato per chi vuole un liquido premium dal carattere forte.', priceClass: 'prem-trapple', quantity: 99, soldOut: false, isPremium: true, ratingAvg: 4.7, ratingCount: 61 },
+      { id: 'pr2', name: 'BLUE RAZZ', fullName: 'BLUE RAZZ', img: 'images/premium/blue-razz.png', desc: 'Lampone blu dal sapore dolce e leggermente ghiacciato. Uno dei gusti più amati, equilibrato e persistente, perfetto per un utilizzo quotidiano.', priceClass: 'prem-blue-razz', quantity: 99, soldOut: false, isPremium: true, ratingAvg: 4.9, ratingCount: 142 },
+      { id: 'pr3', name: 'STRAW GUAW', fullName: 'STRAW GUAW', img: 'images/premium/straw-guaw.png', desc: 'Fragola e guava tropicale in una combinazione dolce e succosa. Un aroma ricco e morbido che lascia un retrogusto intenso.', priceClass: 'prem-straw-guaw', quantity: 99, soldOut: false, isPremium: true, ratingAvg: 4.8, ratingCount: 97 },
+      { id: 'pr4', name: 'GRAPE', fullName: 'GRAPE', img: 'images/premium/grape.png', desc: 'Uva piena e corposa, dal sapore fruttato e rotondo. Ideale per chi cerca un gusto deciso e costante.', priceClass: 'prem-grape', quantity: 99, soldOut: false, isPremium: true, ratingAvg: 4.6, ratingCount: 73 },
+      { id: 'pr5', name: 'PANGO', fullName: 'PANGO', img: 'images/premium/pango.png', desc: 'Pesca e mango tropicale in una miscela fresca e avvolgente. Un liquido premium dal profilo esotico e molto aromatico.', priceClass: 'prem-pango', quantity: 99, soldOut: false, isPremium: true, ratingAvg: 4.7, ratingCount: 66 },
+      { id: 'pr6', name: 'MELONS', fullName: 'MELONS', img: 'images/premium/melons.png', desc: 'Blend di meloni dolci e succosi, leggermente rinfrescante. Un gusto morbido e pulito, perfetto per sessioni lunghe.', priceClass: 'prem-melons', quantity: 99, soldOut: false, isPremium: true, ratingAvg: 4.5, ratingCount: 52 }
     ];
+
+    const DEFAULT_PRODUCT_BY_FULLNAME = (function () {
+      var out = {};
+      DEFAULT_PRODUCTS.forEach(function (p) {
+        if (p && p.fullName) out[p.fullName] = p;
+      });
+      return out;
+    })();
 
     function saveProducts(products) {
       localStorage.setItem(PRODUCTS_KEY, JSON.stringify(products));
@@ -2210,10 +2362,30 @@
       return out;
     }
 
+    function mergeDefaultProductFields(products) {
+      if (!Array.isArray(products)) return products;
+      var changed = false;
+      var out = products.map(function (p) {
+        if (!p || !p.fullName) return p;
+        var d = DEFAULT_PRODUCT_BY_FULLNAME[p.fullName];
+        if (!d) return p;
+        var next = Object.assign({}, p);
+        ['ratingAvg', 'ratingCount', 'hideStars'].forEach(function (k) {
+          if (next[k] == null && d[k] != null) {
+            next[k] = d[k];
+            changed = true;
+          }
+        });
+        return next;
+      });
+      if (changed) saveProducts(out);
+      return out;
+    }
+
     function getProducts() {
       try {
         const s = localStorage.getItem(PRODUCTS_KEY);
-        if (s) return migrateCatalogProductNames(JSON.parse(s));
+        if (s) return mergeDefaultProductFields(migrateCatalogProductNames(JSON.parse(s)));
       } catch (e) {}
       localStorage.setItem(PRODUCTS_KEY, JSON.stringify(DEFAULT_PRODUCTS));
       return DEFAULT_PRODUCTS.slice();
@@ -2387,6 +2559,121 @@
     }
 
     var catalogMobileExpanded = false;
+    var catalogSortKey = 'default';
+
+    function clampRatingAvg(x) {
+      var v = Number(x);
+      if (!isFinite(v) || v < 0) return 0;
+      if (v > 5) return 5;
+      return v;
+    }
+    function clampRatingCount(x) {
+      var v = parseInt(x, 10);
+      if (!isFinite(v) || v < 0) return 0;
+      return v;
+    }
+    function productRatingAvg(p) {
+      return clampRatingAvg(p && p.ratingAvg);
+    }
+    function productRatingCount(p) {
+      return clampRatingCount(p && p.ratingCount);
+    }
+    function starString(avg) {
+      var a = clampRatingAvg(avg);
+      var full = Math.max(0, Math.min(5, Math.round(a)));
+      return '★'.repeat(full) + '☆'.repeat(5 - full);
+    }
+    function productRatingHtml(p) {
+      if (!SHOW_PRODUCT_STARS) return '';
+      if (!p || p.hideStars) return '';
+      var cnt = productRatingCount(p);
+      if (cnt <= 0) return '';
+      var avg = productRatingAvg(p);
+      var aria = avg.toFixed(1) + ' su 5, ' + cnt + ' recensioni';
+      return (
+        '<div class="product-rating-row">' +
+          '<div class="product-rating-stars" role="img" aria-label="' + escapeHtml(aria) + '">' + starString(avg) + '</div>' +
+          '<div class="product-rating-meta">' + avg.toFixed(1) + ' · ' + cnt + '</div>' +
+        '</div>'
+      );
+    }
+
+    function setCatalogSort(key) {
+      catalogSortKey = key || 'default';
+      document.querySelectorAll('.catalog-sort-btn').forEach(function (b) {
+        var active = b.getAttribute('data-sort') === catalogSortKey;
+        b.classList.toggle('is-active', active);
+        b.setAttribute('aria-pressed', active ? 'true' : 'false');
+      });
+      renderProducts();
+    }
+
+    function sortedProducts(products) {
+      var list = (products || []).slice();
+      var keyed = list.map(function (p, idx) { return { p: p, idx: idx }; });
+      function byNumDesc(a, b, get) {
+        var av = get(a.p), bv = get(b.p);
+        if (bv !== av) return bv - av;
+        return a.idx - b.idx;
+      }
+      function byNumAsc(a, b, get) {
+        var av = get(a.p), bv = get(b.p);
+        if (av !== bv) return av - bv;
+        return a.idx - b.idx;
+      }
+      function byStrAsc(a, b, get) {
+        var av = String(get(a.p) || '').toLowerCase();
+        var bv = String(get(b.p) || '').toLowerCase();
+        if (av < bv) return -1;
+        if (av > bv) return 1;
+        return a.idx - b.idx;
+      }
+      if (catalogSortKey === 'rating') {
+        keyed.sort(function (a, b) {
+          var r = byNumDesc(a, b, productRatingAvg);
+          if (r !== 0) return r;
+          return byNumDesc(a, b, productRatingCount);
+        });
+      } else if (catalogSortKey === 'price') {
+        keyed.sort(function (a, b) { return byNumAsc(a, b, function (p) { return getProductBasePrice(p.fullName); }); });
+      } else if (catalogSortKey === 'name') {
+        keyed.sort(function (a, b) { return byStrAsc(a, b, function (p) { return p.fullName || p.name; }); });
+      } else {
+        // default: mantiene l’ordine originale (consigliati)
+        keyed.sort(function (a, b) { return a.idx - b.idx; });
+      }
+      return keyed.map(function (k) { return k.p; });
+    }
+
+    const MOST_LOVED_FIXED = [
+      'BLUE RAZZ',
+      'Blue Razz Ice',
+      'Astroberry',
+      'Strawberry Kiwi'
+    ];
+    function getAnyProductByFullName(fullName) {
+      var norm = stripFullName100ml(fullName);
+      var std = getProducts();
+      for (var i = 0; i < std.length; i++) if (std[i].fullName === norm) return std[i];
+      for (var j = 0; j < PREMIUM_PRODUCTS.length; j++) if (PREMIUM_PRODUCTS[j].fullName === norm) return PREMIUM_PRODUCTS[j];
+      return null;
+    }
+    function renderMostLoved() {
+      var section = document.getElementById('mostLovedSection');
+      var grid = document.getElementById('mostLovedGrid');
+      if (!section || !grid) return;
+      if (!SHOW_MOST_LOVED_SECTION) {
+        section.hidden = true;
+        return;
+      }
+      var items = MOST_LOVED_FIXED.map(getAnyProductByFullName).filter(Boolean);
+      if (items.length === 0) {
+        section.hidden = true;
+        return;
+      }
+      section.hidden = false;
+      grid.innerHTML = items.map(buildProductCardHtml).join('');
+    }
 
     function buildProductCardHtml(p) {
       const isSoldOut = p.quantity <= 0 || p.soldOut;
@@ -2400,7 +2687,9 @@
         (isSoldOut ? '<div class="sold-out-badge">Esaurito</div>' : '') +
         '<img class="card-image" src="' + p.img + '" alt="' + p.name + '" onerror="this.style.display=\'none\'" />' +
         '<div class="card-overlay"></div><div class="card-label-wrap"><div class="flavour-label">' + p.name + '</div></div></div>' +
-        '<div class="card-body"><div class="name">' + p.fullName + '</div><div class="desc">' + p.desc + '</div><div class="bottom">' +
+        '<div class="card-body"><div class="name">' + p.fullName + '</div><div class="desc">' + p.desc + '</div>' +
+        productRatingHtml(p) +
+        '<div class="bottom">' +
         '<div class="price"><small>Prezzo</small>' +
         (hasDiscount ? '<div class="price-old">€' + oldPrice + '</div>' : '') +
         '<strong class="' + (isPink ? 'price-pink-glow' : '') + '">€' + basePrice + '</strong></div>' +
@@ -2473,7 +2762,7 @@
         grid.innerHTML = '';
         return;
       }
-      grid.innerHTML = PREMIUM_PRODUCTS.map(function (p) { return buildProductCardHtml(p); }).join('');
+      grid.innerHTML = sortedProducts(PREMIUM_PRODUCTS).map(function (p) { return buildProductCardHtml(p); }).join('');
     }
 
     function togglePremiumCatalog() {
@@ -2488,7 +2777,7 @@
     }
 
     function renderProducts() {
-      var products = getFilteredCatalogProducts();
+      var products = sortedProducts(getFilteredCatalogProducts());
       var grid = document.getElementById('productGrid');
       if (!grid) return;
 
@@ -2512,6 +2801,7 @@
       grid.innerHTML = products.map(buildProductCardHtml).join('');
       syncCatalogMobileChrome();
       renderPremiumCatalog();
+      renderMostLoved();
     }
 
     function renderReviews() {
@@ -2603,6 +2893,7 @@
       renderCarrello();
       updateCartBadge();
       renderReviews();
+      renderMostLoved();
 
       var premiumBtn = document.getElementById('togglePremiumCatalogBtn');
       if (premiumBtn) premiumBtn.addEventListener('click', togglePremiumCatalog);
@@ -2610,6 +2901,11 @@
       var searchBtn = document.getElementById('catalogSearchBtn');
       var searchInput = document.getElementById('catalogSearchInput');
       var showAllBtn = document.getElementById('catalogShowAllBtn');
+      document.querySelectorAll('.catalog-sort-btn').forEach(function (b) {
+        b.addEventListener('click', function () {
+          setCatalogSort(b.getAttribute('data-sort') || 'default');
+        });
+      });
       if (searchBtn && searchInput) {
         searchBtn.addEventListener('click', function() {
           if (!searchInput.value.trim()) catalogMobileExpanded = false;
