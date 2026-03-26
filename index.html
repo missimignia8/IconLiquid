@@ -1186,6 +1186,7 @@
       background: rgba(255,255,255,0.04);
       color: rgba(255,255,255,0.88);
       font-variant-numeric: tabular-nums;
+      cursor: pointer;
     }
     .order-qty-discount-list li strong { font-weight: 700; color: #e8f0ff; }
     .order-qty-discount-list li.is-current {
@@ -3112,8 +3113,9 @@
       var rows = [];
       for (var ml = 100; ml <= 1000; ml += 100) {
         var p = calcolaPrezzoLiquido(ml, fullName);
+        var currentCls = volumeSelezionatoMl === ml ? ' class="is-current"' : '';
         rows.push(
-          '<li' + (volumeSelezionatoMl === ml ? ' class="is-current"' : '') + '><span>' + ml + ' ml</span><strong>€' + p + '</strong></li>'
+          '<li' + currentCls + ' onclick="impostaVolume(' + ml + ')" role="button" aria-label="Imposta volume a ' + ml + ' ml" title="Imposta ' + ml + ' ml"><span>' + ml + ' ml</span><strong>€' + p + '</strong></li>'
         );
       }
       return (
