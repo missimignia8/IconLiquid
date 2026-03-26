@@ -1159,6 +1159,8 @@
       border-top: 1px solid rgba(255,255,255,0.08);
       padding: 14px 18px 16px;
       background: rgba(0,0,0,0.14);
+      user-select: none;
+      -webkit-user-select: none;
     }
     .order-qty-discount-title {
       font-size: 0.72rem;
@@ -1187,6 +1189,9 @@
       color: rgba(255,255,255,0.88);
       font-variant-numeric: tabular-nums;
       cursor: pointer;
+      touch-action: manipulation;
+      user-select: none;
+      -webkit-user-select: none;
     }
     .order-qty-discount-list li strong { font-weight: 700; color: #e8f0ff; }
     .order-qty-discount-list li.is-current {
