@@ -1593,6 +1593,33 @@
       position: relative;
       text-align: center;
     }
+    .promo-upsell-panel--elite {
+      border: 1px solid transparent;
+      background:
+        linear-gradient(180deg, rgba(16, 14, 28, 0.97) 0%, rgba(8, 8, 16, 0.99) 100%) padding-box,
+        linear-gradient(135deg, rgba(120, 200, 255, 0.45), rgba(200, 120, 255, 0.35), rgba(80, 160, 255, 0.4)) border-box;
+      box-shadow:
+        0 28px 80px rgba(0, 0, 0, 0.55),
+        0 0 60px rgba(100, 160, 255, 0.12),
+        inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    }
+    .promo-upsell-panel--elite::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: url('promo-upsell-elite-art.png') 80% 0 / 55% auto no-repeat;
+      opacity: 0.14;
+      pointer-events: none;
+    }
+    .promo-upsell-panel--elite.promo-upsell-panel--solo::before {
+      opacity: 0.08;
+      background-position: 50% 100%;
+    }
+    .promo-upsell-panel--elite > * {
+      position: relative;
+      z-index: 1;
+    }
     .promo-upsell-close {
       position: absolute;
       top: 14px;
@@ -1682,6 +1709,21 @@
     .cart-row-banner--promo-vibe {
       background: url('promo-vibe-se-lineup.png') center 35% / cover no-repeat !important;
     }
+    .cart-row-banner--promo-bundle {
+      background: url('promo-vibe-se-hero.png') center 40% / cover no-repeat !important;
+    }
+    .order-price-promo-extra {
+      margin-top: 14px;
+      padding: 14px 16px;
+      border-radius: 16px;
+      text-align: left;
+      background: linear-gradient(135deg, rgba(60, 100, 200, 0.18), rgba(120, 60, 180, 0.12));
+      border: 1px solid rgba(120, 180, 255, 0.22);
+      font-size: 0.92rem;
+      line-height: 1.5;
+      color: rgba(255, 255, 255, 0.88);
+    }
+    .order-price-promo-extra strong { color: #b8e8ff; }
 
     @media (max-width: 1024px) {
       .grid { grid-template-columns: repeat(2, 1fr); }
@@ -2173,9 +2215,9 @@
     </div>
   </div>
 
-  <div id="promoUpsellOverlay" class="promo-upsell-overlay" aria-hidden="true" onclick="if (event.target === this) promoUpsellDecline()">
-    <div class="promo-upsell-panel" role="dialog" aria-modal="true" aria-labelledby="promoUpsellTitle" onclick="event.stopPropagation()">
-      <button type="button" class="promo-upsell-close" onclick="promoUpsellDecline()" aria-label="Chiudi">×</button>
+  <div id="promoUpsellOverlay" class="promo-upsell-overlay" aria-hidden="true" onclick="if (event.target === this) orderUpsellSecondary()">
+    <div id="promoUpsellPanel" class="promo-upsell-panel" role="dialog" aria-modal="true" aria-labelledby="promoUpsellTitle" onclick="event.stopPropagation()">
+      <button type="button" class="promo-upsell-close" onclick="orderUpsellSecondary()" aria-label="Chiudi">×</button>
       <div id="promoUpsellBadge" class="promo-upsell-badge">Offerta</div>
       <h2 id="promoUpsellTitle" class="promo-upsell-title"></h2>
       <p id="promoUpsellText" class="promo-upsell-text"></p>
@@ -2187,8 +2229,8 @@
         <span id="promoUpsellNow" class="promo-upsell-now"></span>
       </div>
       <div class="promo-upsell-actions">
-        <button type="button" class="btn btn-secondary" id="promoUpsellSkipBtn" onclick="promoUpsellDecline()">No grazie</button>
-        <button type="button" class="btn btn-complete" id="promoUpsellAddBtn" onclick="promoUpsellAccept()">Aggiungi al messaggio</button>
+        <button type="button" class="btn btn-secondary" id="promoUpsellSkipBtn" onclick="orderUpsellSecondary()">No grazie</button>
+        <button type="button" class="btn btn-complete" id="promoUpsellAddBtn" onclick="orderUpsellPrimary()">Sì, aggiungi</button>
       </div>
     </div>
   </div>
@@ -2614,56 +2656,36 @@
         .replace(/"/g, '&quot;');
     }
 
-    var promoUpsellDismissed = { extra20ml: false, vibe_se: false };
-    var promoUpsellCurrentId = null;
-
     function newCartLineId() {
       return 'l' + Date.now() + Math.random().toString(36).slice(2, 10);
     }
     function carrelloHaPromo(promoId) {
       return carrello.some(function (l) { return l && l.promoId === promoId; });
     }
-    /** Somma i ml di liquido delle righe normali (esclusi gadget promo). */
-    function carrelloMlLiquidoNonPromo() {
-      var t = 0;
-      carrello.forEach(function (l) {
-        if (!l || l.promoId) return;
-        var v = Number(l.volumeMl);
-        if (isFinite(v) && v > 0) t += v;
-      });
-      return t;
-    }
-    function carrelloQualificaPromo100ml() {
-      return carrelloMlLiquidoNonPromo() >= 100;
-    }
-    /** True se c’è almeno una riga liquido di catalogo premium (non promo). */
-    function carrelloHaLiquidoPremium() {
-      for (var i = 0; i < carrello.length; i++) {
-        var l = carrello[i];
-        if (!l || l.promoId) continue;
-        var p = getProductByFullName(l.fullName);
-        if (p && p.isPremium) return true;
-      }
-      return false;
-    }
+
+    /** 'bundle' = 20ml+Vibe €10; 'solo' = fallback +20 ml. */
+    var orderUpsellMode = 'bundle';
+    var orderUpsellDoneCallback = null;
+
     function buildPromoCartMeta(item) {
+      if (item.promoId === 'bundle_20ml_vibe') {
+        return 'Combo promo · +20 ml + Vibe SE — <strong>€' + item.prezzo + '</strong> <span style="color:rgba(255,255,255,0.45)">(val. €38)</span>';
+      }
       if (item.promoId === 'extra20ml') {
         var tag = item.promoExtraPremium ? ' · linea premium' : '';
-        return 'Promo · +20 ml extra' + tag + ' — listino €20 → offerta <strong>€' + item.prezzo + '</strong>';
-      }
-      if (item.promoId === 'vibe_se') {
-        return 'Vaporesso Vibe SE — listino €18 → offerta <strong>€' + item.prezzo + '</strong>';
+        return 'Promo · +20 ml extra' + tag + ' — listino €20 → <strong>€' + item.prezzo + '</strong>';
       }
       return '<strong>€' + item.prezzo + '</strong>';
     }
-    function makePromoLineExtra20ml() {
-      var prem = carrelloHaLiquidoPremium();
+    function makePromoLineExtra20mlOrdine() {
+      var prod = getProductByFullName(statoOrdine.gusto);
+      var prem = prod && prod.isPremium;
       var prezzo = prem ? 8 : 5;
       return {
         lineId: newCartLineId(),
         kind: 'promo',
         promoId: 'extra20ml',
-        promoExtraPremium: prem,
+        promoExtraPremium: !!prem,
         fullName: prem ? '+20 ml liquido extra — linea premium (promo)' : '+20 ml liquido extra (promo)',
         desc: '',
         img: '',
@@ -2674,32 +2696,33 @@
         prezzo: prezzo
       };
     }
-    function makePromoLineVibeSe() {
+    function makePromoLineBundle20Vibe10() {
       return {
         lineId: newCartLineId(),
         kind: 'promo',
-        promoId: 'vibe_se',
-        fullName: 'Vaporesso Vibe SE',
+        promoId: 'bundle_20ml_vibe',
+        fullName: 'Promo: +20 ml + Vaporesso Vibe SE',
         desc: '',
         img: '',
         volumeMl: 0,
         nicotinaMl: 0,
-        packagingLabel: 'Device pod',
+        packagingLabel: 'Combo',
         packagingEuro: 0,
-        prezzo: 5
+        prezzo: 10
       };
     }
-    function hidePromoUpsellOverlay() {
+    function hideOrderPromoOverlay() {
       var o = document.getElementById('promoUpsellOverlay');
       if (o) {
         o.classList.remove('show');
         o.setAttribute('aria-hidden', 'true');
       }
-      promoUpsellCurrentId = null;
+      var pan = document.getElementById('promoUpsellPanel');
+      if (pan) pan.className = 'promo-upsell-panel';
       unlockBodyScroll();
     }
-    function showPromoUpsellModal(promoId) {
-      promoUpsellCurrentId = promoId;
+    function orderPromoOverlayFillBundle() {
+      orderUpsellMode = 'bundle';
       var title = document.getElementById('promoUpsellTitle');
       var text = document.getElementById('promoUpsellText');
       var badge = document.getElementById('promoUpsellBadge');
@@ -2707,38 +2730,69 @@
       var now = document.getElementById('promoUpsellNow');
       var wrap = document.getElementById('promoUpsellImgWrap');
       var img = document.getElementById('promoUpsellImg');
-      if (!title || !text || !wrap || !img) return;
-      Array.prototype.slice.call(wrap.querySelectorAll('.promo-liq-fake')).forEach(function (n) { n.remove(); });
-      if (promoId === 'extra20ml') {
-        var prem = carrelloHaLiquidoPremium();
-        if (badge) badge.textContent = 'Dopo i 100 ml';
-        title.textContent = '+20 ml di liquido in più';
-        if (prem) {
-          text.textContent = 'Linea premium: aggiungi altri 20 ml a soli €8 invece di €20.';
-        } else {
-          text.textContent = 'Aggiungi altri 20 ml dello stesso ordine: in promozione a soli €5 invece di €20.';
-        }
+      var yesBtn = document.getElementById('promoUpsellAddBtn');
+      var noBtn = document.getElementById('promoUpsellSkipBtn');
+      if (badge) badge.textContent = 'Offerta solo ora';
+      if (title) title.textContent = 'Combo speciale';
+      if (text) {
+        text.textContent = 'Vuoi aggiungere 20 ml di liquido e un Vaporesso Vibe SE? Pacchetto a €10 invece di €38 (extra liquido + device).';
+      }
+      if (was) { was.textContent = '€38'; was.style.display = 'inline'; }
+      if (now) now.textContent = 'Tutto a €10';
+      if (yesBtn) yesBtn.textContent = 'Sì, aggiungi il combo';
+      if (noBtn) noBtn.textContent = 'No, grazie';
+      if (wrap && img) {
+        Array.prototype.slice.call(wrap.querySelectorAll('.promo-liq-fake')).forEach(function (n) { n.remove(); });
+        wrap.className = 'promo-upsell-img-wrap';
+        img.style.display = 'block';
+        img.src = 'promo-vibe-se-hero.png';
+        img.alt = 'Vaporesso Vibe SE';
+      }
+      var pan = document.getElementById('promoUpsellPanel');
+      if (pan) pan.className = 'promo-upsell-panel promo-upsell-panel--elite';
+    }
+    function orderPromoOverlayFillSoloExtra() {
+      orderUpsellMode = 'solo';
+      var prod = getProductByFullName(statoOrdine.gusto);
+      var prem = prod && prod.isPremium;
+      var title = document.getElementById('promoUpsellTitle');
+      var text = document.getElementById('promoUpsellText');
+      var badge = document.getElementById('promoUpsellBadge');
+      var was = document.getElementById('promoUpsellWas');
+      var now = document.getElementById('promoUpsellNow');
+      var wrap = document.getElementById('promoUpsellImgWrap');
+      var img = document.getElementById('promoUpsellImg');
+      var yesBtn = document.getElementById('promoUpsellAddBtn');
+      var noBtn = document.getElementById('promoUpsellSkipBtn');
+      if (badge) badge.textContent = 'Altra opzione';
+      if (title) title.textContent = 'Solo +20 ml';
+      if (text) {
+        text.textContent = prem
+          ? 'Linea premium: aggiungi 20 ml in più a €8 invece di €20.'
+          : 'Aggiungi 20 ml in più a soli €5 invece di €20.';
+      }
+      if (was) { was.textContent = '€20'; was.style.display = 'inline'; }
+      if (now) now.textContent = prem ? 'Solo €8' : 'Solo €5';
+      if (yesBtn) yesBtn.textContent = 'Sì, aggiungi i 20 ml';
+      if (noBtn) noBtn.textContent = 'No, vai al riepilogo';
+      if (wrap && img) {
+        Array.prototype.slice.call(wrap.querySelectorAll('.promo-liq-fake')).forEach(function (n) { n.remove(); });
         wrap.className = 'promo-upsell-img-wrap promo-upsell-img-wrap--liquid';
         img.style.display = 'none';
         img.removeAttribute('src');
         img.alt = '';
         var fake = document.createElement('div');
         fake.className = 'promo-liq-fake';
-        fake.innerHTML = '<span style="font-size:2.75rem;line-height:1" aria-hidden="true">💧</span><div style="margin-top:10px;font-weight:800;font-size:1.05rem;letter-spacing:0.04em">+20 ml extra</div>';
+        fake.innerHTML = '<span style="font-size:2.75rem;line-height:1" aria-hidden="true">💧</span><div style="margin-top:10px;font-weight:800;font-size:1.05rem;letter-spacing:0.04em">+20 ml</div>';
         wrap.appendChild(fake);
-        if (was) { was.textContent = 'Valore €20'; was.style.display = 'inline'; }
-        if (now) now.textContent = prem ? 'Solo €8' : 'Solo €5';
-      } else if (promoId === 'vibe_se') {
-        if (badge) badge.textContent = 'Extra';
-        title.textContent = 'Vaporesso Vibe SE';
-        text.textContent = 'Aggiungi il device pod Vibe SE al tuo ordine: in offerta a €5 invece di €18.';
-        wrap.className = 'promo-upsell-img-wrap';
-        img.style.display = 'block';
-        img.src = 'promo-vibe-se-hero.png';
-        img.alt = 'Vaporesso Vibe SE';
-        if (was) { was.textContent = '€18'; was.style.display = 'inline'; }
-        if (now) now.textContent = 'Solo €5';
       }
+      var pan = document.getElementById('promoUpsellPanel');
+      if (pan) pan.className = 'promo-upsell-panel promo-upsell-panel--elite promo-upsell-panel--solo';
+    }
+    function ordineAvviaUpsellPostStep3(done) {
+      statoOrdine.orderPromo = 'none';
+      orderUpsellDoneCallback = done;
+      orderPromoOverlayFillBundle();
       var o = document.getElementById('promoUpsellOverlay');
       if (o) {
         o.classList.add('show');
@@ -2746,35 +2800,32 @@
       }
       lockBodyScroll();
     }
-    function advancePromoUpsellChain() {
-      hidePromoUpsellOverlay();
-      if (!carrelloHaPromo('extra20ml') && !promoUpsellDismissed.extra20ml) {
-        showPromoUpsellModal('extra20ml');
+    function orderUpsellPrimary() {
+      if (orderUpsellMode === 'bundle') {
+        statoOrdine.orderPromo = 'bundle10';
+        orderUpsellFinishSequence();
+      } else {
+        var prod = getProductByFullName(statoOrdine.gusto);
+        statoOrdine.orderPromo = prod && prod.isPremium ? 'extra8' : 'extra5';
+        orderUpsellFinishSequence();
+      }
+    }
+    function orderUpsellSecondary() {
+      if (orderUpsellMode === 'bundle') {
+        orderPromoOverlayFillSoloExtra();
         return;
       }
-      if (!carrelloHaPromo('vibe_se') && !promoUpsellDismissed.vibe_se) {
-        showPromoUpsellModal('vibe_se');
-        return;
-      }
-      inviaOrdineWhatsApp();
+      statoOrdine.orderPromo = 'none';
+      orderUpsellFinishSequence();
     }
-    function promoUpsellDecline() {
-      if (promoUpsellCurrentId === 'extra20ml') promoUpsellDismissed.extra20ml = true;
-      if (promoUpsellCurrentId === 'vibe_se') promoUpsellDismissed.vibe_se = true;
-      advancePromoUpsellChain();
-    }
-    function promoUpsellAccept() {
-      if (promoUpsellCurrentId === 'extra20ml') {
-        carrello.push(makePromoLineExtra20ml());
-      } else if (promoUpsellCurrentId === 'vibe_se') {
-        carrello.push(makePromoLineVibeSe());
-      }
-      saveCarrello();
-      updateCartBadge();
-      advancePromoUpsellChain();
+    function orderUpsellFinishSequence() {
+      hideOrderPromoOverlay();
+      var cb = orderUpsellDoneCallback;
+      orderUpsellDoneCallback = null;
+      if (cb) cb();
     }
     function inviaOrdineWhatsApp() {
-      hidePromoUpsellOverlay();
+      hideOrderPromoOverlay();
       var msg = encodeURIComponent(creaMessaggioCarrelloWhatsApp());
       window.open('https://wa.me/393519198166?text=' + msg, '_blank');
     }
@@ -2793,8 +2844,8 @@
         var bannerStyle = '';
         if (item.promoId === 'extra20ml') {
           bannerClass += ' cart-row-banner--promo-liquid-extra';
-        } else if (item.promoId === 'vibe_se') {
-          bannerClass += ' cart-row-banner--promo-vibe';
+        } else if (item.promoId === 'bundle_20ml_vibe') {
+          bannerClass += ' cart-row-banner--promo-bundle';
         } else {
           bannerStyle = 'background-image:url(\'' + String(item.img).replace(/'/g, "\\'") + '\')';
         }
@@ -2886,13 +2937,13 @@
       // Messaggio WhatsApp richiesto: SOLO gusto/volume/nicotina/prezzo (niente descrizione prodotto).
       var lines = [];
       carrello.forEach(function(item) {
+        if (item.promoId === 'bundle_20ml_vibe') {
+          lines.push('Promo bundle: +20 ml liquido + Vaporesso Vibe SE — €' + item.prezzo + ' (valore €38)');
+          return;
+        }
         if (item.promoId === 'extra20ml') {
           var lab = item.promoExtraPremium ? ' (linea premium)' : '';
           lines.push('Promo: +20 ml liquido extra' + lab + ' — €' + item.prezzo + ' (valore listino €20)');
-          return;
-        }
-        if (item.promoId === 'vibe_se') {
-          lines.push('Promo: Vaporesso Vibe SE — €' + item.prezzo + ' (invece di €18)');
           return;
         }
         var conf = item.packagingLabel ? ' — Confezionamento: ' + item.packagingLabel : '';
@@ -2902,13 +2953,7 @@
     }
     function completaOrdineCarrello() {
       if (carrello.length === 0) return;
-      promoUpsellDismissed = { extra20ml: false, vibe_se: false };
-      if (!carrelloQualificaPromo100ml()) {
-        inviaOrdineWhatsApp();
-        return;
-      }
-      chiudiCarrello();
-      advancePromoUpsellChain();
+      inviaOrdineWhatsApp();
     }
 
     var catalogMobileExpanded = false;
@@ -3291,7 +3336,9 @@
       orderStep: 1,
       packagingId: null,
       packagingEuro: 0,
-      packagingLabel: ''
+      packagingLabel: '',
+      /** 'none' | 'bundle10' | 'extra5' | 'extra8' — promo dopo confezionamento */
+      orderPromo: 'none'
     };
 
     var ORDER_FLOW_HINTS = [
@@ -3524,6 +3571,24 @@
       var supNic = supplementoNicotina(nic);
       var totale = liquido + supNic + packEuro;
       var listinoTotaleRiferimento = Math.round(listinoOriginale + supNic + packEuro);
+      var promoExtraEuro = 0;
+      var promoListinoRif = 0;
+      var promoExtraHtml = '';
+      if (statoOrdine.orderPromo === 'bundle10') {
+        promoExtraEuro = 10;
+        promoListinoRif = 38;
+        promoExtraHtml = '<div class="order-price-promo-extra"><strong>Promo combo</strong> · +20 ml + Vaporesso Vibe SE · <span style="text-decoration:line-through;opacity:0.65">€38</span> → <strong>€10</strong></div>';
+      } else if (statoOrdine.orderPromo === 'extra5') {
+        promoExtraEuro = 5;
+        promoListinoRif = 20;
+        promoExtraHtml = '<div class="order-price-promo-extra"><strong>Extra liquido</strong> · +20 ml · <span style="text-decoration:line-through;opacity:0.65">€20</span> → <strong>€5</strong></div>';
+      } else if (statoOrdine.orderPromo === 'extra8') {
+        promoExtraEuro = 8;
+        promoListinoRif = 20;
+        promoExtraHtml = '<div class="order-price-promo-extra"><strong>Extra liquido (premium)</strong> · +20 ml · <span style="text-decoration:line-through;opacity:0.65">€20</span> → <strong>€8</strong></div>';
+      }
+      totale += promoExtraEuro;
+      listinoTotaleRiferimento += promoListinoRif;
       var qtyTableHtml = htmlTabellaScontiQuantita(statoOrdine.gusto, vol);
       var scontoTotLiquidoPct = calcolaScontoTotalePercentualeSuLiquido(vol, statoOrdine.gusto);
 
@@ -3561,6 +3626,7 @@
         '</div>' +
         nicBlock +
         packBlock +
+        promoExtraHtml +
         '<div class="order-detail-lines">' +
         '<strong style="color:rgba(255,255,255,0.92)">' + escapeHtml(statoOrdine.gusto) + '</strong><br>' +
         'Liquido · <strong>' + vol + ' ml</strong> · totale liquido: <strong style="color:#9ecbff">€' + liquido + '</strong> · sconto vs prezzo originale: <strong>−' + scontoTotLiquidoPct + '%</strong>' +
@@ -3604,13 +3670,20 @@
 
     function orderFlowIndietro() {
       if (statoOrdine.orderStep <= 1) return;
+      if (statoOrdine.orderStep === 4) statoOrdine.orderPromo = 'none';
       statoOrdine.orderStep -= 1;
       syncOrderFlowPanels();
     }
 
     function orderFlowPrimary() {
       if (statoOrdine.orderStep === 4) aggiungiAlCarrello();
-      else orderFlowAvanti();
+      else if (statoOrdine.orderStep === 3) {
+        if (!statoOrdine.packagingId) return;
+        ordineAvviaUpsellPostStep3(function () {
+          statoOrdine.orderStep = 4;
+          syncOrderFlowPanels();
+        });
+      } else orderFlowAvanti();
     }
 
     function selezionaConfezionamento(id, euro, label) {
@@ -3637,6 +3710,7 @@
       statoOrdine.packagingId = null;
       statoOrdine.packagingEuro = 0;
       statoOrdine.packagingLabel = '';
+      statoOrdine.orderPromo = 'none';
       document.querySelectorAll('.packaging-choice').forEach(function (b) { b.classList.remove('is-selected'); });
       aggiornaValoriVolumeNicUI();
       syncOrderFlowPanels();
@@ -3651,6 +3725,8 @@
     }
 
     function chiudiOrdine() {
+      orderUpsellDoneCallback = null;
+      hideOrderPromoOverlay();
       const overlay = document.getElementById('modalOverlay');
       if (!overlay.classList.contains('show')) return;
       overlay.classList.remove('show');
@@ -3676,6 +3752,11 @@
         packagingEuro: statoOrdine.packagingEuro,
         prezzo: calcolaTotaleRiga(statoOrdine.volumeMl, statoOrdine.nicotinaMl, statoOrdine.gusto, statoOrdine.packagingEuro)
       });
+      if (statoOrdine.orderPromo === 'bundle10') {
+        carrello.push(makePromoLineBundle20Vibe10());
+      } else if (statoOrdine.orderPromo === 'extra5' || statoOrdine.orderPromo === 'extra8') {
+        carrello.push(makePromoLineExtra20mlOrdine());
+      }
       saveCarrello();
       updateCartBadge();
       chiudiOrdine();
@@ -3750,7 +3831,8 @@
         orderStep: statoOrdine.orderStep,
         packagingId: statoOrdine.packagingId,
         packagingEuro: statoOrdine.packagingEuro,
-        packagingLabel: statoOrdine.packagingLabel
+        packagingLabel: statoOrdine.packagingLabel,
+        orderPromo: statoOrdine.orderPromo
       };
 
       statoOrdine.gusto = 'Test Aroma';
@@ -3761,6 +3843,7 @@
       statoOrdine.packagingId = 'standard';
       statoOrdine.packagingEuro = 0;
       statoOrdine.packagingLabel = 'Flacone standard Chubby (€0)';
+      statoOrdine.orderPromo = 'none';
 
       cambiaVolume(100);
       const t1 = statoOrdine.volumeMl === 200;
@@ -3816,6 +3899,7 @@
       statoOrdine.packagingId = previousState.packagingId;
       statoOrdine.packagingEuro = previousState.packagingEuro != null ? previousState.packagingEuro : 0;
       statoOrdine.packagingLabel = previousState.packagingLabel || '';
+      statoOrdine.orderPromo = previousState.orderPromo != null ? previousState.orderPromo : 'none';
       if (statoOrdine.gusto) {
         aggiornaValoriVolumeNicUI();
         syncOrderFlowPanels();
