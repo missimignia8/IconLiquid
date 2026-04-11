@@ -1703,14 +1703,14 @@
       justify-content: center;
     }
     .promo-upsell-actions .btn { flex: 1; min-width: 130px; }
-    .cart-row-banner--promo-liquid-extra {
-      background: linear-gradient(145deg, #5b21b6 0%, #1e0b45 100%) !important;
+    .cart-row-banner--promo-extra-std {
+      background: url('promo-upsell-solo-20ml-standard.png') center 42% / cover no-repeat !important;
     }
-    .cart-row-banner--promo-vibe {
-      background: url('promo-vibe-se-lineup.png') center 35% / cover no-repeat !important;
+    .cart-row-banner--promo-extra-prem {
+      background: url('promo-upsell-solo-20ml-premium.png') center 42% / cover no-repeat !important;
     }
     .cart-row-banner--promo-bundle {
-      background: url('promo-vibe-se-hero.png') center 40% / cover no-repeat !important;
+      background: url('promo-upsell-bundle-20ml-vibe.png') center 40% / cover no-repeat !important;
     }
     .order-price-promo-extra {
       margin-top: 14px;
@@ -2745,8 +2745,8 @@
         Array.prototype.slice.call(wrap.querySelectorAll('.promo-liq-fake')).forEach(function (n) { n.remove(); });
         wrap.className = 'promo-upsell-img-wrap';
         img.style.display = 'block';
-        img.src = 'promo-vibe-se-hero.png';
-        img.alt = 'Vaporesso Vibe SE';
+        img.src = 'promo-upsell-bundle-20ml-vibe.png';
+        img.alt = 'Extra liquido 20 ml e Vaporesso Vibe SE';
       }
       var pan = document.getElementById('promoUpsellPanel');
       if (pan) pan.className = 'promo-upsell-panel promo-upsell-panel--elite';
@@ -2777,14 +2777,10 @@
       if (noBtn) noBtn.textContent = 'No, vai al riepilogo';
       if (wrap && img) {
         Array.prototype.slice.call(wrap.querySelectorAll('.promo-liq-fake')).forEach(function (n) { n.remove(); });
-        wrap.className = 'promo-upsell-img-wrap promo-upsell-img-wrap--liquid';
-        img.style.display = 'none';
-        img.removeAttribute('src');
-        img.alt = '';
-        var fake = document.createElement('div');
-        fake.className = 'promo-liq-fake';
-        fake.innerHTML = '<span style="font-size:2.75rem;line-height:1" aria-hidden="true">💧</span><div style="margin-top:10px;font-weight:800;font-size:1.05rem;letter-spacing:0.04em">+20 ml</div>';
-        wrap.appendChild(fake);
+        wrap.className = 'promo-upsell-img-wrap';
+        img.style.display = 'block';
+        img.src = prem ? 'promo-upsell-solo-20ml-premium.png' : 'promo-upsell-solo-20ml-standard.png';
+        img.alt = prem ? 'Extra liquido 20 ml linea premium' : 'Extra liquido 20 ml';
       }
       var pan = document.getElementById('promoUpsellPanel');
       if (pan) pan.className = 'promo-upsell-panel promo-upsell-panel--elite promo-upsell-panel--solo';
@@ -2843,7 +2839,7 @@
         var bannerClass = 'cart-row-banner';
         var bannerStyle = '';
         if (item.promoId === 'extra20ml') {
-          bannerClass += ' cart-row-banner--promo-liquid-extra';
+          bannerClass += item.promoExtraPremium ? ' cart-row-banner--promo-extra-prem' : ' cart-row-banner--promo-extra-std';
         } else if (item.promoId === 'bundle_20ml_vibe') {
           bannerClass += ' cart-row-banner--promo-bundle';
         } else {
